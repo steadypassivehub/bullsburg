@@ -1,0 +1,1030 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ticker Town</title><meta name="description" content="Learn stocks and options with a game: levels, boss battles and pretend money.">
+<meta name="theme-color" content="#2D5BE3"><link rel="stylesheet" href="fonts/fonts.css"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>window.TT_BUILD='web';window.TT_STORE_LINKS={};</script></head><body>
+
+
+<style>
+/* Layout: a game map of stages (two worlds), with sticky HUD + tab rail; each lab is a workbench of instrument + readout. */
+:root {
+  --bg: #EAF0FA; --surface: #FFFFFF; --surface2: #F3F6FC; --ink: #14223D; --muted: #56678A; --line: #D3DCEB; --grid: #E2E8F2;
+  --accent: #2D5BE3; --accent-ink: #FFFFFF; --accent-soft: rgba(45,91,227,.12);
+  --isle: #0E8C86; --isle-soft: rgba(14,140,134,.13);
+  --sun: #FFC23A; --sun-ink: #3A2700; --ma: #B4730E;
+  --up: #0E9A60; --down: #D93C34; --up-soft: rgba(14,154,96,.15); --down-soft: rgba(217,60,52,.13);
+  --lock: #9AA7BF;
+  --shadow: 0 1px 0 rgba(20,34,61,.06), 0 10px 26px -14px rgba(20,34,61,.28);
+  --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0C1424; --surface: #142036; --surface2: #1A2842; --ink: #E8EEF9; --muted: #9DAAC5; --line: #2A3A59; --grid: #213050;
+  --accent: #7F9EFF; --accent-ink: #0C1424; --accent-soft: rgba(127,158,255,.16); --isle: #3FD0C6; --isle-soft: rgba(63,208,198,.15);
+  --sun: #FFD15C; --sun-ink: #2A1C00; --ma: #FFD15C; --up: #3AD49A; --down: #FF6F67; --up-soft: rgba(58,212,154,.17); --down-soft: rgba(255,111,103,.16);
+  --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0C1424; --surface: #142036; --surface2: #1A2842; --ink: #E8EEF9; --muted: #9DAAC5; --line: #2A3A59; --grid: #213050;
+  --accent: #7F9EFF; --accent-ink: #0C1424; --accent-soft: rgba(127,158,255,.16); --isle: #3FD0C6; --isle-soft: rgba(63,208,198,.15);
+  --sun: #FFD15C; --sun-ink: #2A1C00; --ma: #FFD15C; --up: #3AD49A; --down: #FF6F67; --up-soft: rgba(58,212,154,.17); --down-soft: rgba(255,111,103,.16);
+  --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.1; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.eyebrow { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+
+/* HUD */
+.hud { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.hud-row { display: flex; align-items: center; gap: 14px; padding-block: 10px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.logo svg { flex: none; }
+.logo b { font-family: var(--f-display); font-size: 25px; font-weight: 800; letter-spacing: -.02em; }
+.player { display: flex; align-items: center; gap: 12px; margin-left: auto; min-width: 0; }
+.lvl-badge { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--sun); color: var(--sun-ink); font-family: var(--f-display); font-weight: 800; font-size: 20px; box-shadow: inset 0 -3px 0 rgba(0,0,0,.15); flex: none; }
+.xpbox { min-width: 0; width: clamp(140px, 22vw, 240px); }
+.xpbox .rank { font-family: var(--f-display); font-weight: 700; font-size: 16px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.xpbar { height: 10px; border-radius: 99px; background: var(--surface2); border: 1px solid var(--line); overflow: hidden; margin-top: 4px; }
+.xpbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--sun), var(--ma)); border-radius: 99px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+.xpnum { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.starcount { font-family: var(--f-display); font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 4px; color: var(--ink); }
+.starcount span { color: var(--sun); font-size: 20px; }
+.modes { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; padding: 3px; background: var(--surface2); }
+.modes button { border: 0; background: transparent; padding: 5px 12px; border-radius: 99px; font-size: 13.5px; font-weight: 700; color: var(--muted); }
+.modes button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; border: 1px solid var(--line); background: var(--surface); padding: 7px 14px; border-radius: 99px; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; gap: 7px; color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.tab.locked { color: var(--muted); border-style: dashed; }
+.tab .lk { font-size: 12px; }
+
+/* ticker tape */
+.tape { overflow: hidden; border-bottom: 1px solid var(--line); background: var(--surface2); white-space: nowrap; }
+.tape-in { display: inline-flex; gap: 34px; padding: 6px 0; animation: tape 48s linear infinite; font-family: var(--f-mono); font-size: 12.5px; }
+.tape-in .u { color: var(--up); } .tape-in .d { color: var(--down); }
+@keyframes tape { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+main { padding-block: 22px 40px; }
+.view[hidden] { display: none !important; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); padding: 18px; min-width: 0; }
+.btn { border: 0; border-radius: 12px; padding: 10px 16px; font-weight: 700; background: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 rgba(0,0,0,.18); }
+.btn:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 rgba(0,0,0,.18); }
+.btn.ghost { background: var(--surface2); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+.btn.sun { background: var(--sun); color: var(--sun-ink); }
+.btn.up { background: var(--up); color: #fff; } .btn.down { background: var(--down); color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 11px; padding: 3px; background: var(--surface2); gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 14px; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+canvas { display: block; width: 100%; touch-action: pan-y; }
+
+/* MAP */
+.map-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.map-head h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 800; }
+.map-head p { max-width: 54ch; color: var(--muted); margin-top: 6px; }
+.map-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .map-grid { grid-template-columns: 1fr; } }
+.world { border-radius: 20px; padding: 18px 18px 26px; margin-bottom: 20px; position: relative; overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.world.w1 { background: linear-gradient(180deg, var(--accent-soft), transparent 60%), var(--surface); }
+.world.w2 { background: linear-gradient(180deg, var(--isle-soft), transparent 60%), var(--surface); }
+.world-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 2; }
+.world-top h2 { font-size: 28px; font-weight: 800; }
+.world.w2 .world-top h2 { color: var(--isle); }
+.world.w1 .world-top h2 { color: var(--accent); }
+.world-lock { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(2px); text-align: center; padding: 20px; }
+.world-lock div { max-width: 34ch; font-weight: 700; }
+.path { position: relative; margin-top: 10px; }
+.path svg.trail { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+.node { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; width: min(330px, calc(100% - var(--x))); margin-left: var(--x); margin-top: 14px; border: 0; background: none; text-align: left; padding: 0; }
+.node .disc { flex: none; width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 26px; background: var(--surface); border: 4px solid var(--accent); color: var(--accent); box-shadow: 0 5px 0 color-mix(in srgb, var(--accent) 55%, #000 20%); transition: transform .15s; }
+.w2 .node .disc { border-color: var(--isle); color: var(--isle); box-shadow: 0 5px 0 color-mix(in srgb, var(--isle) 55%, #000 20%); }
+.node.done .disc { background: var(--accent); color: var(--accent-ink); }
+.w2 .node.done .disc { background: var(--isle); color: var(--accent-ink); }
+.node.next .disc { animation: bob 1.6s ease-in-out infinite; }
+.node.locked .disc { border-color: var(--lock); color: var(--lock); box-shadow: 0 5px 0 var(--line); background: var(--surface2); }
+.node.boss .disc { width: 78px; height: 78px; border-radius: 22px; font-size: 15px; letter-spacing: .04em; }
+.node:hover:not(.locked) .disc { transform: translateY(-2px); }
+.node .lbl b { display: block; font-family: var(--f-display); font-size: 18px; line-height: 1.15; }
+.node .lbl small { color: var(--muted); font-size: 13px; }
+.node.locked .lbl { color: var(--muted); }
+.stars { color: var(--sun); letter-spacing: 2px; font-size: 15px; }
+.stars .off { color: var(--line); }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.side h3 { font-size: 22px; margin-bottom: 10px; }
+.mission { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: start; padding: 10px 0; border-top: 1px dashed var(--line); }
+.mission:first-of-type { border-top: 0; }
+.mission .ck { width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--line); display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+.mission.got .ck { background: var(--up); border-color: var(--up); color: #fff; }
+.mission b { display: block; font-size: 15px; } .mission small { color: var(--muted); font-size: 13px; display: block; line-height: 1.35; }
+.mission .xp { font-family: var(--f-mono); font-size: 12px; font-weight: 700; color: var(--ma); white-space: nowrap; }
+.ranks { margin-top: 18px; }
+.rankrow { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; padding: 4px 0; color: var(--muted); }
+.rankrow.me { color: var(--ink); font-weight: 700; }
+.rankrow.me::before { content: "▶"; color: var(--sun); margin-right: 6px; }
+
+/* STAGE */
+.stage { max-width: 860px; margin: 0 auto; }
+.stage-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.stage h2 { font-size: clamp(28px, 4.4vw, 40px); font-weight: 800; margin-top: 4px; }
+.lesson-text { font-size: 18px; line-height: 1.65; max-width: 66ch; margin-top: 14px; display: grid; gap: 12px; }
+.lesson-text strong { background: linear-gradient(transparent 60%, color-mix(in srgb, var(--sun) 55%, transparent) 60%); }
+.terms { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.terms span { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: var(--surface2); border: 1px solid var(--line); }
+.widget { margin-top: 20px; background: var(--surface2); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+.widget h4 { font-size: 19px; margin-bottom: 8px; }
+.quiz { margin-top: 22px; }
+.qhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hearts { font-size: 22px; color: var(--down); letter-spacing: 3px; }
+.hearts .gone { color: var(--line); }
+.qcard { margin-top: 12px; }
+.qcard .q { font-family: var(--f-display); font-size: 23px; font-weight: 700; line-height: 1.25; }
+.opts { display: grid; gap: 10px; margin-top: 14px; }
+.opt { text-align: left; border: 2px solid var(--line); background: var(--surface); border-radius: 13px; padding: 12px 14px; font-size: 16.5px; font-weight: 700; box-shadow: 0 3px 0 var(--line); display: flex; gap: 12px; align-items: center; }
+.opt .k { flex: none; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: var(--surface2); border: 1px solid var(--line); font-family: var(--f-mono); font-size: 13px; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt.right { border-color: var(--up); background: var(--up-soft); box-shadow: 0 3px 0 var(--up); }
+.opt.wrong { border-color: var(--down); background: var(--down-soft); box-shadow: 0 3px 0 var(--down); }
+.opt:disabled { cursor: default; }
+.why { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-size: 15.5px; }
+.why.ok { background: var(--up-soft); } .why.no { background: var(--down-soft); }
+.why b { display: block; font-family: var(--f-display); font-size: 18px; }
+.qprog { height: 8px; background: var(--surface2); border-radius: 99px; border: 1px solid var(--line); overflow: hidden; margin-top: 10px; }
+.qprog i { display: block; height: 100%; background: var(--accent); transition: width .35s; }
+.win { text-align: center; padding: 26px 16px; }
+.win .big { font-size: 54px; color: var(--sun); letter-spacing: 6px; line-height: 1; }
+.win h3 { font-size: 32px; margin-top: 10px; }
+.win p { color: var(--muted); margin-top: 6px; }
+.win .row { justify-content: center; margin-top: 18px; }
+
+/* LABS */
+.lab-head { display: flex; justify-content: space-between; gap: 16px; align-items: end; flex-wrap: wrap; margin-bottom: 16px; }
+.lab-head h1 { font-size: clamp(28px, 4.4vw, 40px); font-weight: 800; }
+.lab-head p { color: var(--muted); max-width: 60ch; margin-top: 4px; }
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 18px; align-items: start; }
+@media (max-width: 920px) { .lab-grid { grid-template-columns: 1fr; } }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.readout { margin-top: 10px; padding: 10px 12px; border-radius: 11px; background: var(--surface2); font-size: 14.5px; min-height: 48px; }
+.readout .mono { font-size: 13px; }
+.chk { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; }
+.chk input { width: 18px; height: 18px; accent-color: var(--accent); }
+.anat svg { width: 100%; height: auto; max-width: 280px; display: block; margin: 0 auto; }
+.anat ul { margin: 10px 0 0; padding-left: 18px; font-size: 14.5px; display: grid; gap: 4px; }
+.game-card { margin-top: 18px; }
+.game-row { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 16px; align-items: center; }
+@media (max-width: 760px) { .game-row { grid-template-columns: 1fr; } }
+.choices { display: grid; gap: 8px; }
+.choices .btn { width: 100%; font-size: 16px; padding: 12px; }
+.scorebar { display: flex; gap: 16px; font-family: var(--f-display); font-weight: 800; font-size: 18px; margin-bottom: 8px; }
+.scorebar span { color: var(--muted); font-weight: 600; font-size: 14px; display: block; font-family: var(--f-body); }
+.fb { margin-top: 10px; font-weight: 700; min-height: 24px; }
+.fb.ok { color: var(--up); } .fb.no { color: var(--down); }
+
+/* market */
+.mkt-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.daychip { font-family: var(--f-display); font-weight: 800; font-size: 22px; padding: 4px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.mkt-grid { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .mkt-grid { grid-template-columns: 1fr; } }
+.stocklist { display: grid; gap: 8px; }
+.stk { display: grid; grid-template-columns: 44px 1fr 74px; gap: 10px; align-items: center; text-align: left; border: 2px solid var(--line); background: var(--surface); border-radius: 13px; padding: 9px 10px; }
+.stk[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.stk .tk { width: 44px; height: 44px; border-radius: 11px; display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 18px; color: #fff; }
+.stk b { font-size: 14.5px; display: block; line-height: 1.2; }
+.stk small { font-family: var(--f-mono); font-size: 12px; }
+.stk canvas { height: 30px; }
+.u { color: var(--up); } .d { color: var(--down); }
+.trade { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end; margin-top: 12px; }
+.field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+.field input[type=number], .field input[type=search], .field input[type=text] { width: 100%; padding: 9px 11px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 16px var(--f-mono); }
+.status { margin-top: 10px; font-weight: 700; min-height: 22px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.stat { background: var(--surface2); border-radius: 12px; padding: 10px 12px; border: 1px solid var(--line); }
+.stat span { display: block; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.stat b { font-family: var(--f-mono); font-size: 18px; font-variant-numeric: tabular-nums; }
+.tbl-wrap { overflow-x: auto; margin-top: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 8px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+td { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.news { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.news li { font-size: 14px; padding: 8px 10px; border-radius: 10px; background: var(--surface2); border-left: 4px solid var(--line); }
+.news li.u { border-left-color: var(--up); color: var(--ink); } .news li.d { border-left-color: var(--down); color: var(--ink); }
+.news li small { font-family: var(--f-mono); color: var(--muted); margin-right: 6px; }
+
+/* options lab */
+.opt-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 920px) { .opt-grid { grid-template-columns: 1fr; } }
+.ctrl { display: grid; gap: 12px; }
+.ctrl .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.slider label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--muted); }
+.slider label b { font-family: var(--f-mono); color: var(--ink); }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.explain { margin-top: 12px; padding: 14px; border-radius: 12px; background: var(--surface2); font-size: 16px; line-height: 1.55; }
+.explain .pl { font-family: var(--f-display); font-size: 24px; font-weight: 800; display: block; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); padding: 5px 11px; border-radius: 99px; font-size: 13px; font-weight: 700; }
+
+/* words */
+.words { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 14px; }
+.word { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; padding: 14px; }
+.word b { font-family: var(--f-display); font-size: 19px; display: block; }
+.word .tag { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.word p { font-size: 14.5px; margin-top: 4px; }
+
+/* locked lab screen */
+.lockscreen { text-align: center; padding: 50px 16px; max-width: 520px; margin: 0 auto; }
+.lockscreen .pad { font-size: 54px; line-height: 1; }
+.lockscreen h2 { font-size: 30px; margin-top: 10px; }
+.lockscreen p { color: var(--muted); margin-top: 8px; }
+
+/* overlays */
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(140%); background: var(--ink); color: var(--surface); padding: 11px 18px; border-radius: 12px; font-weight: 700; z-index: 60; transition: transform .3s, visibility .3s; max-width: calc(100% - 32px); text-align: center; visibility: hidden; }
+.toast.show { transform: translateX(-50%) translateY(0); visibility: visible; }
+.xp-pop { position: fixed; z-index: 70; pointer-events: none; font-family: var(--f-display); font-weight: 800; font-size: 22px; color: var(--ma); text-shadow: 0 2px 0 var(--surface); animation: pop 1.1s ease-out forwards; }
+@keyframes pop { 0% { opacity: 0; transform: translate(-50%, 0) scale(.7); } 15% { opacity: 1; transform: translate(-50%, -8px) scale(1.1); } 100% { opacity: 0; transform: translate(-50%, -60px) scale(1); } }
+.levelup { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: rgba(8,14,28,.55); padding: 16px; }
+.levelup[hidden] { display: none; }
+.levelup .box { background: var(--surface); border-radius: 22px; padding: 28px 24px; text-align: center; max-width: 380px; width: 100%; box-shadow: 0 30px 60px -20px rgba(0,0,0,.5); position: relative; animation: zoom .4s cubic-bezier(.2,1.4,.4,1); }
+.levelup .lv { width: 96px; height: 96px; margin: -70px auto 6px; border-radius: 50%; background: var(--sun); color: var(--sun-ink); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 46px; border: 6px solid var(--surface); }
+.levelup h2 { font-size: 34px; } .levelup p { color: var(--muted); margin: 6px 0 16px; }
+@keyframes zoom { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.pw .box { text-align: left; max-width: 430px; }
+.pw .box h2 { font-size: 30px; }
+.pw .price { font-family: var(--f-display); font-weight: 800; font-size: 40px; color: var(--ink); line-height: 1; }
+.pw .price small { font-size: 15px; color: var(--muted); font-weight: 600; margin-left: 6px; }
+.pw ul { margin: 12px 0 16px; padding-left: 0; list-style: none; display: grid; gap: 7px; }
+.pw li { display: flex; gap: 9px; align-items: start; font-size: 15.5px; }
+.pw li::before { content: "\2713"; flex: none; width: 22px; height: 22px; border-radius: 6px; background: var(--up-soft); color: var(--up); display: grid; place-items: center; font-weight: 800; font-size: 13px; }
+.pw .actions { display: grid; gap: 8px; }
+.pw .actions .btn { width: 100%; padding: 13px; font-size: 16.5px; }
+.pw .gateq { font-family: var(--f-display); font-size: 22px; font-weight: 700; margin: 10px 0; line-height: 1.25; }
+.pw .err { color: var(--down); font-weight: 700; min-height: 22px; margin-top: 6px; }
+.pw .fine { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+.fullchip { font-family: var(--f-mono); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; background: var(--sun); color: var(--sun-ink); margin-left: 4px; vertical-align: 2px; }
+#confetti { position: fixed; inset: 0; z-index: 75; pointer-events: none; width: 100%; height: 100%; }
+footer { border-top: 1px solid var(--line); padding-block: 22px 30px; color: var(--muted); font-size: 13.5px; }
+footer .row { justify-content: space-between; }
+@media (prefers-reduced-motion: reduce) { .tape-in, .node.next .disc { animation: none; } .xp-pop { animation-duration: .01s; } .levelup .box { animation: none; } }
+@media (max-width: 560px) { .xpbox { width: 120px; } .logo b { font-size: 21px; } .hud-row { gap: 10px; } .modes button { padding: 5px 9px; font-size: 12.5px; } .node .disc { width: 56px; height: 56px; font-size: 22px; } }
+</style>
+
+<header class="hud">
+  <div class="wrap">
+    <div class="hud-row">
+      <a class="logo" href="#map" data-go="map" aria-label="Ticker Town home">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="4" y="12" width="7" height="13" rx="2" fill="var(--down)"/><line x1="7.5" y1="7" x2="7.5" y2="29" stroke="var(--down)" stroke-width="2"/><rect x="14" y="8" width="7" height="14" rx="2" fill="var(--up)"/><line x1="17.5" y1="4" x2="17.5" y2="26" stroke="var(--up)" stroke-width="2"/><rect x="24" y="5" width="7" height="12" rx="2" fill="var(--up)"/><line x1="27.5" y1="2" x2="27.5" y2="21" stroke="var(--up)" stroke-width="2"/></svg>
+        <b>Ticker Town</b>
+      </a>
+      <div class="modes" role="group" aria-label="How to explain things">
+        <button id="m-kid" data-mode="kid">Like I'm 10</button>
+        <button id="m-adult" data-mode="adult">Beginner</button>
+      </div>
+      <div class="player">
+        <div class="starcount" title="Stars earned"><span>★</span><b id="h-stars">0</b></div>
+        <div class="lvl-badge" id="h-lvl" aria-label="Level">1</div>
+        <div class="xpbox"><div class="rank" id="h-rank">Piggy Bank Rookie</div><div class="xpbar"><i id="h-bar"></i></div><div class="xpnum mono" id="h-xp">0 / 100 XP</div></div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" data-tab="map">Map</button>
+      <button class="tab" role="tab" data-tab="charts">Chart Lab</button>
+      <button class="tab" role="tab" data-tab="market">Practice Market</button>
+      <button class="tab" role="tab" data-tab="options">Options Lab</button>
+      <button class="tab" role="tab" data-tab="words">Word Book</button>
+    </nav>
+  </div>
+  <div class="tape" aria-hidden="true"><div class="tape-in" id="tape"></div></div>
+</header>
+
+<main class="wrap">
+  <!-- MAP -->
+  <section class="view" id="v-map">
+    <div id="map-home">
+      <div class="map-head">
+        <div><div class="eyebrow">Your adventure</div><h1>Learn the market, one stage at a time</h1>
+        <p>Clear each stage to earn XP and stars. Beat the boss at the end of Stock Street to sail to Options Island. Everything here uses pretend money.</p></div>
+        <div class="row"><button class="btn ghost" id="unlockbtn">Unlock full game</button><button class="btn sun" id="continue">Play next stage</button></div>
+      </div>
+      <div class="map-grid">
+        <div id="worlds"></div>
+        <aside class="side">
+          <div class="card"><h3>Missions</h3><div id="missions"></div></div>
+          <div class="card ranks"><h3>Player levels</h3><div id="ranks"></div></div>
+        </aside>
+      </div>
+    </div>
+    <div id="stage" hidden></div>
+  </section>
+
+  <!-- CHART LAB -->
+  <section class="view" id="v-charts" hidden>
+    <div class="lab-head"><div><div class="eyebrow">Lab 1</div><h1>Chart Lab</h1><p>Every chart here is pretend data. Tap or hover a day to read it, then play Trend Spotter to earn XP.</p></div></div>
+    <div class="lab-grid">
+      <div class="card">
+        <div class="toolbar">
+          <div class="seg" role="group" aria-label="Chart type"><button id="c-candle" aria-pressed="true">Candles</button><button id="c-line" aria-pressed="false">Line</button></div>
+          <label class="chk"><input type="checkbox" id="c-ma" checked> 10-day average</label>
+          <label class="chk"><input type="checkbox" id="c-vol" checked> Volume</label>
+          <button class="btn ghost" id="c-new">New chart</button>
+        </div>
+        <canvas id="cv-lab" style="height:360px" aria-label="Practice stock chart"></canvas>
+        <div class="readout" id="lab-read" aria-live="polite"></div>
+      </div>
+      <div class="card anat">
+        <h3 style="font-size:22px;margin-bottom:8px">How to read a candle</h3>
+        <svg viewBox="0 0 280 200" role="img" aria-label="Diagram of green and red candlesticks">
+          <line x1="70" y1="20" x2="70" y2="180" stroke="var(--up)" stroke-width="3"/><rect x="50" y="55" width="40" height="85" rx="4" fill="var(--up)"/>
+          <line x1="200" y1="20" x2="200" y2="180" stroke="var(--down)" stroke-width="3"/><rect x="180" y="55" width="40" height="85" rx="4" fill="var(--down)"/>
+          <g font-family="JetBrains Mono, monospace" font-size="11" fill="var(--ink)" font-weight="700">
+            <text x="96" y="24">High</text><text x="96" y="59">Close</text><text x="96" y="140">Open</text><text x="96" y="182">Low</text>
+            <text x="226" y="24">High</text><text x="226" y="59">Open</text><text x="226" y="140">Close</text><text x="226" y="182">Low</text>
+          </g>
+          <g font-family="Baloo 2, sans-serif" font-size="14" font-weight="800"><text x="44" y="198" fill="var(--up)">Went up</text><text x="168" y="198" fill="var(--down)">Went down</text></g>
+        </svg>
+        <ul>
+          <li><b>Body:</b> where the price started (open) and ended (close) that day.</li>
+          <li><b>Wicks:</b> the highest and lowest prices that day.</li>
+          <li><b>Green</b> means it closed higher than it opened. <b>Red</b> means lower.</li>
+          <li><b>Volume bars</b> show how many shares changed hands.</li>
+          <li><b>The average line</b> smooths out the wiggles so you can see the trend.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card game-card">
+      <div class="row" style="justify-content:space-between"><div><div class="eyebrow">Mini game · +10 XP per right answer</div><h3 style="font-size:26px">Trend Spotter</h3></div>
+      <div class="scorebar"><div><span>Streak</span><b id="t-streak">0</b></div><div><span>Best</span><b id="t-best">0</b></div></div></div>
+      <div class="game-row">
+        <canvas id="cv-trend" style="height:230px" aria-label="Mystery chart"></canvas>
+        <div><p style="font-weight:700;margin-bottom:8px">Which way is this stock trending?</p>
+          <div class="choices"><button class="btn up" data-trend="up">Uptrend ↗</button><button class="btn ghost" data-trend="side">Sideways →</button><button class="btn down" data-trend="down">Downtrend ↘</button></div>
+          <div class="fb" id="t-fb" aria-live="polite"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKET -->
+  <section class="view" id="v-market" hidden>
+    <div class="lab-head"><div><div class="eyebrow">Lab 2</div><h1>Practice Market</h1><p>You start with $10,000 of pretend money. Buy and sell pretend companies, press Next day, and watch what happens. Nothing here is real.</p></div></div>
+    <div class="mkt-bar">
+      <span class="daychip" id="m-day">Day 1</span>
+      <button class="btn" id="m-next">Next day</button>
+      <button class="btn ghost" id="m-skip">Skip 5 days</button>
+      <button class="btn ghost" id="m-reset">Start over</button>
+      <span class="status muted" id="m-reset-q" style="margin:0"></span>
+    </div>
+    <div class="mkt-grid">
+      <div class="stocklist" id="m-list"></div>
+      <div style="display:grid;gap:18px;min-width:0">
+        <div class="card">
+          <div class="row" style="justify-content:space-between;align-items:start"><div><h3 id="m-name" style="font-size:24px">—</h3><p class="muted" id="m-desc" style="font-size:14.5px"></p></div><div style="text-align:right"><div class="mono" id="m-price" style="font-size:26px;font-weight:700">—</div><div class="mono" id="m-chg" style="font-size:13px"></div></div></div>
+          <canvas id="cv-stock" style="height:240px;margin-top:10px" aria-label="Selected stock chart"></canvas>
+          <div class="trade">
+            <div class="field"><label for="m-qty">Shares</label><input type="number" id="m-qty" min="1" step="1" value="10"></div>
+            <div class="field"><label>Order total</label><div class="mono" id="m-total" style="font-size:18px;font-weight:700;padding:8px 0">—</div></div>
+            <button class="btn up" id="m-buy">Buy</button><button class="btn down" id="m-sell">Sell</button>
+          </div>
+          <div class="status" id="m-status" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:22px;margin-bottom:10px">Your portfolio</h3>
+          <div class="stats" id="m-stats"></div>
+          <canvas id="cv-port" style="height:170px;margin-top:12px" aria-label="Portfolio value over time"></canvas>
+          <div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Price</th><th>Value</th><th>Gain / loss</th></tr></thead><tbody id="m-hold"></tbody></table></div>
+        </div>
+        <div class="card"><h3 style="font-size:22px;margin-bottom:10px">Market news</h3><ul class="news" id="m-news"></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTIONS -->
+  <section class="view" id="v-options" hidden>
+    <div class="lab-head"><div><div class="eyebrow">Lab 3</div><h1>Options Lab</h1><p>Build a pretend option trade and see exactly what you'd make or lose at expiration. One contract covers 100 shares.</p></div>
+      <div class="chips" id="o-presets"><button class="chip" data-p="bc">Buy a call</button><button class="chip" data-p="bp">Buy a put</button><button class="chip" data-p="sc">Sell a call</button><button class="chip" data-p="sp">Sell a put</button></div></div>
+    <div class="opt-grid">
+      <div class="card ctrl">
+        <div class="seg" role="group" aria-label="Option type"><button id="o-call" aria-pressed="true">Call (bet up)</button><button id="o-put" aria-pressed="false">Put (bet down)</button></div>
+        <div class="seg" role="group" aria-label="Buy or sell"><button id="o-buy" aria-pressed="true">Buy it</button><button id="o-sell" aria-pressed="false">Sell it</button></div>
+        <div class="two">
+          <div class="field"><label for="o-S">Stock price now</label><input type="number" id="o-S" min="1" step="0.5" value="50"></div>
+          <div class="field"><label for="o-K">Strike price</label><input type="number" id="o-K" min="1" step="0.5" value="55"></div>
+          <div class="field"><label for="o-prem">Premium per share</label><input type="number" id="o-prem" min="0" step="0.05" value="2"></div>
+          <div class="field"><label for="o-n">Contracts</label><input type="number" id="o-n" min="1" step="1" value="1"></div>
+        </div>
+        <div class="slider"><label for="o-P">Stock price at expiration <b id="o-Pv">$62.00</b></label><input type="range" id="o-P" min="1" max="100" step="0.25" value="62"></div>
+        <div class="slider"><label for="o-days">Days left (dashed line) <b id="o-daysv">30</b></label><input type="range" id="o-days" min="0" max="120" step="1" value="30"></div>
+        <div class="slider"><label for="o-vol">How jumpy the stock is (volatility) <b id="o-volv">35%</b></label><input type="range" id="o-vol" min="10" max="120" step="1" value="35"></div>
+        <button class="btn ghost" id="o-fair">Set a fair premium for me</button>
+      </div>
+      <div style="display:grid;gap:14px;min-width:0">
+        <div class="card">
+          <canvas id="cv-opt" style="height:340px" aria-label="Profit and loss chart for the option"></canvas>
+          <div class="legend"><span><i style="background:var(--ink)"></i>Profit or loss at expiration</span><span><i style="background:var(--accent)"></i>Value today with days left (dashed)</span><span><i style="background:var(--sun)"></i>Your expiration price</span></div>
+          <div class="explain" id="o-explain" aria-live="polite"></div>
+        </div>
+        <div class="stats" id="o-stats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORDS -->
+  <section class="view" id="v-words" hidden>
+    <div class="lab-head"><div><div class="eyebrow">Reference</div><h1>Word Book</h1><p>Every term from the stages, in plain words.</p></div>
+      <div class="field" style="width:min(320px,100%)"><label for="w-q">Find a word</label><input type="search" id="w-q" placeholder="Try “strike” or “dividend”"></div></div>
+    <div class="words" id="w-list"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <p style="max-width:70ch">Ticker Town is for learning only. All companies, prices and news are pretend. Nothing here is financial advice. Real investing, and especially options trading, has real risk. In the U.S. you must be 18 to open your own account; kids can invest through a grown-up's custodial account.</p>
+    <div class="row"><label class="chk"><input type="checkbox" id="teacher"> Teacher mode (unlock free stages)</label><button class="btn ghost" id="restore" style="font-size:13px;padding:7px 12px">Restore purchase</button><a href="privacy.html" style="font-size:13px;color:var(--muted);font-weight:700">Privacy policy</a><button class="btn ghost" id="resetall" style="font-size:13px;padding:7px 12px">Reset progress</button></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="levelup pw" id="paywall" hidden role="dialog" aria-modal="true" aria-labelledby="pw-title"><div class="box" id="pw-box"></div></div>
+<div class="levelup" id="levelup" hidden role="dialog" aria-modal="true" aria-labelledby="lu-title">
+  <div class="box"><div class="lv" id="lu-n">2</div><div class="eyebrow">Level up</div><h2 id="lu-title">Coin Collector</h2><p id="lu-msg"></p><button class="btn sun" id="lu-ok">Keep going</button></div>
+</div>
+
+<script>
+/* ================= data ================= */
+const RANKS = [
+  [0, 'Piggy Bank Rookie'], [100, 'Coin Collector'], [250, 'Chart Reader'], [450, 'Smart Saver'], [700, 'Market Explorer'],
+  [1000, 'Trend Spotter'], [1350, 'Options Apprentice'], [1750, 'Strategy Builder'], [2200, 'Risk Manager'], [2700, 'Market Master']];
+const UNLOCK_MSG = { 3: 'You can read charts like a pro now.', 5: 'Keep stacking those stars.', 7: 'Options Island is calling.', 10: 'You reached the top level. Legend.' };
+
+const L = [
+ { id: 's1', world: 1, title: 'What is a stock?', terms: ['Share', 'Stock', 'Ticker symbol', 'Exchange'], widget: 'own',
+   kid: `<p>Your friend Maya starts a lemonade stand. She needs $100 for lemons, cups and a sign, so she cuts her business into <strong>100 equal pieces</strong> and sells each piece for $1.</p><p>Each piece is called a <strong>share</strong>. If you buy 10 shares, you own 10% of the lemonade stand. When the stand does well, your pieces are worth more.</p><p>Big companies do the same thing with millions of pieces. Owning a stock means you own a tiny slice of a real company.</p>`,
+   adult: `<p>A <strong>share of stock</strong> is a unit of ownership in a company. Companies sell shares to raise money. After that, investors trade shares with each other on <strong>exchanges</strong> like the New York Stock Exchange and Nasdaq.</p><p>Each company has a short <strong>ticker symbol</strong> (Apple is AAPL). Your ownership slice is your shares divided by all the shares that exist. Common stock usually gives you a vote at shareholder meetings and a claim on part of the company's profits.</p>`,
+   quiz: [{ q: 'A company has 100 shares. You own 25. How much of the company do you own?', o: ['25%', '2.5%', '100%', '4%'], why: '25 out of 100 pieces is 25 percent.' },
+          { q: 'What is a ticker symbol?', o: ['A short code that names a stock, like AAPL', 'The price of one share', 'A receipt from the bank'], why: 'Tickers are nicknames on the market board, so AAPL means Apple.' }] },
+ { id: 's2', world: 1, title: 'Why do prices move?', terms: ['Supply and demand', 'Buyer', 'Seller', 'Earnings'], widget: 'tug',
+   kid: `<p>Think about trading cards. When everybody wants the same rare card and nobody wants to give theirs up, the card gets <strong>more expensive</strong>.</p><p>Stocks work the same way. When more people want to <strong>buy</strong> than <strong>sell</strong>, the price goes up. When more people want to sell, the price goes down.</p><p>News changes what people want. A hit new product can make lots of people want the stock.</p>`,
+   adult: `<p>A stock's price is simply the last price where a buyer and a seller agreed to trade. When demand to buy outweighs the supply of shares for sale, buyers bid the price up, and the reverse pushes it down.</p><p>What moves demand: <strong>earnings</strong> reports, company news, interest rates, and the overall mood of the market. Day to day moves are noisy. Over many years, prices tend to follow how much money the business actually makes.</p>`,
+   quiz: [{ q: 'Lots of people want to buy a stock and only a few want to sell. What usually happens?', o: ['The price goes up', 'The price goes down', 'Nothing changes'], why: 'More buyers than sellers pushes the price up.' },
+          { q: 'A company reports much bigger profits than people expected. What often happens next?', o: ['The stock price jumps up', 'The stock disappears', 'The company has to give the money back'], why: 'Good surprises make more people want the stock, so the price often rises.' }] },
+ { id: 's3', world: 1, title: 'Making and losing money', terms: ['Profit', 'Loss', 'Dividend', 'Unrealized gain'], unlock: 'market',
+   kid: `<p>Buy a share for $10, sell it later for $15, and you made <strong>$5 profit</strong>. But prices can fall too. If it drops to $6, you'd lose $4 if you sold.</p><p>Some companies also share their profits with owners. That payment is called a <strong>dividend</strong>, like Maya's lemonade stand paying every owner a quarter each month.</p><p>Finishing this stage unlocks the <strong>Practice Market</strong>, where you can try it with pretend money.</p>`,
+   adult: `<p>You earn money from stocks two ways: the price rising above what you paid (a <strong>capital gain</strong>) and <strong>dividends</strong>, cash some companies pay to shareholders.</p><p>Until you sell, a gain or loss is <strong>unrealized</strong>, meaning it only exists on paper. Prices can fall below what you paid, and a company that fails can go to zero. Total return is price change plus dividends.</p><p>Clearing this stage unlocks the <strong>Practice Market</strong>.</p>`,
+   quiz: [{ q: 'You buy 10 shares at $20 and sell them at $26. What is your profit?', o: ['$60', '$6', '$260', '$46'], why: 'You made $6 per share, times 10 shares = $60.' },
+          { q: 'What is a dividend?', o: ['Cash a company pays its shareholders', 'A fee for buying stock', 'A type of chart'], why: 'Dividends are a slice of profits paid out to owners.' }] },
+ { id: 's4', world: 1, title: 'Reading a stock chart', terms: ['Candlestick', 'Open / Close', 'High / Low', 'Volume', 'Moving average'], widget: 'minichart', unlock: 'charts',
+   kid: `<p>A chart is a picture of the price over time. When the line goes uphill, the price went up.</p><p>Many charts use <strong>candles</strong>. Each candle is one day. <strong>Green</strong> means the price ended the day higher than it started. <strong>Red</strong> means it ended lower. The skinny lines on top and bottom (the wicks) show the highest and lowest price that day.</p><p>Clear this stage to unlock the <strong>Chart Lab</strong> and the Trend Spotter game.</p>`,
+   adult: `<p>A line chart plots each day's closing price. A <strong>candlestick</strong> chart shows four prices per day: <strong>open, high, low, close</strong>. The body runs from open to close; the wicks reach the high and low.</p><p><strong>Volume</strong> bars show how many shares traded. A <strong>moving average</strong> smooths the noise so you can see the trend. Charts describe the past and never guarantee the future.</p><p>Clearing this stage unlocks the <strong>Chart Lab</strong>.</p>`,
+   quiz: [{ q: 'A green candle means…', o: ['The price closed higher than it opened', 'The company is environmentally friendly', 'The stock paid a dividend'], why: 'Green candles close above where they opened.' },
+          { q: 'What does a moving average line do?', o: ['Smooths out daily wiggles to show the trend', 'Shows tomorrow’s price', 'Counts the number of shareholders'], why: 'It averages recent prices so the bigger direction is easier to see.' }] },
+ { id: 's5', world: 1, title: 'Don’t put all your eggs in one basket', terms: ['Diversification', 'Index fund', 'ETF', 'S&P 500'],
+   kid: `<p>If you carry all your eggs in one basket and drop it, every egg breaks. If you spread them across lots of baskets, one fall isn't a disaster.</p><p>Investing works the same way. Owning <strong>many different companies</strong> means one bad company can't ruin everything. A <strong>fund</strong> is a basket that holds lots of stocks for you.</p><p>In the Practice Market, the <strong>Everything Fund</strong> owns a little of every pretend company. Watch how much calmer it moves.</p>`,
+   adult: `<p><strong>Diversification</strong> spreads risk across many companies and industries. <strong>Index funds</strong> and <strong>ETFs</strong> hold hundreds of stocks at once; an S&P 500 fund owns about 500 large U.S. companies.</p><p>Diversifying shrinks the damage from any one company failing. It does not protect you from the whole market falling. In the Practice Market, compare the Everything Fund's swings with Rocket Rides'.</p>`,
+   quiz: [{ q: 'Why do investors diversify?', o: ['So one bad company can’t sink everything', 'To pay fewer taxes', 'To make prices go up'], why: 'Spreading money out limits the damage from any one loser.' },
+          { q: 'An S&P 500 index fund owns…', o: ['About 500 large U.S. companies', 'Exactly one company', '500 dollars of gold'], why: 'It tracks an index of roughly 500 large U.S. companies.' }] },
+ { id: 's6', world: 1, title: 'Time is your superpower', terms: ['Compound growth', 'Return', 'Long term'], widget: 'grow',
+   kid: `<p>When your money grows, the growth starts growing too. That's <strong>compound growth</strong>, like a snowball rolling downhill that picks up more snow the bigger it gets.</p><p>The secret ingredient is <strong>time</strong>. Starting young with small amounts can beat starting later with big amounts. Try the snowball maker below.</p>`,
+   adult: `<p><strong>Compounding</strong> means returns earn their own returns. Over long periods, time in the market matters more than the amount you start with.</p><p>The calculator uses a steady example rate to show the math. Real markets don't grow smoothly: some years are down a lot, and no rate is promised.</p>`,
+   quiz: [{ q: 'Two friends invest $50 a month at the same rate until age 65. Who usually ends up with more?', o: ['The one who starts at 15', 'The one who starts at 35', 'They end up the same'], why: 'Twenty extra years of compounding makes a huge difference.' },
+          { q: 'Compound growth means…', o: ['Your gains start earning gains too', 'Prices never go down', 'You pay interest to the bank'], why: 'Growth on top of growth is the snowball effect.' }] },
+ { id: 's7', world: 1, title: 'Smart habits and staying safe', terms: ['Risk', 'FOMO', 'Custodial account', 'Emergency fund'],
+   kid: `<p>Smart investors follow a few rules:</p><p><strong>Practice first</strong> with pretend money, like in Ticker Town. <strong>Ask a grown-up</strong>; kids under 18 invest through a grown-up's custodial account. <strong>Never invest money you need</strong> for things like food or school trips. <strong>Be suspicious of hype</strong>: if a video says a stock will "go to the moon," it's a warning sign, not a tip.</p>`,
+   adult: `<p>Build an <strong>emergency fund</strong> before investing, and only invest money you won't need for five or more years. Watch fees, since they quietly eat returns. Avoid hype and <strong>FOMO</strong> (fear of missing out), and don't panic-sell during drops.</p><p>Minors in the U.S. can invest through a <strong>custodial account</strong> (UTMA/UGMA) that a parent manages, or a custodial Roth IRA if they have earned income.</p>`,
+   quiz: [{ q: 'Someone online promises a stock will "definitely triple next week." What should you do?', o: ['Be skeptical; nobody can promise that', 'Buy as much as you can', 'Borrow money to buy more'], why: 'Guaranteed quick riches are a classic warning sign.' },
+          { q: 'In the U.S., a 12-year-old who wants to invest usually needs…', o: ['A grown-up to open a custodial account', 'Nothing, they can open one alone', 'A driver’s license'], why: 'You must be 18 to open your own brokerage account.' }] },
+ { id: 'b1', world: 1, boss: true, title: 'Boss: The Market Bull', pool: ['s1','s2','s3','s4','s5','s6','s7'] },
+
+ { id: 'o1', world: 2, title: 'What is an option?', terms: ['Option', 'Strike price', 'Expiration', 'Premium', 'Contract'],
+   kid: `<p>A new video game costs $50 today. You think it'll get pricier once it's popular. The store lets you pay <strong>$2</strong> for a voucher that says: "You can buy this game for $50 any time this month."</p><p>If the price jumps to $70, your voucher is awesome. If it stays at $50 or drops, you just don't use it and you're out the $2. That voucher is an <strong>option</strong>.</p>`,
+   adult: `<p>An <strong>option</strong> is a contract giving the buyer the right, but not the obligation, to buy or sell a stock at a set price (the <strong>strike</strong>) on or before a set date (the <strong>expiration</strong>).</p><p>A standard U.S. stock option <strong>contract covers 100 shares</strong>. The price is the <strong>premium</strong>, quoted per share, so a $2.00 premium costs $200 per contract. <strong>Calls</strong> are the right to buy; <strong>puts</strong> are the right to sell.</p>`,
+   quiz: [{ q: 'One standard stock option contract covers how many shares?', o: ['100', '1', '10', '1,000'], why: 'The 100-share multiplier is why prices are quoted per share.' },
+          { q: 'An option quoted at $1.50 costs how much for one contract?', o: ['$150', '$1.50', '$15', '$1,500'], why: '$1.50 × 100 shares = $150.' }] },
+ { id: 'o2', world: 2, title: 'Calls: betting the price goes up', terms: ['Call option', 'Break-even', 'Max loss'], widget: 'preset:bc', unlock: 'options',
+   kid: `<p>A <strong>call</strong> is the voucher to <strong>buy</strong>. You make money if the stock climbs above the strike price plus what you paid for the voucher.</p><p>Example: the stock is $50. You pay $2 for a $55 call. If the stock hits $62, you can buy at $55 and the voucher is worth $7. You paid $2, so you're up $5 per share, which is $500 for the 100-share contract.</p><p>Clearing this stage unlocks the <strong>Options Lab</strong>.</p>`,
+   adult: `<p>Buying a call profits if the stock finishes above <strong>strike + premium</strong> (the break-even).</p><p>Example: stock $50, buy the $55 call for $2 ($200). At expiration with the stock at $62, the call is worth $7 ($700): a $500 profit. At $55 or below, it expires worthless and you lose the $200. <strong>Max loss is the premium</strong>; the upside has no cap.</p><p>Clearing this stage unlocks the <strong>Options Lab</strong>.</p>`,
+   quiz: [{ q: 'You buy a $55 call for $2. What is your break-even price at expiration?', o: ['$57', '$55', '$53', '$110'], why: 'Strike $55 + $2 premium = $57.' },
+          { q: 'What’s the most you can lose buying that one call contract?', o: ['$200', '$2', '$5,500', 'Unlimited'], why: 'A buyer can only lose the premium: $2 × 100 = $200.' }] },
+ { id: 'o3', world: 2, title: 'Puts: betting down, or buying insurance', terms: ['Put option', 'Protective put'], widget: 'preset:bp',
+   kid: `<p>A <strong>put</strong> is the voucher to <strong>sell</strong> at a set price. It's like insurance on your bike: you pay a little, and if something bad happens (the price falls), you're protected.</p><p>Example: the stock is $50. You pay $1.50 for a $45 put. If the stock crashes to $38, you can still sell at $45. That's $7 a share, minus the $1.50 you paid.</p>`,
+   adult: `<p>A put gives the right to sell at the strike. It profits if the stock finishes below <strong>strike − premium</strong>.</p><p>Example: stock $50, buy the $45 put for $1.50 ($150). At $38 the put is worth $7 ($700): a $550 profit. Investors who own shares sometimes buy puts as insurance, called a <strong>protective put</strong>.</p>`,
+   quiz: [{ q: 'A put option usually gains value when the stock price…', o: ['Falls', 'Rises', 'Stays exactly the same'], why: 'The right to sell at a fixed price is worth more when the market price drops.' },
+          { q: 'You buy a $45 put for $1.50. What’s your break-even?', o: ['$43.50', '$46.50', '$45', '$1.50'], why: '$45 strike − $1.50 premium = $43.50.' }] },
+ { id: 'o4', world: 2, title: 'Why options melt over time', terms: ['Time value', 'Intrinsic value', 'Time decay', 'Volatility'], widget: 'decay',
+   kid: `<p>An option is like an <strong>ice cream cone on a hot day</strong>. It melts a little every day. Less time left means less chance of a big price move, so the option is worth less.</p><p>Options on <strong>jumpy</strong> stocks cost more, because a jumpy stock has a better chance of making a big move. Move the slider below and watch.</p>`,
+   adult: `<p>A premium is <strong>intrinsic value</strong> (how far in the money it is) plus <strong>time value</strong>. Time value shrinks as expiration nears, called <strong>time decay</strong>, and it speeds up in the final weeks.</p><p>Higher <strong>volatility</strong> means bigger possible moves, so premiums rise. The chart below uses the Black-Scholes model to show it.</p>`,
+   quiz: [{ q: 'Everything else equal, is an option with 60 days left usually worth more or less than one with 5 days left?', o: ['More', 'Less', 'Exactly the same'], why: 'More time means more chances for a move, so more time value.' },
+          { q: 'When a stock gets more jumpy (volatile), option premiums usually…', o: ['Go up', 'Go down', 'Disappear'], why: 'Bigger possible swings make the option more valuable.' }] },
+ { id: 'o5', world: 2, title: 'In, at, or out of the money', terms: ['In the money', 'At the money', 'Out of the money'],
+   kid: `<p>A <strong>call</strong> is <strong>in the money</strong> when the stock is above the strike, because the voucher would save you money right now. A <strong>put</strong> is in the money when the stock is below the strike.</p><p>If it wouldn't save you anything yet, it's <strong>out of the money</strong>. Right at the strike is <strong>at the money</strong>.</p>`,
+   adult: `<p>Calls are <strong>in the money (ITM)</strong> when stock > strike; puts are ITM when stock < strike. Near the strike is <strong>at the money (ATM)</strong>; otherwise <strong>out of the money (OTM)</strong>.</p><p>OTM options have only time value. Being ITM at expiration isn't the same as profiting: the stock also has to get past your break-even.</p>`,
+   quiz: [{ q: 'The stock is $60. A $55 call is…', o: ['In the money', 'Out of the money', 'At the money'], why: 'The right to buy at $55 when the price is $60 is worth $5 right now.' },
+          { q: 'The stock is $60. A $55 put is…', o: ['Out of the money', 'In the money', 'At the money'], why: 'Nobody wants to sell at $55 when they can sell at $60.' }] },
+ { id: 'o6', world: 2, title: 'Buyers vs. sellers', terms: ['Option writer', 'Naked call', 'Covered call', 'Cash-secured put'], widget: 'preset:sc',
+   kid: `<p>For every voucher buyer, there's a <strong>seller</strong>. The seller keeps the $2 right away, but must sell the game at $50 even if it's now worth $90. Ouch.</p><p>Buying an option means your biggest loss is what you paid. <strong>Selling</strong> options can lose much more, so beginners stick to buying with pretend money first.</p>`,
+   adult: `<p>Option sellers (writers) collect the premium up front and take on the obligation. Selling a call without owning the shares, a <strong>naked call</strong>, has theoretically <strong>unlimited risk</strong>.</p><p>More conservative versions include <strong>covered calls</strong> (selling calls on shares you own) and <strong>cash-secured puts</strong>. Brokers require options approval and you must be 18 or older. Paper-trade first.</p>`,
+   quiz: [{ q: 'Who has potentially unlimited risk?', o: ['Someone who sells a call without owning the stock', 'Someone who buys a call', 'Someone who buys a put'], why: 'If the stock soars, a naked call seller must deliver shares at any price.' },
+          { q: 'When does an option seller get the premium?', o: ['Up front, when they sell', 'Only if the stock goes up', 'At the end of the year'], why: 'Sellers collect the premium immediately.' }] },
+ { id: 'b2', world: 2, boss: true, title: 'Boss: The Options Kraken', pool: ['o1','o2','o3','o4','o5','o6'] },
+];
+const STAGES = L.map(x => x.id);
+const BYID = Object.fromEntries(L.map(x => [x.id, x]));
+const WORLDS = [{ n: 1, name: 'Stock Street', sub: 'World 1 · Stocks' }, { n: 2, name: 'Options Island', sub: 'World 2 · Options' }];
+const LAB_GATE = { market: 's3', charts: 's4', options: 'o2' };
+
+const MISSIONS = [
+ { id: 'm1', title: 'First share', d: 'Buy any stock in the Practice Market.', xp: 40 },
+ { id: 'm2', title: 'Basket builder', d: 'Own 3 different stocks at the same time.', xp: 60 },
+ { id: 'm3', title: 'Steady hands', d: 'Keep the Practice Market going until Day 30.', xp: 60 },
+ { id: 'm4', title: 'Grow it', d: 'Reach a portfolio worth $10,500 or more.', xp: 80 },
+ { id: 'm5', title: 'Trend spotter', d: 'Get a 5-answer streak in Trend Spotter.', xp: 60 },
+ { id: 'm6', title: 'Candle detective', d: 'Tap or hover a candle in the Chart Lab.', xp: 30 },
+ { id: 'm7', title: 'Break-even finder', d: 'In the Options Lab, slide the expiration price onto the break-even.', xp: 60 },
+ { id: 'm8', title: 'Insurance agent', d: 'Build a put in the Options Lab.', xp: 30 },
+ { id: 'm9', title: 'Snowball', d: 'Make the snowball calculator reach $100,000.', xp: 40 },
+];
+
+const WORDS = [
+ ['Share', 'Stocks', 'One small piece of ownership in a company.'], ['Stock', 'Stocks', 'Ownership in a company, made up of shares.'],
+ ['Ticker symbol', 'Stocks', 'A short code for a stock on the market board, like AAPL for Apple.'], ['Exchange', 'Stocks', 'A marketplace where shares are bought and sold, like the NYSE or Nasdaq.'],
+ ['Supply and demand', 'Stocks', 'More buyers than sellers pushes a price up; more sellers pushes it down.'], ['Earnings', 'Stocks', 'The profit a company makes. Companies report it every three months.'],
+ ['Dividend', 'Stocks', 'Cash a company pays to its shareholders from its profits.'], ['Capital gain', 'Stocks', 'Profit from selling something for more than you paid.'],
+ ['Unrealized gain', 'Stocks', 'A gain that only exists on paper because you haven’t sold yet.'], ['Candlestick', 'Charts', 'A chart mark showing a day’s open, high, low and close.'],
+ ['Volume', 'Charts', 'How many shares traded during a period.'], ['Moving average', 'Charts', 'The average of recent prices, drawn as a smooth line to show the trend.'],
+ ['Trend', 'Charts', 'The general direction a price has been moving: up, down or sideways.'], ['Diversification', 'Stocks', 'Spreading money across many investments so one loser can’t sink you.'],
+ ['Index fund', 'Stocks', 'A fund that owns every stock in a list, like the S&P 500.'], ['ETF', 'Stocks', 'Exchange-traded fund: a basket of investments that trades like one stock.'],
+ ['S&P 500', 'Stocks', 'An index of about 500 large U.S. companies.'], ['Compound growth', 'Stocks', 'Growth that earns more growth, like a rolling snowball.'],
+ ['Portfolio', 'Stocks', 'All the investments you own.'], ['Custodial account', 'Safety', 'An account a grown-up manages for a kid until they become an adult.'],
+ ['FOMO', 'Safety', 'Fear of missing out: buying because everyone else is, not because it makes sense.'], ['Emergency fund', 'Safety', 'Savings set aside for surprises, kept out of the stock market.'],
+ ['Option', 'Options', 'A contract giving the right, but not the duty, to buy or sell a stock at a set price before a set date.'], ['Call option', 'Options', 'The right to buy a stock at the strike price.'],
+ ['Put option', 'Options', 'The right to sell a stock at the strike price.'], ['Strike price', 'Options', 'The set price in an option contract.'],
+ ['Expiration', 'Options', 'The last day an option can be used.'], ['Premium', 'Options', 'The price of an option, quoted per share. Multiply by 100 for one contract.'],
+ ['Contract', 'Options', 'One option, which covers 100 shares.'], ['Break-even', 'Options', 'The stock price where you neither make nor lose money at expiration.'],
+ ['Intrinsic value', 'Options', 'What an option would be worth if used right now.'], ['Time value', 'Options', 'The extra value from time left for the stock to move.'],
+ ['Time decay', 'Options', 'Options lose time value every day, faster near expiration.'], ['Volatility', 'Options', 'How jumpy a stock’s price is. Higher volatility makes options cost more.'],
+ ['In the money', 'Options', 'A call with the stock above the strike, or a put with the stock below it.'], ['Out of the money', 'Options', 'An option that would be worth nothing if used right now.'],
+ ['Covered call', 'Options', 'Selling a call on shares you already own.'], ['Naked call', 'Options', 'Selling a call without owning the shares. Risk has no limit.'],
+ ['Cash-secured put', 'Options', 'Selling a put while holding enough cash to buy the shares if needed.'], ['Protective put', 'Options', 'Buying a put on shares you own, like insurance.'],
+];
+
+/* ================= state ================= */
+const KEY = 'tickertown.v1';
+const S = { mode: 'kid', xp: 0, stars: {}, missions: {}, mkt: null, best: 0, teacher: false, full: false };
+try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+/* ================= helpers ================= */
+const $ = s => document.querySelector(s);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const money = (v, d = 2) => (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = v => (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(1) + '%';
+const MONO = '"JetBrains Mono", ui-monospace, monospace';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gaussFrom(r) { return () => { let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }; }
+const gauss = gaussFrom(Math.random);
+function shuffle(a, r = Math.random) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function sma(a, k) { return a.map((_, i) => i < k - 1 ? null : a.slice(i - k + 1, i + 1).reduce((s, x) => s + x, 0) / k); }
+
+/* ================= canvas core ================= */
+const DRAW = new Map();
+const ro = new ResizeObserver(es => es.forEach(e => { const f = DRAW.get(e.target); if (f) f(); }));
+function reg(cv, fn) { DRAW.forEach((f, c) => { if (!c.isConnected) { ro.unobserve(c); DRAW.delete(c); } }); DRAW.set(cv, fn); ro.observe(cv); fn(); }
+function redrawAll() { DRAW.forEach((f, c) => { if (c.isConnected) f(); }); }
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAll);
+new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+function prep(cv) { const dpr = Math.min(2, window.devicePixelRatio || 1); const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return null;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h); return { ctx, w, h }; }
+function nice(min, max, n = 5) { if (min === max) { min -= 1; max += 1; } const step0 = (max - min) / n, mag = Math.pow(10, Math.floor(Math.log10(step0))), e = step0 / mag;
+  const step = (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag; const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step; const t = [];
+  for (let v = lo; v <= hi + step * 1e-6; v += step) t.push(+v.toFixed(10)); return { lo, hi, step, ticks: t }; }
+function axisFmt(step) { return v => { const a = Math.abs(v); const s = a >= 10000 ? (a / 1000).toFixed(a >= 100000 ? 0 : 1) + 'k' : a.toFixed(step < 1 ? 2 : 0); return (v < 0 ? '−$' : '$') + s; }; }
+function plot(g, o) { const { ctx, w, h } = g; const pad = { l: o.padL ?? 56, r: o.padR ?? 12, t: o.padT ?? 12, b: o.padB ?? 26 };
+  const yt = nice(o.y0, o.y1, o.yn || 5); const box = { x: pad.l, y: pad.t, w: Math.max(10, w - pad.l - pad.r), h: Math.max(10, h - pad.t - pad.b) };
+  const X = v => box.x + (v - o.x0) / (o.x1 - o.x0) * box.w; const Y = v => box.y + box.h - (v - yt.lo) / (yt.hi - yt.lo) * box.h;
+  const yf = o.yfmt || axisFmt(yt.step);
+  ctx.font = `500 11px ${MONO}`; ctx.fillStyle = css('--muted'); ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  yt.ticks.forEach(v => { const y = Math.round(Y(v)) + .5; ctx.beginPath(); ctx.moveTo(box.x, y); ctx.lineTo(box.x + box.w, y); ctx.stroke(); ctx.fillText(yf(v), box.x - 8, y); });
+  if (o.xticks) { ctx.textAlign = 'center'; ctx.textBaseline = 'top'; o.xticks.forEach(([v, l]) => { const x = X(v); if (x >= box.x - 2 && x <= box.x + box.w + 2) ctx.fillText(l, x, box.y + box.h + 8); }); }
+  return { X, Y, box, yt, x0: o.x0, x1: o.x1 }; }
+function linePath(ctx, pts) { ctx.beginPath(); let started = false; pts.forEach(p => { if (p[1] == null || isNaN(p[1])) { started = false; return; } started ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); started = true; }); }
+function dayTicks(n, first = 1) { const step = n > 50 ? 10 : n > 25 ? 5 : n > 12 ? 3 : 1; const t = []; for (let i = 0; i < n; i += step) t.push([i, 'D' + (first + i)]); return t; }
+function idxAt(cv, e, n) { const m = cv._map; if (!m) return null; const r = cv.getBoundingClientRect(); const v = m.x0 + (e.clientX - r.left - m.box.x) / m.box.w * (m.x1 - m.x0); const i = Math.round(v); return i < 0 || i >= n ? null : i; }
+
+function genOHLC(n, seed, o = {}) { const r = mulberry32(seed), g = gaussFrom(r); const sig = o.sig || .018; let c = o.start || 50; const base = c; const out = [];
+  for (let i = 0; i < n; i++) { const op = c * (1 + g() * sig * .25); let ret = (o.mu || 0) + g() * sig; if (o.revert) ret += Math.log(base / c) * o.revert;
+    const cl = op * Math.exp(ret); const hi = Math.max(op, cl) * (1 + Math.abs(g()) * sig * .5); const lo = Math.min(op, cl) * (1 - Math.abs(g()) * sig * .5);
+    out.push({ o: op, h: hi, l: lo, c: cl, v: Math.round((700 + Math.abs(ret) / sig * 900 + r() * 500) * 1000) }); c = cl; } return out; }
+
+function drawOHLC(cv, d, o = {}) { const g = prep(cv); if (!g) return; const { ctx } = g; const n = d.length;
+  const lo = Math.min(...d.map(x => x.l)), hi = Math.max(...d.map(x => x.h)), m = (hi - lo) * .08;
+  const P = plot(g, { x0: -.7, x1: n - .3, y0: lo - m, y1: hi + m, xticks: o.noX ? null : dayTicks(n), padL: o.padL, padB: o.noX ? 10 : 26 }); cv._map = P; const { X, Y, box } = P;
+  const up = css('--up'), dn = css('--down'), bw = Math.max(2, box.w / n * .62);
+  if (o.vol) { const mv = Math.max(...d.map(x => x.v)); ctx.globalAlpha = .25; d.forEach((x, i) => { ctx.fillStyle = x.c >= x.o ? up : dn; const hh = x.v / mv * box.h * .2; ctx.fillRect(X(i) - bw / 2, box.y + box.h - hh, bw, hh); }); ctx.globalAlpha = 1; }
+  if (o.type === 'line') { const acc = css('--accent'); const pts = d.map((x, i) => [X(i), Y(x.c)]);
+    ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.lineTo(X(n - 1), box.y + box.h); ctx.lineTo(X(0), box.y + box.h); ctx.closePath();
+    const gr = ctx.createLinearGradient(0, box.y, 0, box.y + box.h); gr.addColorStop(0, css('--accent-soft')); gr.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = gr; ctx.fill();
+    linePath(ctx, pts); ctx.strokeStyle = acc; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+    ctx.beginPath(); ctx.arc(...pts[n - 1], 4, 0, 7); ctx.fillStyle = acc; ctx.fill(); }
+  else d.forEach((x, i) => { const c = x.c >= x.o ? up : dn; ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = 1.5; const xx = Math.round(X(i)) + .5;
+    ctx.beginPath(); ctx.moveTo(xx, Y(x.h)); ctx.lineTo(xx, Y(x.l)); ctx.stroke(); const y1 = Y(Math.max(x.o, x.c)), y2 = Y(Math.min(x.o, x.c)); ctx.fillRect(X(i) - bw / 2, y1, bw, Math.max(1.5, y2 - y1)); });
+  if (o.ma) { const a = sma(d.map(x => x.c), 10); linePath(ctx, a.map((v, i) => [X(i), v == null ? null : Y(v)])); ctx.strokeStyle = css('--ma'); ctx.lineWidth = 2.2; ctx.stroke(); }
+  if (o.hover != null) { const x = X(o.hover); ctx.strokeStyle = css('--ink'); ctx.globalAlpha = .35; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x, box.y); ctx.lineTo(x, box.y + box.h); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+    ctx.beginPath(); ctx.arc(x, Y(d[o.hover].c), 4.5, 0, 7); ctx.fillStyle = css('--ink'); ctx.fill(); } }
+
+function drawLine(cv, vals, o = {}) { const g = prep(cv); if (!g) return; const { ctx } = g; const n = vals.length;
+  if (o.spark) { const lo = Math.min(...vals), hi = Math.max(...vals); const X = i => 2 + i / (n - 1) * (g.w - 4), Y = v => g.h - 3 - (v - lo) / ((hi - lo) || 1) * (g.h - 6);
+    ctx.beginPath(); vals.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.strokeStyle = vals[n - 1] >= vals[0] ? css('--up') : css('--down'); ctx.lineWidth = 2; ctx.stroke(); return; }
+  let lo = Math.min(...vals), hi = Math.max(...vals); if (o.base != null) { lo = Math.min(lo, o.base); hi = Math.max(hi, o.base); } const m = (hi - lo) * .1 || hi * .02 || 1;
+  const P = plot(g, { x0: 0, x1: Math.max(1, n - 1), y0: lo - m, y1: hi + m, xticks: o.xticks || dayTicks(n, o.first || 1), padL: 62 }); cv._map = P; const { X, Y, box } = P;
+  const col = o.color || (vals[n - 1] >= (o.base ?? vals[0]) ? css('--up') : css('--down'));
+  if (o.base != null) { ctx.setLineDash([5, 5]); ctx.strokeStyle = css('--muted'); ctx.beginPath(); ctx.moveTo(box.x, Y(o.base)); ctx.lineTo(box.x + box.w, Y(o.base)); ctx.stroke(); ctx.setLineDash([]); }
+  const pts = vals.map((v, i) => [X(i), Y(v)]); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.lineTo(X(n - 1), box.y + box.h); ctx.lineTo(X(0), box.y + box.h); ctx.closePath();
+  ctx.globalAlpha = .13; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = 1; linePath(ctx, pts); ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(...pts[n - 1], 4, 0, 7); ctx.fillStyle = col; ctx.fill(); }
+
+/* ================= XP / levels ================= */
+function levelOf(xp) { let i = 0; RANKS.forEach((r, k) => { if (xp >= r[0]) i = k; }); return i; }
+function hud() { const i = levelOf(S.xp), cur = RANKS[i][0], next = RANKS[i + 1] ? RANKS[i + 1][0] : null;
+  $('#h-lvl').textContent = i + 1; $('#h-rank').textContent = RANKS[i][1];
+  $('#h-bar').style.width = next ? ((S.xp - cur) / (next - cur) * 100).toFixed(1) + '%' : '100%';
+  $('#h-xp').textContent = next ? `${S.xp} / ${next} XP` : `${S.xp} XP · max level`;
+  $('#h-stars').textContent = Object.values(S.stars).reduce((a, b) => a + b, 0);
+  document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === S.mode));
+  document.querySelectorAll('.tab').forEach(t => { const g = LAB_GATE[t.dataset.tab]; const lk = g && !isOpen(t.dataset.tab); t.classList.toggle('locked', !!lk);
+    t.innerHTML = t.innerHTML.replace(/<span class="lk"[^>]*>.*?<\/span>/g, '') + (lk ? '<span class="lk" aria-label="locked">🔒</span>' : ''); }); }
+function popXP(n, el) { if (!n) return; const p = document.createElement('div'); p.className = 'xp-pop'; p.textContent = '+' + n + ' XP';
+  let x = innerWidth / 2, y = innerHeight / 2; if (el && el.getBoundingClientRect) { const r = el.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top; }
+  p.style.left = x + 'px'; p.style.top = y + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1200); }
+function addXP(n, el) { const before = levelOf(S.xp); S.xp += n; save(); popXP(n, el); hud(); const after = levelOf(S.xp);
+  if (after > before) setTimeout(() => levelUp(after), 500); }
+function levelUp(i) { $('#lu-n').textContent = i + 1; $('#lu-title').textContent = RANKS[i][1];
+  $('#lu-msg').textContent = UNLOCK_MSG[i + 1] || `You're now level ${i + 1}. Next up: ${RANKS[i + 1] ? RANKS[i + 1][1] : 'nothing, you won Ticker Town'}.`;
+  $('#levelup').hidden = false; $('#lu-ok').focus(); confetti(); }
+$('#lu-ok').onclick = () => { $('#levelup').hidden = true; };
+let toastT; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+function mission(id, el) { if (S.missions[id]) return; const m = MISSIONS.find(x => x.id === id); S.missions[id] = true; save(); addXP(m.xp, el); toast(`Mission complete: ${m.title}`); renderMissions(); }
+function confetti() { if (reduce) return; const cv = $('#confetti'); const dpr = Math.min(2, devicePixelRatio || 1); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cols = [css('--sun'), css('--accent'), css('--up'), css('--down'), css('--isle')]; const ps = Array.from({ length: 140 }, () => ({ x: innerWidth / 2, y: innerHeight * .45, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: Math.random() * 6, s: 4 + Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)] }));
+  let f = 0; (function tick() { ctx.clearRect(0, 0, innerWidth, innerHeight); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .35; p.vx *= .99; p.r += .1; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); ctx.restore(); });
+    if (++f < 110) requestAnimationFrame(tick); else ctx.clearRect(0, 0, innerWidth, innerHeight); })(); }
+
+/* ================= routing ================= */
+const PAID = new Set(['b1', 'o1', 'o2', 'o3', 'o4', 'o5', 'o6', 'b2']);
+const paid = id => PAID.has(id) && !S.full;
+function isOpen(tab) { if (tab === 'options' && !S.full) return false; const g = LAB_GATE[tab]; return !g || S.teacher || !!S.stars[g]; }
+function isUnlocked(id) { if (S.teacher) return true; const i = STAGES.indexOf(id); return i === 0 || !!S.stars[STAGES[i - 1]]; }
+let TAB = 'map';
+function go(tab, keepStage) { TAB = tab; document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.tab === tab));
+  document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== 'v-' + tab);
+  try { history.replaceState(null, '', '#' + tab); } catch (e) {}
+  if (tab === 'map' && !keepStage) showMap();
+  if (LAB_GATE[tab] && !isOpen(tab)) lockScreen(tab); else unlockScreen(tab);
+  if (tab === 'market') renderMarket(); if (tab === 'options') renderOpt(); if (tab === 'charts') { drawLab(); drawTrend(); }
+  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); }
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => go(t.dataset.tab));
+document.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
+function lockScreen(tab) { const v = $('#v-' + tab); [...v.children].forEach(c => { if (!c.classList.contains('lockscreen')) c.hidden = true; }); let ls = v.querySelector('.lockscreen');
+  if (!ls) { ls = document.createElement('div'); ls.className = 'lockscreen'; v.appendChild(ls); } const st = BYID[LAB_GATE[tab]];
+  if (tab === 'options' && !S.full) { ls.hidden = false; ls.innerHTML = `<div class="pad">🔑</div><h2>Part of the full game</h2><p>The Options Lab comes with the full game, along with Options Island and both boss battles.</p><div class="row" style="justify-content:center;margin-top:16px"><button class="btn sun" id="ls-buy">Unlock full game · ${priceStr()}</button></div>`; ls.querySelector('#ls-buy').onclick = openPaywall; return; }
+  ls.hidden = false; ls.innerHTML = `<div class="pad">🔒</div><h2>Locked for now</h2><p>Clear <b>Stage ${STAGES.indexOf(st.id) + 1 - (st.world === 2 ? 8 : 0)}: ${st.title}</b> on ${st.world === 1 ? 'Stock Street' : 'Options Island'} to unlock this lab.</p><div class="row" style="justify-content:center;margin-top:16px"><button class="btn sun" id="ls-go">Go to the map</button></div>`;
+  ls.querySelector('#ls-go').onclick = () => go('map'); }
+function unlockScreen(tab) { const v = $('#v-' + tab); const ls = v.querySelector('.lockscreen'); if (ls) ls.hidden = true; [...v.children].forEach(c => { if (!c.classList.contains('lockscreen')) c.hidden = false; }); }
+
+/* ================= MAP ================= */
+function starStr(n) { return '<span class="stars">' + [0, 1, 2].map(i => i < n ? '★' : '<span class="off">★</span>').join('') + '</span>'; }
+function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const nextId = STAGES.find(id => !S.stars[id] && isUnlocked(id) && !paid(id));
+  const xs = ['4%', '30%', '52%', '30%'];
+  WORLDS.forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
+    const el = document.createElement('div'); el.className = 'world w' + w.n;
+    el.innerHTML = `<div class="world-top"><div><div class="eyebrow">${w.sub}</div><h2>${w.name}</h2></div><div class="mono muted" style="font-size:13px">★ ${got} / ${stages.length * 3}</div></div><div class="path"><svg class="trail" aria-hidden="true"></svg></div>`;
+    const path = el.querySelector('.path'); let num = 0;
+    stages.forEach((s, k) => { if (!s.boss) num++; const un = isUnlocked(s.id), pw = paid(s.id), st = S.stars[s.id] || 0; const b = document.createElement('button');
+      b.className = 'node' + (st ? ' done' : '') + (!un || pw ? ' locked' : '') + (s.id === nextId ? ' next' : '') + (s.boss ? ' boss' : ''); b.style.setProperty('--x', xs[k % 4]);
+      b.innerHTML = `<span class="disc">${pw ? '🔑' : s.boss ? 'BOSS' : (un ? num : '🔒')}</span><span class="lbl"><b>${s.title}${pw ? '<span class="fullchip">Full game</span>' : ''}</b><small>${s.boss ? 'Mixed questions · 3 hearts' : 'Stage ' + num}${s.unlock ? ' · unlocks ' + { market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock] : ''}</small><br>${starStr(st)}</span>`;
+      b.disabled = !un && !pw; b.onclick = () => pw ? openPaywall() : openStage(s.id); path.appendChild(b); });
+    if (w.n === 2 && !S.full) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔑<br>Options Island is part of the full game: 6 options stages, both boss battles and the Options Lab.<br><button class="btn sun" style="margin-top:12px">Unlock for ${priceStr()}</button></div>`; lk.querySelector('button').onclick = openPaywall; el.appendChild(lk); }
+    else if (w.n === 2 && !isUnlocked('o1')) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = '<div>🔒<br>Beat The Market Bull at the end of Stock Street to sail to Options Island.</div>'; el.appendChild(lk); }
+    box.appendChild(el); });
+  requestAnimationFrame(drawTrails); renderMissions(); renderRanks();
+  const needBuy = !nextId && !S.full; $('#continue').textContent = nextId ? 'Play next stage' : needBuy ? 'Unlock the full game' : 'All stages cleared!'; $('#continue').disabled = !nextId && !needBuy;
+  $('#continue').onclick = () => nextId ? openStage(nextId) : needBuy && openPaywall(); $('#unlockbtn').hidden = S.full || needBuy; $('#unlockbtn').onclick = openPaywall; }
+function drawTrails() { document.querySelectorAll('.path').forEach(p => { const svg = p.querySelector('svg'); const pr = p.getBoundingClientRect(); const pts = [...p.querySelectorAll('.disc')].map(d => { const r = d.getBoundingClientRect(); return [r.left - pr.left + r.width / 2, r.top - pr.top + r.height / 2]; });
+  if (pts.length < 2) return; let dd = `M${pts[0][0]},${pts[0][1]}`; for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], my = (a[1] + b[1]) / 2; dd += ` C${a[0]},${my} ${b[0]},${my} ${b[0]},${b[1]}`; }
+  svg.innerHTML = `<path d="${dd}" fill="none" stroke="var(--line)" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/>`; }); }
+new ResizeObserver(() => drawTrails()).observe($('#worlds'));
+function renderMissions() { $('#missions').innerHTML = MISSIONS.map(m => `<div class="mission ${S.missions[m.id] ? 'got' : ''}"><span class="ck">${S.missions[m.id] ? '✓' : ''}</span><div><b>${m.title}</b><small>${m.d}</small></div><span class="xp">+${m.xp} XP</span></div>`).join(''); }
+function renderRanks() { const me = levelOf(S.xp); $('#ranks').innerHTML = RANKS.map((r, i) => `<div class="rankrow ${i === me ? 'me' : ''}"><span>Lv ${i + 1} · ${r[1]}</span><span class="mono">${r[0]} XP</span></div>`).join(''); }
+function showMap() { $('#stage').hidden = true; $('#map-home').hidden = false; renderMap(); }
+
+/* ================= STAGE / QUIZ ================= */
+let Q = null;
+function openStage(id) { const s = BYID[id]; if (paid(id)) return openPaywall(); if (!isUnlocked(id)) return; go('map', true); $('#map-home').hidden = true; const st = $('#stage'); st.hidden = false;
+  const wname = s.world === 1 ? 'Stock Street' : 'Options Island'; const num = L.filter(x => x.world === s.world && !x.boss).findIndex(x => x.id === id) + 1;
+  if (s.boss) { const qs = shuffle(s.pool.flatMap(pid => BYID[pid].quiz.map(q => ({ ...q, from: pid })))).slice(0, 7);
+    Q = { id, qs, i: 0, miss: 0, hearts: 3, boss: true };
+    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">Answer 7 mixed questions from this world. Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.world === 1 ? ' and unlock Options Island' : ' and finish the game'}.</p><div class="quiz card" id="quiz"></div></div>`; }
+  else { Q = { id, qs: s.quiz.map(q => ({ ...q })), i: 0, miss: 0, boss: false };
+    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Stage ${num}</span></div>
+      <h2>${s.title}</h2><div class="lesson-text" id="ltext">${S.mode === 'kid' ? s.kid : s.adult}</div><div class="terms">${s.terms.map(t => `<span>${t}</span>`).join('')}</div>
+      <div id="widget"></div><div class="quiz card" id="quiz"></div></div>`;
+    if (s.widget) WIDGETS[s.widget.split(':')[0]]($('#widget'), s.widget.split(':')[1]); }
+  $('#back').onclick = () => showMap(); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' }); }
+function renderQ() { const box = $('#quiz'); const q = Q.qs[Q.i]; const n = Q.qs.length;
+  if (!q) return finishStage();
+  const order = shuffle(q.o.map((t, k) => ({ t, k })));
+  box.innerHTML = `<div class="qhead"><span class="eyebrow">${Q.boss ? 'Boss question' : 'Checkpoint'} ${Q.i + 1} of ${n}</span>${Q.boss ? `<span class="hearts" aria-label="${Q.hearts} hearts left">${[0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('')}</span>` : '<span class="mono muted" style="font-size:12px">+20 XP if right first try</span>'}</div>
+    <div class="qprog"><i style="width:${Q.i / n * 100}%"></i></div><div class="qcard"><div class="q">${q.q}</div><div class="opts">${order.map((x, j) => `<button class="opt" data-k="${x.k}"><span class="k">${'ABCD'[j]}</span>${x.t}</button>`).join('')}</div><div id="why"></div></div>`;
+  let tried = false;
+  box.querySelectorAll('.opt').forEach(b => b.onclick = () => { const right = +b.dataset.k === 0;
+    if (right) { box.querySelectorAll('.opt').forEach(o => o.disabled = true); b.classList.add('right');
+      if (!tried) addXP(Q.boss ? 15 : 20, b);
+      $('#why').innerHTML = `<div class="why ok"><b>${['Nice!', 'You got it!', 'Correct!', 'Boom!'][Math.floor(Math.random() * 4)]}</b>${q.why}</div><div class="row" style="margin-top:12px"><button class="btn" id="nextq">${Q.i + 1 < n ? 'Next question' : 'Finish'}</button></div>`;
+      $('#nextq').onclick = () => { Q.i++; renderQ(); }; $('#nextq').focus(); }
+    else { b.classList.add('wrong'); b.disabled = true; if (!tried) Q.miss++; tried = true;
+      if (Q.boss) { Q.hearts--; box.querySelector('.hearts').innerHTML = [0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('');
+        if (Q.hearts <= 0) { box.querySelectorAll('.opt').forEach(o => o.disabled = true); $('#why').innerHTML = `<div class="why no"><b>Out of hearts!</b>The boss wins this round. The right answer: ${q.o[0]}. Review the stages and try again.</div><div class="row" style="margin-top:12px"><button class="btn sun" id="retry">Try again</button><button class="btn ghost" id="tomap">Back to map</button></div>`;
+          $('#retry').onclick = () => openStage(Q.id); $('#tomap').onclick = () => showMap(); return; } }
+      $('#why').innerHTML = `<div class="why no"><b>Not quite.</b>Try another answer.</div>`; } }); }
+function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts : (Q.miss === 0 ? 3 : Q.miss === 1 ? 2 : 1); const prev = S.stars[Q.id] || 0; const first = !prev;
+  S.stars[Q.id] = Math.max(prev, stars); save(); let bonus = 0;
+  if (first) bonus = Q.boss ? 150 : 50; else if (stars > prev) bonus = 10 * (stars - prev);
+  const nextId = STAGES[STAGES.indexOf(Q.id) + 1]; const unlockTxt = first && s.unlock ? `<p><b>Unlocked: ${{ market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock]}!</b></p>` : '';
+  $('#quiz').innerHTML = `<div class="win"><div class="big">${starStr(stars).replace('class="stars"', 'class="stars" style="letter-spacing:8px"')}</div><h3>${Q.boss ? (Q.hearts ? 'Boss defeated!' : '') : 'Stage clear!'}</h3><p>${stars === 3 ? 'Perfect run.' : stars === 2 ? 'Great job. Replay for 3 stars.' : 'Cleared! Replay any time for more stars.'}</p>${unlockTxt}
+    <div class="row">${s.unlock && first ? `<button class="btn sun" id="golab">Open the lab</button>` : ''}${nextId && !BYID[nextId] ? '' : nextId ? `<button class="btn" id="nexts">Next stage</button>` : ''}<button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
+  if (bonus) setTimeout(() => addXP(bonus, $('#quiz .big')), 250);
+  if (Q.boss && first) setTimeout(confetti, 300);
+  hud(); const gl = $('#golab'); if (gl) gl.onclick = () => go(s.unlock); const ns = $('#nexts'); if (ns) ns.onclick = () => openStage(nextId); $('#tomap2').onclick = () => showMap(); }
+
+/* ================= lesson widgets ================= */
+const WIDGETS = {
+  own(el) { el.innerHTML = `<div class="widget"><h4>Buy pieces of Maya's Lemonade</h4><div class="slider"><label for="w-own">Shares you buy <b id="w-ownv">10</b></label><input type="range" id="w-own" min="0" max="100" value="10"></div>
+      <div id="w-grid" style="display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin-top:12px;max-width:520px"></div><p id="w-owntxt" style="margin-top:10px"></p></div>`;
+    const r = el.querySelector('#w-own'); const f = () => { const n = +r.value; el.querySelector('#w-ownv').textContent = n;
+      el.querySelector('#w-grid').innerHTML = Array.from({ length: 100 }, (_, i) => `<span style="aspect-ratio:1;border-radius:3px;background:${i < n ? 'var(--sun)' : 'var(--line)'}"></span>`).join('');
+      el.querySelector('#w-owntxt').innerHTML = `You own <b>${n} of 100</b> shares, which is <b>${n}%</b> of the stand. If it makes $40 profit this summer, your slice is <b>${money(40 * n / 100)}</b>.`; }; r.oninput = f; f(); },
+  tug(el) { el.innerHTML = `<div class="widget"><h4>Buyers vs. sellers</h4><p class="muted" style="font-size:14.5px">Add buyers or sellers and watch the price of Robo Pup stock.</p>
+      <div class="row" style="margin-top:10px"><button class="btn up" id="tb">+5 buyers</button><button class="btn down" id="ts">+5 sellers</button><span class="mono" id="tp" style="font-size:22px;font-weight:700;margin-left:auto"></span></div>
+      <canvas id="tcv" style="height:150px;margin-top:10px" aria-label="Price reacting to buyers and sellers"></canvas><p id="tt" style="margin-top:8px;font-weight:700"></p></div>`;
+    let B = 20, Sl = 20; const hist = [10]; const cv = el.querySelector('#tcv');
+    const upd = () => { const p = 10 * Math.exp(.035 * (B - Sl)); hist.push(+p.toFixed(2)); if (hist.length > 30) hist.shift();
+      el.querySelector('#tp').textContent = money(p); el.querySelector('#tt').textContent = B > Sl ? `${B} buyers vs ${Sl} sellers: buyers win, the price climbs.` : B < Sl ? `${B} buyers vs ${Sl} sellers: sellers win, the price drops.` : `${B} buyers and ${Sl} sellers: balanced, the price holds.`;
+      reg(cv, () => drawLine(cv, hist, { xticks: [], padB: 10 })); };
+    el.querySelector('#tb').onclick = () => { B += 5; upd(); }; el.querySelector('#ts').onclick = () => { Sl += 5; upd(); }; el.querySelector('#tp').textContent = '$10.00';
+    el.querySelector('#tt').textContent = 'Balanced: 20 buyers and 20 sellers.'; reg(cv, () => drawLine(cv, hist.length > 1 ? hist : [10, 10], { xticks: [], color: css('--accent') })); },
+  minichart(el) { el.innerHTML = `<div class="widget"><h4>Tap a candle</h4><canvas id="mcv" style="height:220px" aria-label="Small practice candle chart"></canvas><div class="readout" id="mread">Tap or hover any candle to read its four prices.</div></div>`;
+    const d = genOHLC(24, 7, { start: 20, sig: .03, mu: .004 }); const cv = el.querySelector('#mcv'); let h = null;
+    const draw = () => drawOHLC(cv, d, { hover: h, vol: false }); reg(cv, draw);
+    cv.onpointermove = cv.onpointerdown = e => { const i = idxAt(cv, e, d.length); if (i == null || i === h) return; h = i; draw(); el.querySelector('#mread').innerHTML = candleText(d[i], i); }; },
+  grow(el) { el.innerHTML = `<div class="widget"><h4>Snowball maker</h4><div class="trade" style="margin-top:0">
+      <div class="field"><label for="g-start">Start with</label><input type="number" id="g-start" min="0" step="10" value="100"></div>
+      <div class="field"><label for="g-mo">Add each month</label><input type="number" id="g-mo" min="0" step="5" value="25"></div>
+      <div class="field"><label for="g-yr">Years</label><input type="number" id="g-yr" min="1" max="60" step="1" value="30"></div></div>
+      <div class="slider" style="margin-top:10px"><label for="g-r">Example yearly growth <b id="g-rv">7%</b></label><input type="range" id="g-r" min="0" max="12" step="0.5" value="7"></div>
+      <canvas id="gcv" style="height:220px;margin-top:10px" aria-label="Compound growth chart"></canvas><p id="g-txt" style="margin-top:8px"></p><p class="muted" style="font-size:13px;margin-top:4px">Example rate only. Real returns go up and down and are never guaranteed.</p></div>`;
+    const cv = el.querySelector('#gcv'); const inp = ['g-start', 'g-mo', 'g-yr', 'g-r'].map(i => el.querySelector('#' + i));
+    const calc = () => { const st = Math.max(0, +inp[0].value || 0), mo = Math.max(0, +inp[1].value || 0), yr = Math.min(60, Math.max(1, Math.round(+inp[2].value || 1))), r = +inp[3].value / 100;
+      el.querySelector('#g-rv').textContent = inp[3].value + '%'; let bal = st, put = st; const B = [st], P = [st];
+      for (let m = 1; m <= yr * 12; m++) { bal = bal * (1 + r / 12) + mo; put += mo; if (m % 12 === 0) { B.push(bal); P.push(put); } }
+      el.querySelector('#g-txt').innerHTML = `You put in <b>${money(put, 0)}</b>. After ${yr} years the snowball is <b>${money(bal, 0)}</b>. Growth made <b>${money(bal - put, 0)}</b> of that.`;
+      if (bal >= 100000) mission('m9', el.querySelector('#g-txt'));
+      reg(cv, () => { const g = prep(cv); if (!g) return; const { ctx } = g; const P2 = plot(g, { x0: 0, x1: yr, y0: 0, y1: Math.max(...B) * 1.05, padL: 62, xticks: nice(0, yr, 5).ticks.filter(v => v <= yr).map(v => [v, v + 'y']) }); const { X, Y, box } = P2;
+        const area = (arr, col, a) => { ctx.beginPath(); arr.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.lineTo(X(arr.length - 1), box.y + box.h); ctx.lineTo(X(0), box.y + box.h); ctx.closePath(); ctx.globalAlpha = a; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = 1;
+          ctx.beginPath(); arr.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke(); };
+        area(B, css('--up'), .18); area(P, css('--accent'), .22);
+        ctx.font = `700 12px ${MONO}`; ctx.textAlign = 'left'; ctx.fillStyle = css('--up'); ctx.fillText('Total', box.x + 8, box.y + 12); ctx.fillStyle = css('--accent'); ctx.fillText('Money you put in', box.x + 8, box.y + 28); }); };
+    inp.forEach(i => i.oninput = calc); calc(); },
+  decay(el) { el.innerHTML = `<div class="widget"><h4>Watch the ice cream melt</h4><p class="muted" style="font-size:14.5px">Price of call options on a $50 stock as expiration gets closer.</p>
+      <div class="slider" style="margin-top:8px"><label for="d-vol">How jumpy the stock is <b id="d-volv">35%</b></label><input type="range" id="d-vol" min="10" max="100" value="35"></div>
+      <canvas id="dcv" style="height:230px;margin-top:10px" aria-label="Time decay chart"></canvas><div class="legend"><span><i style="background:var(--accent)"></i>$50 strike (at the money)</span><span><i style="background:var(--isle)"></i>$55 strike (out of the money)</span></div></div>`;
+    const cv = el.querySelector('#dcv'), r = el.querySelector('#d-vol');
+    const draw = () => { const vol = +r.value / 100; el.querySelector('#d-volv').textContent = r.value + '%'; const days = Array.from({ length: 61 }, (_, i) => 60 - i);
+      const a = days.map(dd => bs('call', 50, 50, dd / 365, vol)), b = days.map(dd => bs('call', 50, 55, dd / 365, vol));
+      const g = prep(cv); if (!g) return; const { ctx } = g; const P = plot(g, { x0: 60, x1: 0, y0: 0, y1: Math.max(...a) * 1.1, xticks: [60, 45, 30, 15, 0].map(v => [v, v + 'd']) }); const { X, Y } = P;
+      [[a, css('--accent')], [b, css('--isle')]].forEach(([arr, c]) => { ctx.beginPath(); arr.forEach((v, i) => i ? ctx.lineTo(X(days[i]), Y(v)) : ctx.moveTo(X(days[i]), Y(v))); ctx.strokeStyle = c; ctx.lineWidth = 2.6; ctx.stroke(); });
+      ctx.font = `600 11px ${MONO}`; ctx.fillStyle = css('--muted'); ctx.textAlign = 'right'; ctx.fillText('days left →', P.box.x + P.box.w, P.box.y + 8); };
+    r.oninput = () => reg(cv, draw); reg(cv, draw); },
+  preset(el, p) { const t = { bc: 'Try this call in the Options Lab', bp: 'Try this put in the Options Lab', sc: 'See the seller’s side in the Options Lab' }[p];
+    el.innerHTML = `<div class="widget"><h4>See it on a chart</h4><p class="muted" style="font-size:14.5px">${isOpen('options') ? 'Open the Options Lab with this example loaded.' : 'The Options Lab unlocks when you clear Calls (Stage 2). Here is the example as a chart:'}</p><canvas id="pcv" style="height:220px;margin-top:10px" aria-label="Example payoff"></canvas>${isOpen('options') ? `<div class="row" style="margin-top:10px"><button class="btn" id="pgo">${t}</button></div>` : ''}</div>`;
+    const cv = el.querySelector('#pcv'); const o = { ...PRESETS[p], days: 0, vol: .35 }; reg(cv, () => drawPayoff(cv, o, true)); const b = el.querySelector('#pgo'); if (b) b.onclick = () => { Object.assign(O, PRESETS[p]); go('options'); }; },
+};
+function candleText(c, i) { const up = c.c >= c.o; return `<b>Day ${i + 1}</b> · <span class="mono">Open ${money(c.o)} · High ${money(c.h)} · Low ${money(c.l)} · Close ${money(c.c)}</span><br>${S.mode === 'kid'
+  ? (up ? 'Green candle: the price ended the day <b class="u">higher</b> than it started.' : 'Red candle: the price ended the day <b class="d">lower</b> than it started.')
+  : `${up ? 'Up' : 'Down'} ${pct(c.c / c.o - 1)} from open to close. Range ${money(c.h - c.l)}. Volume ${(c.v / 1e6).toFixed(2)}M shares.`}`; }
+
+/* ================= CHART LAB ================= */
+const LAB = { seed: 12, type: 'candle', ma: true, vol: true, hover: null, d: null };
+LAB.d = genOHLC(60, LAB.seed, { start: 48, sig: .02, mu: .002 });
+function drawLab() { const cv = $('#cv-lab'); reg(cv, () => drawOHLC(cv, LAB.d, LAB)); if (LAB.hover == null) $('#lab-read').innerHTML = 'Tap or hover any day on the chart to read it.'; }
+$('#c-candle').onclick = () => { LAB.type = 'candle'; $('#c-candle').setAttribute('aria-pressed', true); $('#c-line').setAttribute('aria-pressed', false); drawLab(); };
+$('#c-line').onclick = () => { LAB.type = 'line'; $('#c-line').setAttribute('aria-pressed', true); $('#c-candle').setAttribute('aria-pressed', false); drawLab(); };
+$('#c-ma').onchange = e => { LAB.ma = e.target.checked; drawLab(); }; $('#c-vol').onchange = e => { LAB.vol = e.target.checked; drawLab(); };
+$('#c-new').onclick = () => { LAB.seed = Math.floor(Math.random() * 1e6); LAB.d = genOHLC(60, LAB.seed, { start: 20 + Math.random() * 80, sig: .012 + Math.random() * .025, mu: (Math.random() - .45) * .006 }); LAB.hover = null; drawLab(); };
+$('#cv-lab').onpointermove = $('#cv-lab').onpointerdown = e => { const cv = $('#cv-lab'); const i = idxAt(cv, e, LAB.d.length); if (i == null || i === LAB.hover) return; LAB.hover = i; drawOHLC(cv, LAB.d, LAB); $('#lab-read').innerHTML = candleText(LAB.d[i], i); mission('m6', cv); };
+const TR = { d: null, ans: null, streak: 0, locked: false };
+function newTrend() { const k = ['up', 'down', 'side'][Math.floor(Math.random() * 3)]; TR.ans = k; TR.locked = false;
+  TR.d = genOHLC(40, Math.floor(Math.random() * 1e6), { start: 30 + Math.random() * 60, sig: .016, mu: k === 'up' ? .009 : k === 'down' ? -.009 : 0, revert: k === 'side' ? .25 : 0 }); drawTrend(); }
+function drawTrend() { if (!TR.d) newTrend(); const cv = $('#cv-trend'); reg(cv, () => drawOHLC(cv, TR.d, { type: 'candle', ma: true, noX: true })); $('#t-streak').textContent = TR.streak; $('#t-best').textContent = S.best || 0; }
+document.querySelectorAll('[data-trend]').forEach(b => b.onclick = () => { if (TR.locked) return; TR.locked = true; const ok = b.dataset.trend === TR.ans; const fb = $('#t-fb');
+  const name = { up: 'an uptrend', down: 'a downtrend', side: 'sideways' }[TR.ans];
+  if (ok) { TR.streak++; fb.className = 'fb ok'; fb.textContent = `Yes! It was ${name}. ${TR.streak > 1 ? 'Streak ' + TR.streak + '!' : ''}`; addXP(10 + Math.min(20, (TR.streak - 1) * 5), b); if (TR.streak > (S.best || 0)) { S.best = TR.streak; save(); } if (TR.streak >= 5) mission('m5', b); }
+  else { TR.streak = 0; fb.className = 'fb no'; fb.textContent = `Nope, that one was ${name}. Look at where the yellow average line is heading.`; }
+  $('#t-streak').textContent = TR.streak; $('#t-best').textContent = S.best || 0; setTimeout(newTrend, 1300); });
+
+/* ================= MARKET ================= */
+const STOCKS = [
+  { sym: 'EVRY', name: 'Everything Fund', desc: 'A pretend index fund that owns a little of every company below. Calmer moves.', col: '#5B6CF0', p: 50 },
+  { sym: 'LEMN', name: 'Sunny Lemonade Co.', desc: 'Pretend lemonade stands in every park. Slow and steady.', mu: .0006, sig: .016, col: '#E0A100', p: 24 },
+  { sym: 'RPUP', name: 'Robo Pup Toys', desc: 'Pretend robot dogs. Big hits and big flops.', mu: .0009, sig: .032, col: '#D9468C', p: 38 },
+  { sym: 'RKTR', name: 'Rocket Rides', desc: 'Pretend trips to space. Very jumpy.', mu: .0007, sig: .055, col: '#E2552D', p: 72 },
+  { sym: 'GRDN', name: 'Green Garden Foods', desc: 'Pretend veggie snacks in grocery stores. Steady, small dividends.', mu: .0004, sig: .013, col: '#1E9E62', p: 31 },
+];
+const NEWS = {
+  LEMN: [['Record heat wave! Lemonade sales soar.', .07], ['A lemon shortage raises costs.', -.06], ['Sunny Lemonade opens 50 new stands.', .05]],
+  RPUP: [['Robo Pup’s new puppy is the hottest toy of the year!', .14], ['Robo Pup recalls toys with squeaky wheels.', -.15], ['A famous YouTuber reviews Robo Pup. Fans love it.', .09]],
+  RKTR: [['Rocket Rides lands its first passengers safely!', .22], ['A Rocket Rides launch is delayed again.', -.18], ['Rocket Rides signs a deal with the moon hotel.', .16], ['Rocket Rides is losing money faster than expected.', -.2]],
+  GRDN: [['Green Garden’s veggie chips win a taste award.', .05], ['Rainy season hurts the carrot harvest.', -.05]],
+};
+function newMarket() { const m = { day: 1, cash: 10000, hold: {}, sel: 'EVRY', news: [{ day: 1, t: 'Welcome to the Practice Market! You have $10,000 of pretend cash.', dir: '' }], val: [10000], h: {} };
+  STOCKS.forEach(s => { if (s.sym !== 'EVRY') { const h = [s.p]; for (let i = 0; i < 40; i++) h.unshift(h[0] / Math.exp((s.mu || 0) + gauss() * s.sig)); m.h[s.sym] = h.map(v => +v.toFixed(2)); } });
+  const ev = [50]; for (let i = 1; i < 41; i++) { const r = STOCKS.filter(s => s.sym !== 'EVRY').reduce((a, s) => a + Math.log(m.h[s.sym][i] / m.h[s.sym][i - 1]), 0) / 4; ev.push(ev[i - 1] * Math.exp(r)); }
+  m.h.EVRY = ev.map(v => +v.toFixed(2)); return m; }
+if (!S.mkt || !S.mkt.h) S.mkt = newMarket();
+const M = () => S.mkt;
+const price = sym => { const h = M().h[sym]; return h[h.length - 1]; };
+function total() { return M().cash + Object.entries(M().hold).reduce((a, [k, v]) => a + v.sh * price(k), 0); }
+function nextDay(quiet) { const m = M(); m.day++; const rets = {}; const crash = Math.random() < .03 ? -(.03 + Math.random() * .03) : Math.random() < .03 ? .025 : 0;
+  if (crash) m.news.unshift({ day: m.day, t: crash < 0 ? 'The whole market had a rough day. Almost everything fell.' : 'Great news for the economy! Most stocks rose.', dir: crash < 0 ? 'd' : 'u' });
+  STOCKS.filter(s => s.sym !== 'EVRY').forEach(s => { let r = s.mu + gauss() * s.sig + crash;
+    if (Math.random() < .07) { const e = NEWS[s.sym][Math.floor(Math.random() * NEWS[s.sym].length)]; r += e[1]; m.news.unshift({ day: m.day, t: `${s.sym}: ${e[0]}`, dir: e[1] > 0 ? 'u' : 'd' }); }
+    rets[s.sym] = r; m.h[s.sym].push(+(price(s.sym) * Math.exp(r)).toFixed(2)); });
+  const er = Object.values(rets).reduce((a, b) => a + b, 0) / 4; m.h.EVRY.push(+(price('EVRY') * Math.exp(er)).toFixed(2));
+  if (m.day % 30 === 0 && m.hold.GRDN) { const dv = +(m.hold.GRDN.sh * .15).toFixed(2); m.cash += dv; m.news.unshift({ day: m.day, t: `GRDN paid you a dividend of ${money(dv)} in cash!`, dir: 'u' }); }
+  Object.values(m.h).forEach(h => { if (h.length > 160) h.splice(0, h.length - 160); });
+  m.news = m.news.slice(0, 8); m.val.push(+total().toFixed(2)); if (m.val.length > 160) m.val.shift();
+  if (m.day >= 30) mission('m3', $('#m-next')); if (total() >= 10500) mission('m4', $('#m-next'));
+  if (!quiet) { save(); renderMarket(); tape(); } }
+function renderMarket() { if (!isOpen('market')) return; const m = M(); $('#m-day').textContent = 'Day ' + m.day;
+  $('#m-list').innerHTML = STOCKS.map(s => { const h = m.h[s.sym], p = h[h.length - 1], c = p / h[h.length - 2] - 1; return `<button class="stk" data-s="${s.sym}" aria-pressed="${m.sel === s.sym}"><span class="tk" style="background:${s.col}">${s.sym[0]}</span><span><b>${s.name}</b><small>${s.sym} · ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${pct(c)}</span></small></span><canvas data-sp="${s.sym}" aria-hidden="true"></canvas></button>`; }).join('');
+  document.querySelectorAll('.stk').forEach(b => b.onclick = () => { m.sel = b.dataset.s; save(); renderMarket(); });
+  document.querySelectorAll('[data-sp]').forEach(cv => reg(cv, () => drawLine(cv, m.h[cv.dataset.sp].slice(-20), { spark: true })));
+  const s = STOCKS.find(x => x.sym === m.sel), h = m.h[s.sym], p = h[h.length - 1], c = p / h[h.length - 2] - 1;
+  $('#m-name').textContent = `${s.name} (${s.sym})`; $('#m-desc').textContent = s.desc; $('#m-price').textContent = money(p);
+  $('#m-chg').innerHTML = `<span class="${c >= 0 ? 'u' : 'd'}">${c >= 0 ? '▲' : '▼'} ${money(Math.abs(p - h[h.length - 2]))} (${pct(c)}) today</span>`;
+  const show = h.slice(-60); const cv = $('#cv-stock'); reg(cv, () => drawLine(cv, show, { first: m.day - show.length + 1 }));
+  updTotal();
+  const tv = total(), gain = tv - 10000, inv = tv - m.cash;
+  $('#m-stats').innerHTML = [['Pretend cash', money(m.cash)], ['Invested', money(inv)], ['Total worth', money(tv)], ['Since start', `<span class="${gain >= 0 ? 'u' : 'd'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+  const pv = m.val.length > 1 ? m.val : [10000, 10000]; const pc = $('#cv-port'); reg(pc, () => drawLine(pc, pv, { base: 10000, first: m.day - pv.length + 1 }));
+  const rows = Object.entries(m.hold); $('#m-hold').innerHTML = rows.length ? rows.map(([k, v]) => { const pp = price(k), val = v.sh * pp, g = val - v.cost; return `<tr><td>${k}</td><td>${v.sh}</td><td>${money(v.cost / v.sh)}</td><td>${money(pp)}</td><td>${money(val)}</td><td class="${g >= 0 ? 'u' : 'd'}">${g >= 0 ? '+' : ''}${money(g)} (${pct(g / v.cost)})</td></tr>`; }).join('')
+    : `<tr><td colspan="6" style="font-family:var(--f-body);color:var(--muted);text-align:left">You don't own anything yet. Pick a stock above and press Buy.</td></tr>`;
+  $('#m-news').innerHTML = m.news.map(n => `<li class="${n.dir}"><small>Day ${n.day}</small>${n.t}</li>`).join(''); }
+function updTotal() { const q = Math.max(0, Math.floor(+$('#m-qty').value || 0)); $('#m-total').textContent = money(q * price(M().sel)); }
+$('#m-qty').oninput = updTotal;
+$('#m-buy').onclick = () => { const m = M(), q = Math.floor(+$('#m-qty').value || 0), p = price(m.sel), st = $('#m-status');
+  if (q < 1) { st.textContent = 'Type how many shares you want first.'; st.className = 'status d'; return; }
+  if (q * p > m.cash) { st.textContent = `Not enough pretend cash. You can afford ${Math.floor(m.cash / p)} shares.`; st.className = 'status d'; return; }
+  m.cash -= q * p; const h = m.hold[m.sel] || { sh: 0, cost: 0 }; h.sh += q; h.cost += q * p; m.hold[m.sel] = h; m.val[m.val.length - 1] = +total().toFixed(2);
+  st.textContent = `Bought ${q} shares of ${m.sel} for ${money(q * p)}.`; st.className = 'status u'; save(); renderMarket(); mission('m1', $('#m-buy')); if (Object.keys(m.hold).length >= 3) mission('m2', $('#m-buy')); };
+$('#m-sell').onclick = () => { const m = M(), q = Math.floor(+$('#m-qty').value || 0), p = price(m.sel), st = $('#m-status'), h = m.hold[m.sel];
+  if (!h) { st.textContent = `You don't own any ${m.sel} yet.`; st.className = 'status d'; return; }
+  if (q < 1 || q > h.sh) { st.textContent = `You can sell between 1 and ${h.sh} shares.`; st.className = 'status d'; return; }
+  const basis = h.cost * q / h.sh, gain = q * p - basis; h.cost -= basis; h.sh -= q; if (!h.sh) delete m.hold[m.sel]; m.cash += q * p;
+  st.textContent = `Sold ${q} shares for ${money(q * p)}: ${gain >= 0 ? 'a profit of ' + money(gain) : 'a loss of ' + money(-gain)}.`; st.className = 'status ' + (gain >= 0 ? 'u' : 'd'); save(); renderMarket(); };
+$('#m-next').onclick = () => nextDay();
+$('#m-skip').onclick = () => { for (let i = 0; i < 5; i++) nextDay(true); save(); renderMarket(); tape(); };
+let resetArm = false; $('#m-reset').onclick = () => { if (!resetArm) { resetArm = true; $('#m-reset').textContent = 'Tap again to start over'; setTimeout(() => { resetArm = false; $('#m-reset').textContent = 'Start over'; }, 3000); return; }
+  resetArm = false; $('#m-reset').textContent = 'Start over'; S.mkt = newMarket(); save(); renderMarket(); tape(); $('#m-status').textContent = 'Fresh start: $10,000 of pretend cash.'; $('#m-status').className = 'status'; };
+function tape() { const items = STOCKS.map(s => { const h = M().h[s.sym], p = h[h.length - 1], c = p / h[h.length - 2] - 1; return `<span>${s.sym} ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${c >= 0 ? '▲' : '▼'}${pct(c)}</span></span>`; }).join('');
+  $('#tape').innerHTML = items + items + items + items; }
+
+/* ================= OPTIONS LAB ================= */
+function ncdf(x) { const t = 1 / (1 + .2316419 * Math.abs(x)); const d = .3989423 * Math.exp(-x * x / 2); const p = d * t * (.3193815 + t * (-.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+function bs(type, Sx, K, T, vol, r = .04) { if (T <= 0) return Math.max(0, type === 'call' ? Sx - K : K - Sx); const d1 = (Math.log(Sx / K) + (r + vol * vol / 2) * T) / (vol * Math.sqrt(T)), d2 = d1 - vol * Math.sqrt(T);
+  return type === 'call' ? Sx * ncdf(d1) - K * Math.exp(-r * T) * ncdf(d2) : K * Math.exp(-r * T) * ncdf(-d2) - Sx * ncdf(-d1); }
+const PRESETS = { bc: { type: 'call', side: 'buy', S: 50, K: 55, prem: 2, n: 1, P: 62 }, bp: { type: 'put', side: 'buy', S: 50, K: 45, prem: 1.5, n: 1, P: 38 },
+  sc: { type: 'call', side: 'sell', S: 50, K: 55, prem: 2, n: 1, P: 60 }, sp: { type: 'put', side: 'sell', S: 50, K: 45, prem: 1.5, n: 1, P: 47 } };
+const O = { ...PRESETS.bc, days: 30, vol: .35 };
+const intr = (o, x) => Math.max(0, o.type === 'call' ? x - o.K : o.K - x);
+const plExp = (o, x) => (intr(o, x) - o.prem) * 100 * o.n * (o.side === 'buy' ? 1 : -1);
+const be = o => o.type === 'call' ? o.K + o.prem : o.K - o.prem;
+function drawPayoff(cv, o, mini) { const g = prep(cv); if (!g) return; const { ctx } = g;
+  const lo = Math.max(0, Math.min(o.S, o.K) * .55), hi = Math.max(o.S, o.K, o.P || 0) * 1.35 + 1; const N = 160; const xs = Array.from({ length: N + 1 }, (_, i) => lo + (hi - lo) * i / N);
+  const ye = xs.map(x => plExp(o, x)); const sign = o.side === 'buy' ? 1 : -1; const yt = o.days > 0 ? xs.map(x => (bs(o.type, x, o.K, o.days / 365, o.vol) - o.prem) * 100 * o.n * sign) : null;
+  const all = ye.concat(yt || [], [0]); const y0 = Math.min(...all), y1 = Math.max(...all); const m = (y1 - y0) * .08 || 50;
+  const xt = nice(lo, hi, mini ? 4 : 7); const P = plot(g, { x0: lo, x1: hi, y0: y0 - m, y1: y1 + m, padL: 66, xticks: xt.ticks.map(v => [v, '$' + v]) }); cv._map = P; const { X, Y, box } = P;
+  const zero = Y(0); const shape = () => { ctx.beginPath(); ctx.moveTo(X(xs[0]), zero); xs.forEach((x, i) => ctx.lineTo(X(x), Y(ye[i]))); ctx.lineTo(X(xs[N]), zero); ctx.closePath(); };
+  ctx.save(); ctx.beginPath(); ctx.rect(box.x, box.y, box.w, zero - box.y); ctx.clip(); shape(); ctx.fillStyle = css('--up-soft'); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.rect(box.x, zero, box.w, box.y + box.h - zero); ctx.clip(); shape(); ctx.fillStyle = css('--down-soft'); ctx.fill(); ctx.restore();
+  ctx.strokeStyle = css('--muted'); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(box.x, zero); ctx.lineTo(box.x + box.w, zero); ctx.stroke();
+  const vline = (x, col, lbl, row) => { if (x < lo || x > hi) return; ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = col; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(X(x), box.y); ctx.lineTo(X(x), box.y + box.h); ctx.stroke(); ctx.restore();
+    ctx.font = `700 11px ${MONO}`; const tw = ctx.measureText(lbl).width + 10; let lx = X(x) - tw / 2; lx = Math.max(box.x, Math.min(box.x + box.w - tw, lx)); const ly = box.y + 2 + row * 20;
+    ctx.fillStyle = css('--surface'); ctx.fillRect(lx, ly, tw, 17); ctx.fillStyle = col; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(lbl, lx + 5, ly + 3); };
+  vline(o.S, css('--muted'), 'Now $' + o.S, 0); vline(o.K, css('--accent'), 'Strike $' + o.K, 1);
+  if (yt) { linePath(ctx, xs.map((x, i) => [X(x), Y(yt[i])])); ctx.setLineDash([7, 6]); ctx.strokeStyle = css('--accent'); ctx.lineWidth = 2.2; ctx.stroke(); ctx.setLineDash([]); }
+  linePath(ctx, xs.map((x, i) => [X(x), Y(ye[i])])); ctx.strokeStyle = css('--ink'); ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.stroke();
+  const b = be(o); if (b > lo && b < hi) { ctx.beginPath(); ctx.arc(X(b), zero, 6, 0, 7); ctx.fillStyle = css('--surface'); ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = css('--ink'); ctx.stroke();
+    ctx.font = `700 11px ${MONO}`; ctx.fillStyle = css('--ink'); ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText('break-even $' + b.toFixed(2), Math.max(box.x + 60, Math.min(box.x + box.w - 60, X(b))), zero + 10); }
+  if (o.P != null && !mini) { vline(o.P, css('--ma'), 'Expires at $' + o.P.toFixed(2), 2); const v = plExp(o, o.P); ctx.beginPath(); ctx.arc(X(o.P), Y(v), 7, 0, 7); ctx.fillStyle = css('--sun'); ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = css('--ink'); ctx.stroke(); } }
+function renderOpt() { if (!isOpen('options')) return; const o = O;
+  $('#o-call').setAttribute('aria-pressed', o.type === 'call'); $('#o-put').setAttribute('aria-pressed', o.type === 'put'); $('#o-buy').setAttribute('aria-pressed', o.side === 'buy'); $('#o-sell').setAttribute('aria-pressed', o.side === 'sell');
+  ['S', 'K', 'prem', 'n'].forEach(k => { const el = $('#o-' + k); if (document.activeElement !== el) el.value = o[k]; });
+  const r = $('#o-P'); r.max = Math.ceil(Math.max(o.S, o.K) * 2); r.min = 0; o.P = Math.min(+r.max, Math.max(0, o.P)); r.value = o.P; $('#o-Pv').textContent = money(o.P);
+  $('#o-days').value = o.days; $('#o-daysv').textContent = o.days; $('#o-vol').value = Math.round(o.vol * 100); $('#o-volv').textContent = Math.round(o.vol * 100) + '%';
+  const cv = $('#cv-opt'); reg(cv, () => drawPayoff(cv, o));
+  const c = o.prem * 100 * o.n, b = be(o), unl = 'No limit';
+  const stats = o.side === 'buy' ? [['You pay', money(c)], ['Break-even', money(b)], ['Max gain', o.type === 'call' ? unl : money((o.K - o.prem) * 100 * o.n)], ['Max loss', money(c)]]
+    : [['You collect', money(c)], ['Break-even', money(b)], ['Max gain', money(c)], ['Max loss', o.type === 'call' ? unl : money((o.K - o.prem) * 100 * o.n)]];
+  $('#o-stats').innerHTML = stats.map(([a, v]) => `<div class="stat"><span>${a}</span><b class="${a === 'Max loss' && v === unl ? 'd' : ''}">${v}</b></div>`).join('');
+  $('#o-explain').innerHTML = explainOpt(o);
+  if (o.type === 'put') mission('m8', $('#o-put')); if (Math.abs(o.P - b) <= .25) mission('m7', $('#o-P')); }
+function explainOpt(o) { const v = intr(o, o.P), pl = plExp(o, o.P), sh = 100 * o.n, kind = o.type === 'call' ? 'call' : 'put', verb = o.type === 'call' ? 'buy' : 'sell';
+  const res = `<span class="pl ${pl > 0 ? 'u' : pl < 0 ? 'd' : ''}">${pl > 0 ? 'Profit ' : pl < 0 ? 'Loss ' : 'Break even '}${pl ? money(Math.abs(pl)) : ''}</span>`;
+  const itm = v > 0; let t;
+  if (o.side === 'buy') t = itm ? `The stock ended at <b>${money(o.P)}</b>. Your ${kind} lets you ${verb} at <b>${money(o.K)}</b>, so it's worth <b>${money(v)}</b> a share, or ${money(v * sh)} for ${sh} shares. You paid ${money(o.prem * sh)}, so you ${pl >= 0 ? 'come out ahead' : 'still lose a little'}.`
+      : `The stock ended at <b>${money(o.P)}</b>, ${o.type === 'call' ? 'at or below' : 'at or above'} the ${money(o.K)} strike. Nobody would use this ${kind}, so it expires worthless and you lose the ${money(o.prem * sh)} you paid.`;
+  else t = itm ? `The stock ended at <b>${money(o.P)}</b>. The buyer uses the ${kind}, so you must ${o.type === 'call' ? 'sell' : 'buy'} ${sh} shares at ${money(o.K)}. That costs you ${money(v * sh)}, and you keep the ${money(o.prem * sh)} you collected.${o.type === 'call' ? ' The higher the stock goes, the more you lose.' : ''}`
+      : `The stock ended at <b>${money(o.P)}</b>, so the buyer doesn't use the ${kind}. It expires worthless and you keep the whole ${money(o.prem * sh)} you collected.`;
+  return res + t + (o.days > 0 ? `<br><span class="muted" style="font-size:14px">The dashed line shows what the trade would be worth if you closed it with ${o.days} days still left.</span>` : ''); }
+$('#o-call').onclick = () => { O.type = 'call'; renderOpt(); }; $('#o-put').onclick = () => { O.type = 'put'; renderOpt(); };
+$('#o-buy').onclick = () => { O.side = 'buy'; renderOpt(); }; $('#o-sell').onclick = () => { O.side = 'sell'; renderOpt(); };
+['S', 'K', 'prem', 'n'].forEach(k => $('#o-' + k).oninput = e => { const v = +e.target.value; if (!(v >= 0) || ((k === 'S' || k === 'K') && v <= 0)) return; O[k] = k === 'n' ? Math.max(1, Math.round(v)) : v; renderOpt(); });
+$('#o-P').oninput = e => { O.P = +e.target.value; renderOpt(); }; $('#o-days').oninput = e => { O.days = +e.target.value; renderOpt(); }; $('#o-vol').oninput = e => { O.vol = +e.target.value / 100; renderOpt(); };
+$('#o-fair').onclick = () => { O.prem = +bs(O.type, O.S, O.K, Math.max(1, O.days) / 365, O.vol).toFixed(2); renderOpt(); toast(`Fair premium with ${Math.max(1, O.days)} days left: ${money(O.prem)} per share`); };
+document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { Object.assign(O, PRESETS[b.dataset.p]); renderOpt(); });
+
+/* ================= WORDS ================= */
+function renderWords() { const q = ($('#w-q').value || '').toLowerCase(); $('#w-list').innerHTML = WORDS.filter(w => !q || (w[0] + ' ' + w[2]).toLowerCase().includes(q)).map(w => `<div class="word"><span class="tag">${w[1]}</span><b>${w[0]}</b><p>${w[2]}</p></div>`).join('') || '<p class="muted">No words match that yet.</p>'; }
+$('#w-q').oninput = renderWords;
+
+
+/* ================= full game purchase ================= */
+const PRICE = '$9.99';
+const BUILD = window.TT_BUILD || 'preview'; // 'preview' (this page), 'web' (free demo site), 'app' (store apps)
+const STORE_LINKS = window.TT_STORE_LINKS || {};
+const priceStr = () => { try { const p = window.TickerStoreBridge && window.TickerStoreBridge.price && window.TickerStoreBridge.price(); if (p) return p; } catch (e) {} return PRICE; };
+window.TT_setOwned = v => { if (v && !S.full) { S.full = true; save(); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); } };
+const PRODUCT_ID = 'tickertown_full_game';
+// In the store apps, the native wrapper sets window.TickerStoreBridge = { buy(id) -> Promise<bool>, restore() -> Promise<bool>, price?(id) -> Promise<string> }.
+const Store = { native: () => !!window.TickerStoreBridge,
+  async buy() { return window.TickerStoreBridge ? !!(await window.TickerStoreBridge.buy(PRODUCT_ID)) : null; },
+  async restore() { return window.TickerStoreBridge ? !!(await window.TickerStoreBridge.restore()) : null; } };
+const NUMW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'];
+let GATE = null;
+function pwShow(html) { $('#pw-box').innerHTML = html; $('#paywall').hidden = false; const f = $('#pw-box').querySelector('input, .btn'); if (f) f.focus(); }
+function pwClose() { $('#paywall').hidden = true; }
+$('#paywall').addEventListener('click', e => { if (e.target.id === 'paywall') pwClose(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#paywall').hidden) pwClose(); });
+function openPaywall() { if (S.full) return toast('You already own the full game.');
+  pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Unlock all of Ticker Town</h2>
+    <div class="price" style="margin-top:10px">${priceStr()}<small>one time, no subscription</small></div>
+    <ul><li>Options Island: 6 new stages on calls, puts and more</li><li>Both boss battles: The Market Bull and The Options Kraken</li><li>The Options Lab with profit and loss charts</li><li>Every level up to Market Master</li></ul>
+    <div class="actions"><button class="btn sun" id="pw-buy">Unlock for ${priceStr()}</button><button class="btn ghost" id="pw-later">Not now</button></div>
+    <p class="fine">Kids: ask a grown-up first. A grown-up will need to answer a question before buying.</p>`);
+  $('#pw-buy').onclick = () => gate(doBuy); $('#pw-later').onclick = pwClose; }
+function gate(next) { const a = 6 + Math.floor(Math.random() * 7), b = 3 + Math.floor(Math.random() * 7); GATE = { ans: a * b, next };
+  pwShow(`<div class="eyebrow">For grown-ups</div><h2 id="pw-title">Ask a grown-up</h2><p class="muted" style="margin-top:6px">To keep purchases safe, a grown-up needs to answer this.</p>
+    <div class="gateq">What is ${NUMW[a]} times ${NUMW[b]}?</div><div class="field"><label for="pw-ans">Answer in numbers</label><input type="number" id="pw-ans" inputmode="numeric" autocomplete="off"></div>
+    <div class="err" id="pw-err" aria-live="polite"></div><div class="actions"><button class="btn" id="pw-ok">Continue</button><button class="btn ghost" id="pw-cancel">Cancel</button></div>`);
+  const ok = () => { if (+$('#pw-ans').value === GATE.ans) { GATE.next(); } else { $('#pw-err').textContent = 'That answer isn’t right. Ask a grown-up to try again.'; setTimeout(() => gate(next), 1400); } };
+  $('#pw-ok').onclick = ok; $('#pw-ans').onkeydown = e => { if (e.key === 'Enter') ok(); }; $('#pw-cancel').onclick = pwClose; }
+async function doBuy() { pwShow(`<h2 id="pw-title">Opening checkout…</h2><p class="muted" style="margin-top:6px">Finish the purchase in the store window.</p>`);
+  let r; try { r = await Store.buy(); } catch (e) { r = false; }
+  if (r === null) return webBuy();
+  if (r) grantFull(); else pwShow(`<h2 id="pw-title">Purchase not finished</h2><p class="muted" style="margin-top:6px">Nothing was charged. You can try again any time.</p><div class="actions" style="margin-top:14px"><button class="btn ghost" id="pw-x">Close</button></div>`), $('#pw-x').onclick = pwClose; }
+function webBuy() { if (BUILD === 'web') { const links = [['apple', 'Get it on the App Store'], ['google', 'Get it on Google Play']].filter(([k]) => STORE_LINKS[k]).map(([k, t]) => `<a class="btn sun" style="text-align:center;text-decoration:none" href="${STORE_LINKS[k]}" target="_blank" rel="noopener">${t}</a>`).join('');
+    pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Get the full game in the app</h2><p style="margin-top:8px">The full game is in the Ticker Town app for iPhone, iPad and Android. Your free stages here stay free.</p>
+      <div class="actions" style="margin-top:14px">${links || '<p class="muted">Coming soon to the App Store and Google Play.</p>'}<button class="btn ghost" id="pw-x">Close</button></div>`); $('#pw-x').onclick = pwClose; return; }
+  webBuyPreview(); }
+function webBuyPreview() { pwShow(`<div class="eyebrow">Web preview</div><h2 id="pw-title">Get the full game in the app</h2>
+    <p style="margin-top:8px">In the App Store and Google Play versions, this button opens the store checkout for ${priceStr()}. This web page is a preview, so there is no real checkout here.</p>
+    <div class="actions" style="margin-top:14px"><button class="btn sun" id="pw-test">Pretend purchase (testing only)</button><button class="btn ghost" id="pw-x">Close</button></div>
+    <p class="fine">The test button exists so you can try the full game while building it. It is removed from the store versions.</p>`);
+  $('#pw-test').onclick = grantFull; $('#pw-x').onclick = pwClose; }
+function grantFull() { S.full = true; save(); pwClose(); confetti(); toast('Full game unlocked. Options Island is open!'); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); }
+$('#restore').onclick = async () => { let r; try { r = await Store.restore(); } catch (e) { r = false; }
+  if (r === null) return toast('Restore works in the App Store and Google Play versions.'); if (r) grantFull(); else toast('No earlier purchase found on this account.'); };
+/* ================= global controls ================= */
+document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { S.mode = b.dataset.mode; save(); hud(); const lt = $('#ltext'); if (lt && Q && !Q.boss) lt.innerHTML = S.mode === 'kid' ? BYID[Q.id].kid : BYID[Q.id].adult; });
+$('#teacher').checked = !!S.teacher; $('#teacher').onchange = e => { S.teacher = e.target.checked; save(); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); };
+let raArm = false; $('#resetall').onclick = () => { if (!raArm) { raArm = true; $('#resetall').textContent = 'Tap again to erase all progress'; setTimeout(() => { raArm = false; $('#resetall').textContent = 'Reset progress'; }, 3000); return; }
+  Object.assign(S, { xp: 0, stars: {}, missions: {}, best: 0, mkt: newMarket() }); /* purchase (S.full) is kept */ save(); raArm = false; $('#resetall').textContent = 'Reset progress'; hud(); tape(); go('map'); toast('Progress reset. Welcome back, rookie.'); };
+
+hud(); tape(); renderWords();
+const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'options', 'words'].includes(start) ? start : 'map');
+</script>
+
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>
