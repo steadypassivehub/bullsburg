@@ -15,6 +15,7 @@
   --sun: #FFC23A; --sun-ink: #3A2700; --ma: #B4730E;
   --up: #0E9A60; --down: #D93C34; --up-soft: rgba(14,154,96,.15); --down-soft: rgba(217,60,52,.13);
   --lock: #9AA7BF;
+  --w3: #7547D6; --w3-soft: rgba(117,71,214,.12); --w4: #D2611C; --w4-soft: rgba(210,97,28,.12); --w5: #A07800; --w5-soft: rgba(201,153,0,.15);
   --shadow: 0 1px 0 rgba(20,34,61,.06), 0 10px 26px -14px rgba(20,34,61,.28);
   --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
   --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
@@ -25,12 +26,12 @@
   --bg: #0C1424; --surface: #142036; --surface2: #1A2842; --ink: #E8EEF9; --muted: #9DAAC5; --line: #2A3A59; --grid: #213050;
   --accent: #7F9EFF; --accent-ink: #0C1424; --accent-soft: rgba(127,158,255,.16); --isle: #3FD0C6; --isle-soft: rgba(63,208,198,.15);
   --sun: #FFD15C; --sun-ink: #2A1C00; --ma: #FFD15C; --up: #3AD49A; --down: #FF6F67; --up-soft: rgba(58,212,154,.17); --down-soft: rgba(255,111,103,.16);
-  --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; } }
+  --w3: #B49BFF; --w3-soft: rgba(180,155,255,.15); --w4: #FF9C5B; --w4-soft: rgba(255,156,91,.14); --w5: #FFD15C; --w5-soft: rgba(255,209,92,.14); --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #0C1424; --surface: #142036; --surface2: #1A2842; --ink: #E8EEF9; --muted: #9DAAC5; --line: #2A3A59; --grid: #213050;
   --accent: #7F9EFF; --accent-ink: #0C1424; --accent-soft: rgba(127,158,255,.16); --isle: #3FD0C6; --isle-soft: rgba(63,208,198,.15);
   --sun: #FFD15C; --sun-ink: #2A1C00; --ma: #FFD15C; --up: #3AD49A; --down: #FF6F67; --up-soft: rgba(58,212,154,.17); --down-soft: rgba(255,111,103,.16);
-  --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; }
+  --w3: #B49BFF; --w3-soft: rgba(180,155,255,.15); --w4: #FF9C5B; --w4-soft: rgba(255,156,91,.14); --w5: #FFD15C; --w5-soft: rgba(255,209,92,.14); --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; }
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
@@ -112,6 +113,18 @@ canvas { display: block; width: 100%; touch-action: pan-y; }
 .w2 .node .disc { border-color: var(--isle); color: var(--isle); box-shadow: 0 5px 0 color-mix(in srgb, var(--isle) 55%, #000 20%); }
 .node.done .disc { background: var(--accent); color: var(--accent-ink); }
 .w2 .node.done .disc { background: var(--isle); color: var(--accent-ink); }
+.world.w3 { background: linear-gradient(180deg, var(--w3-soft), transparent 60%), var(--surface); }
+.world.w3 .world-top h2 { color: var(--w3); }
+.w3 .node .disc { border-color: var(--w3); color: var(--w3); box-shadow: 0 5px 0 color-mix(in srgb, var(--w3) 55%, #000 20%); }
+.w3 .node.done .disc { background: var(--w3); color: var(--accent-ink); }
+.world.w4 { background: linear-gradient(180deg, var(--w4-soft), transparent 60%), var(--surface); }
+.world.w4 .world-top h2 { color: var(--w4); }
+.w4 .node .disc { border-color: var(--w4); color: var(--w4); box-shadow: 0 5px 0 color-mix(in srgb, var(--w4) 55%, #000 20%); }
+.w4 .node.done .disc { background: var(--w4); color: var(--accent-ink); }
+.world.w5 { background: linear-gradient(180deg, var(--w5-soft), transparent 60%), var(--surface); }
+.world.w5 .world-top h2 { color: var(--w5); }
+.w5 .node .disc { border-color: var(--w5); color: var(--w5); box-shadow: 0 5px 0 color-mix(in srgb, var(--w5) 55%, #000 20%); }
+.w5 .node.done .disc { background: var(--w5); color: var(--accent-ink); }
 .node.next .disc { animation: bob 1.6s ease-in-out infinite; }
 .node.locked .disc { border-color: var(--lock); color: var(--lock); box-shadow: 0 5px 0 var(--line); background: var(--surface2); }
 .node.boss .disc { width: 78px; height: 78px; border-radius: 22px; font-size: 15px; letter-spacing: .04em; }
@@ -280,6 +293,38 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 30px; color: var
 footer .row { justify-content: space-between; }
 @media (prefers-reduced-motion: reduce) { .tape-in, .node.next .disc { animation: none; } .xp-pop { animation-duration: .01s; } .levelup .box { animation: none; } }
 @media (max-width: 560px) { .xpbox { width: 120px; } .logo b { font-size: 21px; } .hud-row { gap: 10px; } .modes button { padding: 5px 9px; font-size: 12.5px; } .node .disc { width: 56px; height: 56px; font-size: 22px; } }
+.daychip { display: inline-flex; flex-direction: column; line-height: 1.1; }
+.daychip small { font-size: 11px; color: var(--muted); font-weight: 500; }
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 14px; margin-top: 12px; font-size: 13px; }
+.facts span { display: block; color: var(--muted); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.facts b { font-family: var(--f-mono); font-size: 13px; font-weight: 700; }
+.exps { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; max-width: 100%; }
+.exps .chip { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.15; flex: none; }
+.exps .chip small { font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); font-weight: 500; }
+.exps .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.exps .chip.on small { color: var(--accent-ink); }
+table.chain tbody tr { cursor: pointer; }
+table.chain tbody tr:hover td { background: var(--accent-soft); }
+table.chain tr.itm td { background: var(--up-soft); }
+table.chain tr.sel td { background: var(--accent-soft); box-shadow: inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent); }
+.ticket { margin-top: 14px; border: 2px solid var(--accent); border-radius: 14px; padding: 14px; background: var(--surface2); }
+.ticket h4 { font-size: 20px; }
+.ticket .stats { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+.ticket .stat b { font-size: 15px; }
+.btn.mini { padding: 5px 10px; font-size: 13px; }
+.subh { font-size: 17px; margin: 16px 0 0; }
+td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !important; white-space: normal; }
+.orders { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+.orders li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--surface2); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+.lockmini { text-align: center; padding: 24px 10px; } .lockmini p { color: var(--muted); margin: 6px 0 12px; }
+
+.xbar { margin-top: 12px; } .xb { display: flex; height: 18px; border-radius: 99px; overflow: hidden; background: var(--line); max-width: 520px; }
+.xb span { display: block; height: 100%; transition: width .2s; } .xbar p { margin-top: 6px; font-size: 15px; }
+.grad { text-align: left; } .grad h3 { text-align: center; } .grad ul { margin: 12px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 15.5px; }
+.cert { border: 3px double var(--w5); border-radius: 18px; padding: 22px 18px; text-align: center; background: var(--w5-soft); margin-bottom: 16px; }
+.cert .eyebrow { color: var(--w5); } .cert h3 { font-size: 30px; margin-top: 6px; } .cert p { color: var(--muted); }
 </style>
 
 <header class="hud">
@@ -378,34 +423,60 @@ footer .row { justify-content: space-between; }
 
   <!-- MARKET -->
   <section class="view" id="v-market" hidden>
-    <div class="lab-head"><div><div class="eyebrow">Lab 2</div><h1>Practice Market</h1><p>You start with $10,000 of pretend money. Buy and sell pretend companies, press Next day, and watch what happens. Nothing here is real.</p></div></div>
+    <div class="lab-head"><div><div class="eyebrow">Lab 2</div><h1>Practice Market</h1><p>$10,000 of pretend money in a simulated market: real-style candles, volume, earnings, dividends, order types and, once you reach Options Island, a full option chain. Nothing here is real.</p></div></div>
     <div class="mkt-bar">
-      <span class="daychip" id="m-day">Day 1</span>
+      <span class="daychip"><span id="m-day">Mon</span><small id="m-dayn" class="mono"></small></span>
       <button class="btn" id="m-next">Next day</button>
       <button class="btn ghost" id="m-skip">Skip 5 days</button>
       <button class="btn ghost" id="m-reset">Start over</button>
-      <span class="status muted" id="m-reset-q" style="margin:0"></span>
     </div>
     <div class="mkt-grid">
       <div class="stocklist" id="m-list"></div>
       <div style="display:grid;gap:18px;min-width:0">
         <div class="card">
-          <div class="row" style="justify-content:space-between;align-items:start"><div><h3 id="m-name" style="font-size:24px">—</h3><p class="muted" id="m-desc" style="font-size:14.5px"></p></div><div style="text-align:right"><div class="mono" id="m-price" style="font-size:26px;font-weight:700">—</div><div class="mono" id="m-chg" style="font-size:13px"></div></div></div>
-          <canvas id="cv-stock" style="height:240px;margin-top:10px" aria-label="Selected stock chart"></canvas>
-          <div class="trade">
-            <div class="field"><label for="m-qty">Shares</label><input type="number" id="m-qty" min="1" step="1" value="10"></div>
-            <div class="field"><label>Order total</label><div class="mono" id="m-total" style="font-size:18px;font-weight:700;padding:8px 0">—</div></div>
-            <button class="btn up" id="m-buy">Buy</button><button class="btn down" id="m-sell">Sell</button>
+          <div class="row" style="justify-content:space-between;align-items:start"><div style="min-width:0"><h3 id="m-name" style="font-size:24px">—</h3><p class="muted" id="m-desc" style="font-size:14.5px"></p></div><div style="text-align:right"><div class="mono" id="m-price" style="font-size:26px;font-weight:700">—</div><div class="mono" id="m-chg" style="font-size:13px"></div></div></div>
+          <div class="facts" id="m-facts"></div>
+          <div class="toolbar" style="margin-top:12px">
+            <div class="seg" role="group" aria-label="Chart type"><button data-mk-type="candle">Candles</button><button data-mk-type="line">Line</button></div>
+            <div class="seg" role="group" aria-label="Time range"><button data-mk-range="21">1M</button><button data-mk-range="63">3M</button><button data-mk-range="126">6M</button></div>
+            <label class="chk"><input type="checkbox" id="mk-vol"> Volume</label>
+            <label class="chk"><input type="checkbox" id="mk-ma20"> 20-day avg</label>
+            <label class="chk"><input type="checkbox" id="mk-ma50"> 50-day avg</label>
           </div>
-          <div class="status" id="m-status" aria-live="polite"></div>
+          <canvas id="cv-stock" style="height:300px" aria-label="Selected stock chart"></canvas>
+          <div class="readout" id="m-read" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <div class="seg" role="group" aria-label="Trade"><button data-mk-tab="stock">Trade stock</button><button data-mk-tab="opt">Option chain</button></div>
+          <div id="mk-stockpane" style="margin-top:14px">
+            <div class="row"><div class="seg" role="group" aria-label="Buy or sell"><button data-sside="buy">Buy</button><button data-sside="sell">Sell</button></div>
+              <div class="seg" role="group" aria-label="Order type"><button data-skind="market">Market</button><button data-skind="limit">Limit</button><button data-skind="stop">Stop</button></div></div>
+            <div class="trade">
+              <div class="field"><label for="st-qty">Shares</label><input type="number" id="st-qty" min="1" step="1" value="10"></div>
+              <div class="field" id="st-pxw"><label for="st-px" id="st-pxl">Limit price</label><input type="number" id="st-px" min="0.01" step="0.01"></div>
+              <div class="field"><label>Estimated total</label><div class="mono" id="st-est" style="font-size:18px;font-weight:700;padding:8px 0">—</div></div>
+              <button class="btn up" id="st-go">Buy</button>
+            </div>
+            <p id="st-help" style="font-size:14px;margin-top:8px"></p>
+            <div class="status" id="st-status" aria-live="polite"></div>
+          </div>
+          <div id="mk-optpane" style="margin-top:14px" hidden><div id="mk-chain"></div></div>
         </div>
         <div class="card">
           <h3 style="font-size:22px;margin-bottom:10px">Your portfolio</h3>
           <div class="stats" id="m-stats"></div>
-          <canvas id="cv-port" style="height:170px;margin-top:12px" aria-label="Portfolio value over time"></canvas>
+          <canvas id="cv-port" style="height:160px;margin-top:12px" aria-label="Portfolio value over time"></canvas>
+          <h4 class="subh">Stocks</h4>
           <div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Price</th><th>Value</th><th>Gain / loss</th></tr></thead><tbody id="m-hold"></tbody></table></div>
+          <h4 class="subh">Option positions</h4>
+          <div class="tbl-wrap"><table><thead><tr><th>Contract</th><th>Qty</th><th>Avg</th><th>Mark</th><th>P/L</th><th>Delta</th><th>Theta/day</th><th>Left</th><th></th></tr></thead><tbody id="m-opts"></tbody></table></div>
+          <h4 class="subh">Open orders</h4>
+          <ul class="orders" id="m-orders"></ul>
         </div>
-        <div class="card"><h3 style="font-size:22px;margin-bottom:10px">Market news</h3><ul class="news" id="m-news"></ul></div>
+        <div class="two-col">
+          <div class="card"><h3 style="font-size:22px;margin-bottom:10px">Market news</h3><ul class="news" id="m-news"></ul></div>
+          <div class="card"><h3 style="font-size:22px;margin-bottom:10px">Activity</h3><ul class="news" id="m-log"></ul></div>
+        </div>
       </div>
     </div>
   </section>
@@ -465,9 +536,10 @@ footer .row { justify-content: space-between; }
 <script>
 /* ================= data ================= */
 const RANKS = [
-  [0, 'Piggy Bank Rookie'], [100, 'Coin Collector'], [250, 'Chart Reader'], [450, 'Smart Saver'], [700, 'Market Explorer'],
-  [1000, 'Trend Spotter'], [1350, 'Options Apprentice'], [1750, 'Strategy Builder'], [2200, 'Risk Manager'], [2700, 'Market Master']];
-const UNLOCK_MSG = { 3: 'You can read charts like a pro now.', 5: 'Keep stacking those stars.', 7: 'Options Island is calling.', 10: 'You reached the top level. Legend.' };
+  [0, 'Piggy Bank Rookie'], [120, 'Coin Collector'], [300, 'Chart Reader'], [550, 'Smart Saver'], [850, 'Market Explorer'],
+  [1200, 'Trend Spotter'], [1600, 'Options Apprentice'], [2050, 'Greek Scholar'], [2550, 'Volatility Tamer'], [3100, 'Strategy Builder'],
+  [3700, 'Spread Architect'], [4300, 'Risk Manager'], [4900, 'Portfolio Pro'], [5500, 'Market Sage'], [6200, 'Market Master']];
+const UNLOCK_MSG = { 3: 'You can read charts like a pro now.', 7: 'Options Island is calling.', 8: 'The Greeks speak your language now.', 10: 'Time to build real strategies.', 12: 'Protecting your money is the real skill.', 15: 'You reached the top level: Market Master.' };
 
 const L = [
  { id: 's1', world: 1, title: 'What is a stock?', terms: ['Share', 'Stock', 'Ticker symbol', 'Exchange'], widget: 'own',
@@ -538,22 +610,230 @@ const L = [
    quiz: [{ q: 'Who has potentially unlimited risk?', o: ['Someone who sells a call without owning the stock', 'Someone who buys a call', 'Someone who buys a put'], why: 'If the stock soars, a naked call seller must deliver shares at any price.' },
           { q: 'When does an option seller get the premium?', o: ['Up front, when they sell', 'Only if the stock goes up', 'At the end of the year'], why: 'Sellers collect the premium immediately.' }] },
  { id: 'b2', world: 2, boss: true, title: 'Boss: The Options Kraken', pool: ['o1','o2','o3','o4','o5','o6'] },
+ // ---------------- WORLD 3: GREEK PEAKS ----------------
+ { id: 'g1', world: 3, title: 'Intrinsic vs. extrinsic value', terms: ['Intrinsic value', 'Extrinsic value', 'Time value'], widget: 'greeks',
+   kid: `<p>An option's price has two parts, like a pizza with two toppings.</p><p><strong>Intrinsic value</strong> is the part it's worth <em>right now</em>. A $50 call when the stock is $56 already saves you $6, so it has $6 of intrinsic value.</p><p><strong>Extrinsic value</strong> is the extra people pay for <em>hope</em>: the chance the stock moves even more before the option ends. If that call costs $8, the extra $2 is extrinsic. Extrinsic value always shrinks to zero by expiration.</p>`,
+   adult: `<p>Every option premium splits into <strong>intrinsic value</strong> (what it would be worth exercised now: stock − strike for a call, strike − stock for a put, never below zero) and <strong>extrinsic value</strong> (everything else).</p><p>Extrinsic value, also called time value, comes from time left, implied volatility and interest rates. It is largest at the money and decays to zero at expiration. When you buy an option you are paying for extrinsic value that will melt; when you sell one you collect it. Use the tool below to watch the split change.</p>`,
+   quiz: [{ q: 'Stock $56. A $50 call costs $8. What is its extrinsic value?', o: ['$2', '$6', '$8', '$14'], why: 'Intrinsic is $56 − $50 = $6. The other $2 is extrinsic.' },
+          { q: 'Stock $40. A $45 call costs $0.90. What is its intrinsic value?', o: ['$0', '$0.90', '$5', '$4.10'], why: 'It is out of the money, so all $0.90 is extrinsic.' },
+          { q: 'What happens to extrinsic value by expiration?', o: ['It shrinks to zero', 'It doubles', 'It turns into intrinsic value'], why: 'At expiration an option is worth only its intrinsic value.' }] },
+ { id: 'g2', world: 3, title: 'Implied volatility', terms: ['Implied volatility (IV)', 'Historical volatility', 'IV rank'], widget: 'greeks',
+   kid: `<p>Some stocks are calm like a sleeping cat. Others jump around like a kangaroo.</p><p><strong>Implied volatility</strong> (IV) is the market's guess about how much a stock will jump in the future. When people expect big jumps, options get <strong>more expensive</strong>, because a big jump could make them very valuable.</p><p>IV is written as a percent. 20% is calm; 80% is wild.</p>`,
+   adult: `<p><strong>Implied volatility</strong> is the yearly volatility "implied" by an option's market price. Plug the price into a pricing model and solve for the volatility that makes it fit. It's the market's forecast of future movement, not a promise.</p><p>Rough rule: a stock's expected one-standard-deviation move over a period is about price × IV × √(days ÷ 365). A $100 stock with 30% IV has an expected 30-day move of about $100 × 0.30 × 0.29 ≈ $8.60. Compare IV with the stock's own past range (IV rank) to judge if options are cheap or expensive.</p>`,
+   quiz: [{ q: 'IV goes up while everything else stays the same. What happens to option prices?', o: ['They go up', 'They go down', 'They stay the same'], why: 'Higher expected movement makes both calls and puts more valuable.' },
+          { q: 'A $100 stock has 30% IV. Roughly how big is its expected one-year move?', o: ['About $30 up or down', 'Exactly $30 up', 'About $3'], why: '30% of $100 is $30, one standard deviation either way.' },
+          { q: 'Implied volatility is best described as…', o: ['The market’s forecast of future movement', 'A guarantee of future movement', 'How much the stock moved last year'], why: 'It’s backed out of current option prices: a forecast, not a promise.' }] },
+ { id: 'g3', world: 3, title: 'Delta: the speed meter', terms: ['Delta', 'Share equivalent', 'Probability ITM'], widget: 'greeks',
+   kid: `<p><strong>Delta</strong> tells you how much an option's price moves when the stock moves $1.</p><p>A call with a delta of <strong>0.50</strong> goes up about 50 cents when the stock goes up $1. Calls have delta between 0 and 1. Puts have delta between 0 and −1, because they go <em>up</em> when the stock goes <em>down</em>.</p><p>Delta also gives a rough guess of the chance the option ends in the money.</p>`,
+   adult: `<p><strong>Delta</strong> is the change in option price for a $1 change in the stock. Calls: 0 to +1. Puts: 0 to −1. At the money is about ±0.50; deep in the money approaches ±1.</p><p>Because one contract is 100 shares, a 0.40-delta call behaves like owning about 40 shares (<strong>share equivalent</strong>). Traders also use delta as a rough estimate of the probability of finishing in the money. Add up the deltas of everything you hold to see your total directional exposure.</p>`,
+   quiz: [{ q: 'A call has a delta of 0.60. The stock rises $2. About how much does the option gain per share?', o: ['$1.20', '$0.60', '$2.00', '$0.30'], why: '0.60 × $2 = $1.20 per share, or $120 per contract.' },
+          { q: 'Which delta could belong to a put option?', o: ['−0.35', '0.35', '1.20'], why: 'Puts have negative delta between 0 and −1.' },
+          { q: 'You own 2 calls with delta 0.50. That’s roughly like owning how many shares?', o: ['100', '50', '200', '2'], why: '2 contracts × 100 shares × 0.50 = 100 share equivalents.' }] },
+ { id: 'g4', world: 3, title: 'Gamma: how fast delta changes', terms: ['Gamma', 'Gamma risk'], widget: 'greeks',
+   kid: `<p>If delta is a car's speed, <strong>gamma</strong> is the gas pedal. It tells you how fast delta changes when the stock moves.</p><p>Gamma is biggest for options right at the strike price, especially close to expiration. That's when an option can flip from almost worthless to very valuable in one day, which is exciting for buyers and scary for sellers.</p>`,
+   adult: `<p><strong>Gamma</strong> is the change in delta for a $1 move in the stock. It peaks at the money and grows sharply as expiration approaches.</p><p>Long options have positive gamma: moves in either direction help you accelerate. Short options have negative gamma: losses accelerate when the stock moves against you. This "gamma risk" is why selling short-dated at-the-money options can blow up quickly.</p>`,
+   quiz: [{ q: 'Where is gamma usually highest?', o: ['At the money, near expiration', 'Deep in the money, far from expiration', 'Far out of the money'], why: 'Delta changes fastest when the outcome is a coin flip and time is short.' },
+          { q: 'A call has delta 0.50 and gamma 0.10. The stock rises $1. What is the new delta, roughly?', o: ['0.60', '0.40', '0.50', '1.50'], why: 'Delta rises by gamma: 0.50 + 0.10 = 0.60.' },
+          { q: 'Who has negative gamma?', o: ['Option sellers', 'Option buyers', 'Nobody'], why: 'Short options have negative gamma, so moves against them speed up.' }] },
+ { id: 'g5', world: 3, title: 'Theta: the daily melt', terms: ['Theta', 'Time decay', 'Weekend decay'], widget: 'greeks',
+   kid: `<p><strong>Theta</strong> tells you how much an option melts each day, like our ice cream cone.</p><p>A theta of <strong>−0.05</strong> means the option loses about 5 cents a day (that's $5 per contract) if nothing else changes. The melting speeds up in the last few weeks. Option <strong>buyers</strong> fight theta; option <strong>sellers</strong> earn it.</p>`,
+   adult: `<p><strong>Theta</strong> is the change in option value per day with everything else held constant. Long options have negative theta; short options have positive theta.</p><p>Decay accelerates as expiration nears, especially for at-the-money options; that's the shape you saw on Options Island. Calendar days count, so a weekend costs a long option two extra days of decay. Option sellers build strategies around collecting theta while managing gamma risk.</p>`,
+   quiz: [{ q: 'Your call has theta −0.08. About how much value does one contract lose per day?', o: ['$8', '$0.08', '$80', '$0.80'], why: '−0.08 per share × 100 shares = −$8 per day.' },
+          { q: 'When does time decay speed up the most?', o: ['In the final weeks before expiration', 'Right after you buy', 'It’s always the same speed'], why: 'Decay accelerates as expiration approaches.' },
+          { q: 'Who benefits from theta?', o: ['Option sellers', 'Option buyers', 'Stock buyers'], why: 'Sellers collect the time value as it melts.' }] },
+ { id: 'g6', world: 3, title: 'Vega: the volatility dial', terms: ['Vega'], widget: 'greeks',
+   kid: `<p><strong>Vega</strong> tells you how much an option's price changes when implied volatility goes up or down by 1 point.</p><p>A vega of <strong>0.10</strong> means the option gains 10 cents if IV rises from 30% to 31%. Options with lots of time left have the most vega, because there's more time for wild moves.</p>`,
+   adult: `<p><strong>Vega</strong> is the change in option value for a 1-percentage-point change in implied volatility. Long options have positive vega; short options have negative vega.</p><p>Vega is largest at the money and for longer-dated options. You can be right about the stock's direction and still lose money if IV falls more than your gain from delta. The next lessons on earnings show exactly that.</p>`,
+   quiz: [{ q: 'An option has vega 0.15. IV rises 4 points. About how much does it gain per share?', o: ['$0.60', '$0.15', '$4.00', '$0.04'], why: '0.15 × 4 = $0.60 per share, $60 per contract.' },
+          { q: 'Which option usually has the most vega?', o: ['An at-the-money option with months left', 'A far out-of-the-money option expiring tomorrow', 'A deep in-the-money option expiring today'], why: 'More time and being at the money both increase vega.' },
+          { q: 'If you buy an option and IV drops sharply, vega makes the option…', o: ['Lose value', 'Gain value', 'Unchanged'], why: 'Long options have positive vega, so falling IV hurts.' }] },
+ { id: 'g7', world: 3, title: 'Rho, dividends and early exercise', terms: ['Rho', 'Ex-dividend date', 'Early exercise', 'American option'],
+   kid: `<p><strong>Rho</strong> is a small Greek about interest rates. When rates go up, calls get a tiny bit more valuable and puts a tiny bit less. It barely matters for short-term options.</p><p><strong>Dividends</strong> matter more: when a company pays a dividend, its stock price drops by about that amount, which hurts calls and helps puts.</p>`,
+   adult: `<p><strong>Rho</strong> measures sensitivity to interest rates: higher rates raise call values and lower put values, mostly for long-dated options.</p><p>On the <strong>ex-dividend date</strong> the stock usually drops by about the dividend, and option holders don't receive it. U.S. stock options are <strong>American style</strong>, so they can be exercised any day. Owners of in-the-money calls sometimes exercise early, just before an ex-dividend date, to capture the dividend, which is one reason short calls can be assigned early.</p>`,
+   quiz: [{ q: 'A stock pays a $1 dividend. On the ex-dividend date, the stock price usually…', o: ['Drops by about $1', 'Rises by about $1', 'Doesn’t change'], why: 'The cash leaves the company, so the price adjusts down.' },
+          { q: 'U.S. stock options can usually be exercised…', o: ['Any day up to expiration (American style)', 'Only on expiration day', 'Only once a year'], why: 'Most U.S. equity options are American style.' },
+          { q: 'Which Greek measures sensitivity to interest rates?', o: ['Rho', 'Theta', 'Gamma'], why: 'Rho is the interest-rate Greek.' }] },
+ { id: 'g8', world: 3, title: 'Earnings and the IV crush', terms: ['Earnings report', 'IV crush', 'Expected move', 'Straddle price'], widget: 'ivcrush',
+   kid: `<p>Every three months, companies report how much money they made. Nobody knows the result ahead of time, so option prices get puffed up like a balloon before the big day.</p><p>The moment the news is out, the mystery is gone and the balloon pops. That's the <strong>IV crush</strong>. You can guess the direction right and still lose money because the balloon popped.</p>`,
+   adult: `<p>Before an <strong>earnings report</strong>, implied volatility for options that expire after the report climbs, because the market is pricing in a possible jump. Right after the report, that uncertainty disappears and IV collapses: the <strong>IV crush</strong>.</p><p>The price of an at-the-money straddle (call + put) shows roughly how big a move the market expects. If the actual move is smaller than that <strong>expected move</strong>, option buyers usually lose even when they pick the right direction. The chart below shows it.</p>`,
+   quiz: [{ q: 'What usually happens to implied volatility right after earnings are announced?', o: ['It drops sharply', 'It rises sharply', 'It stays the same'], why: 'The uncertainty is gone, so IV collapses: the IV crush.' },
+          { q: 'You buy a call before earnings. The stock rises a little. Your call might still lose value because of…', o: ['IV crush', 'Dividends', 'Rho'], why: 'The drop in IV can outweigh a small gain from the stock move.' },
+          { q: 'An at-the-money straddle costs $5 on a $100 stock before earnings. The expected move is about…', o: ['$5, or 5%', '$50', '$0.50'], why: 'The straddle price approximates the market’s expected move.' }] },
+ { id: 'g9', world: 3, title: 'Volume, open interest and liquidity', terms: ['Volume', 'Open interest', 'Bid-ask spread', 'Liquidity', 'Slippage'],
+   kid: `<p>Every option has a <strong>bid</strong> (the most a buyer will pay) and an <strong>ask</strong> (the least a seller will take). The gap between them is the <strong>spread</strong>, like a toll you pay to trade.</p><p><strong>Volume</strong> is how many contracts traded today. <strong>Open interest</strong> is how many are still open. Lots of both means the option is easy to trade with a small toll.</p>`,
+   adult: `<p>You buy at the <strong>ask</strong> and sell at the <strong>bid</strong>, so a wide <strong>bid-ask spread</strong> is an instant cost. A $1.00 × $1.20 quote costs you $20 per contract just to get in and out.</p><p><strong>Volume</strong> counts contracts traded today; <strong>open interest</strong> counts contracts still open. High volume and open interest usually mean tight spreads and easy exits (<strong>liquidity</strong>). Far out-of-the-money strikes and small stocks often have wide spreads and <strong>slippage</strong>. In the Practice Market, compare spreads across strikes and expirations.</p>`,
+   quiz: [{ q: 'An option is quoted $2.00 bid, $2.30 ask. You buy one contract and immediately sell it. What do you lose to the spread?', o: ['$30', '$0.30', '$3', '$230'], why: '$0.30 per share × 100 = $30.' },
+          { q: 'Open interest is…', o: ['The number of contracts still open', 'The number traded today', 'The interest rate on options'], why: 'Volume counts today’s trades; open interest counts open positions.' },
+          { q: 'Which option is usually easiest to trade?', o: ['High volume, high open interest, tight spread', 'No volume, wide spread', 'Far out of the money on a tiny stock'], why: 'Liquidity means tight spreads and easy exits.' }] },
+ { id: 'b3', world: 3, boss: true, title: 'Boss: The Volatility Dragon', pool: ['g1','g2','g3','g4','g5','g6','g7','g8','g9'] },
+
+ // ---------------- WORLD 4: STRATEGY CITY ----------------
+ { id: 't1', world: 4, title: 'Covered calls', terms: ['Covered call', 'Called away', 'Premium income'], widget: 'strat:cc',
+   kid: `<p>Imagine you own 100 baseball cards. Someone pays you $1.50 a card for the right to buy them from you at $55 a card next month.</p><p>That's a <strong>covered call</strong>: you own 100 shares and sell a call on them. You keep the money no matter what. If the price shoots past $55, you have to sell your shares at $55, so you miss the extra gains.</p>`,
+   adult: `<p>A <strong>covered call</strong> = own 100 shares + sell 1 call. You collect premium, which adds income and cushions small drops.</p><p>The trade-off: your upside is capped at the strike. If the stock finishes above it, your shares are <strong>called away</strong> at the strike. Your downside is still nearly the full stock risk, minus the premium. Example: own at $50, sell the $55 call for $1.50 → max profit $6.50 a share, break-even $48.50.</p>`,
+   quiz: [{ q: 'A covered call means you…', o: ['Own 100 shares and sell a call on them', 'Buy a call and a put', 'Sell a call without owning shares'], why: 'The shares "cover" the obligation to deliver them.' },
+          { q: 'You own at $50 and sell the $55 call for $1.50. What’s your max profit per share?', o: ['$6.50', '$1.50', '$5.00', 'Unlimited'], why: '$5 stock gain up to the strike + $1.50 premium.' },
+          { q: 'What’s the main downside of a covered call?', o: ['Your gains are capped at the strike', 'You can lose more than the stock', 'You pay a premium'], why: 'You give up gains above the strike in exchange for the premium.' }] },
+ { id: 't2', world: 4, title: 'Cash-secured puts', terms: ['Cash-secured put', 'Assignment', 'Effective buy price'], widget: 'strat:csp',
+   kid: `<p>You want to buy a stock, but only if it gets cheaper. With a <strong>cash-secured put</strong>, someone pays you now for promising to buy at a lower price.</p><p>You set aside the cash. If the stock drops below your price, you buy it, and the money you were paid makes your price even lower. If it doesn't drop, you just keep the money.</p>`,
+   adult: `<p>A <strong>cash-secured put</strong> = sell a put while holding enough cash to buy 100 shares at the strike. You collect premium up front.</p><p>If the stock finishes below the strike you're <strong>assigned</strong>: you buy 100 shares at the strike, with an effective price of strike − premium. If not, you keep the premium. The risk is a big drop: you still have to buy at the strike. Example: sell the $45 put for $1.20 with $4,500 set aside; break-even $43.80.</p>`,
+   quiz: [{ q: 'To sell one cash-secured $45 put, how much cash must be set aside?', o: ['$4,500', '$45', '$450', '$120'], why: '$45 × 100 shares = $4,500.' },
+          { q: 'You sell the $45 put for $1.20 and get assigned. What’s your effective buy price?', o: ['$43.80', '$45.00', '$46.20', '$1.20'], why: '$45 strike − $1.20 premium = $43.80.' },
+          { q: 'The stock stays above $45 at expiration. What happens?', o: ['The put expires and you keep the premium', 'You must buy the shares', 'You lose the premium'], why: 'An out-of-the-money put expires worthless and the seller keeps the premium.' }] },
+ { id: 't3', world: 4, title: 'Protective puts and collars', terms: ['Protective put', 'Collar', 'Hedge'], widget: 'strat:collar',
+   kid: `<p>A <strong>protective put</strong> is insurance for stock you own. If the price crashes, the put lets you sell at your safe price.</p><p>Insurance costs money, so some investors pay for it by also selling a call. That combo is a <strong>collar</strong>: a floor below you and a ceiling above you.</p>`,
+   adult: `<p>A <strong>protective put</strong> = own shares + buy a put. It sets a floor on losses for the cost of the premium. It's a <strong>hedge</strong>, not a profit strategy.</p><p>A <strong>collar</strong> adds a short call to pay for the put: own at $50, buy the $45 put, sell the $55 call. The loss is capped near $45 and the gain near $55. When the call premium covers the put, it's a "zero-cost collar."</p>`,
+   quiz: [{ q: 'A protective put is mainly used to…', o: ['Limit losses on stock you own', 'Make extra income', 'Bet the stock rises'], why: 'It’s insurance: the put sets a floor.' },
+          { q: 'A collar combines owning stock with…', o: ['A long put and a short call', 'Two long calls', 'A short put and a long call'], why: 'Buy a put for protection, sell a call to pay for it.' },
+          { q: 'What do you give up with a collar?', o: ['Gains above the call strike', 'All downside protection', 'Your shares immediately'], why: 'The short call caps your upside.' }] },
+ { id: 't4', world: 4, title: 'Bull call spreads', terms: ['Vertical spread', 'Debit spread', 'Bull call spread'], widget: 'strat:bcs',
+   kid: `<p>Buying a call can be pricey. A <strong>bull call spread</strong> makes it cheaper: buy one call and sell a higher call.</p><p>The money from the call you sell pays for part of the one you buy. The catch: you can only win up to the higher strike. It's a cheaper ticket with a smaller prize.</p>`,
+   adult: `<p>A <strong>bull call spread</strong> (a debit vertical) = buy a lower-strike call + sell a higher-strike call, same expiration. Example: buy the $50 call for $3.00, sell the $55 call for $1.20, a $1.80 debit.</p><p>Max loss is the debit ($180). Max gain is the strike width minus the debit: $5.00 − $1.80 = $3.20 ($320). Break-even is $51.80. Spreads also reduce your exposure to theta and IV compared with a single long call.</p>`,
+   quiz: [{ q: 'Buy the $50 call for $3.00, sell the $55 call for $1.20. What’s the max loss per contract?', o: ['$180', '$300', '$500', '$120'], why: 'Net debit $1.80 × 100 = $180.' },
+          { q: 'Same spread: what’s the max gain per contract?', o: ['$320', '$500', 'Unlimited', '$180'], why: '($5 width − $1.80 debit) × 100 = $320.' },
+          { q: 'Why trade a spread instead of a single call?', o: ['It costs less and has defined risk', 'It has unlimited profit', 'It never loses'], why: 'Selling the higher call lowers cost but caps the gain.' }] },
+ { id: 't5', world: 4, title: 'Bear put spreads', terms: ['Bear put spread', 'Defined risk'], widget: 'strat:bps',
+   kid: `<p>A <strong>bear put spread</strong> is the bull call spread's mirror twin. It's for when you think a stock will go <em>down</em>.</p><p>Buy one put and sell a lower put. You spend less money, and your prize is capped at the lower strike.</p>`,
+   adult: `<p>A <strong>bear put spread</strong> = buy a higher-strike put + sell a lower-strike put, same expiration. Example: buy the $50 put for $2.80, sell the $45 put for $1.00, a $1.80 debit.</p><p>Max loss $180, max gain ($5 − $1.80) × 100 = $320, break-even $48.20. Like all vertical spreads, it has <strong>defined risk</strong>: you know your worst case before you enter.</p>`,
+   quiz: [{ q: 'A bear put spread profits when the stock…', o: ['Falls', 'Rises', 'Stays exactly flat'], why: 'It’s a bearish strategy built from puts.' },
+          { q: 'Buy the $50 put for $2.80, sell the $45 put for $1.00. Break-even?', o: ['$48.20', '$45.00', '$51.80', '$46.80'], why: '$50 − $1.80 net debit = $48.20.' },
+          { q: '"Defined risk" means…', o: ['You know your maximum loss in advance', 'You can’t lose money', 'The broker guarantees profit'], why: 'The long option limits how much the spread can lose.' }] },
+ { id: 't6', world: 4, title: 'Credit spreads', terms: ['Credit spread', 'Bull put spread', 'Bear call spread'], widget: 'strat:bpcs',
+   kid: `<p>In a <strong>credit spread</strong> you get paid up front. You sell an option and buy a cheaper one farther away as a safety net.</p><p>If the stock stays away from your strike, both expire and you keep the money. The safety net means you can never lose more than the gap between the strikes minus what you got paid.</p>`,
+   adult: `<p>A <strong>credit spread</strong> = sell a closer option, buy a farther one as protection. A bull put spread: sell the $47.50 put for $1.60, buy the $45 put for $0.90, a $0.70 credit.</p><p>Max gain is the credit ($70). Max loss is width − credit: ($2.50 − $0.70) × 100 = $180. Break-even $46.80. Credit spreads profit from time decay and the stock staying put, but the risk/reward is lopsided, so position size matters.</p>`,
+   quiz: [{ q: 'In a credit spread, when do you receive money?', o: ['Up front, when you open it', 'Only at expiration', 'Never'], why: 'You sell the more expensive option, so you start with a credit.' },
+          { q: 'Sell the $47.50 put for $1.60, buy the $45 put for $0.90. Max loss per contract?', o: ['$180', '$70', '$250', 'Unlimited'], why: '($2.50 width − $0.70 credit) × 100 = $180.' },
+          { q: 'Why buy the farther option in a credit spread?', o: ['To cap the maximum loss', 'To make more money', 'Because the broker requires two of everything'], why: 'It’s the safety net that defines your risk.' }] },
+ { id: 't7', world: 4, title: 'Straddles and strangles', terms: ['Straddle', 'Strangle', 'Long volatility'], widget: 'strat:straddle',
+   kid: `<p>What if you think something big will happen but don't know which way? Buy a call <em>and</em> a put! That's a <strong>straddle</strong>.</p><p>If the stock zooms up or crashes down a lot, one side wins big. If it barely moves, both melt and you lose. A <strong>strangle</strong> is the same idea with cheaper options farther away.</p>`,
+   adult: `<p>A long <strong>straddle</strong> = buy a call and a put at the same strike. Example at $50: call $3.00 + put $2.80 = $5.80. You profit if the stock finishes beyond $44.20 or $55.80.</p><p>A <strong>strangle</strong> uses out-of-the-money strikes: cheaper, but it needs a bigger move. Both are "long volatility": they suffer from theta and IV crush, which is why buying them right before earnings often disappoints.</p>`,
+   quiz: [{ q: 'A long straddle profits most when the stock…', o: ['Makes a big move either way', 'Doesn’t move', 'Moves exactly to the strike'], why: 'You need a move bigger than the total premium paid.' },
+          { q: 'Call $3.00 + put $2.80 at the $50 strike. What are the break-evens?', o: ['$44.20 and $55.80', '$47 and $53', '$50 only', '$45 and $55'], why: '$50 ± $5.80 total premium.' },
+          { q: 'What’s the main enemy of a long straddle?', o: ['Time decay and IV crush', 'Dividends', 'Big moves'], why: 'Both options lose value if the stock sits still or IV falls.' }] },
+ { id: 't8', world: 4, title: 'Iron condors', terms: ['Iron condor', 'Range-bound', 'Wings'], widget: 'strat:ic',
+   kid: `<p>An <strong>iron condor</strong> is a bet that a stock stays inside a fence. You sell a put below and a call above, and buy cheaper ones even farther out as safety nets.</p><p>If the stock stays inside the fence until expiration, you keep the money. If it breaks out, your safety nets limit the damage.</p>`,
+   adult: `<p>An <strong>iron condor</strong> = a bull put credit spread + a bear call credit spread on the same expiration. Example on a $50 stock: sell the $45 put, buy the $42.50 put, sell the $55 call, buy the $57.50 call, for about a $1.05 credit.</p><p>Max gain is the credit if the stock finishes between the short strikes. Max loss is wing width − credit ($1.45, or $145). It profits from time decay and falling IV in a <strong>range-bound</strong> market.</p>`,
+   quiz: [{ q: 'An iron condor wins when the stock…', o: ['Stays between the short strikes', 'Makes a huge move', 'Goes to zero'], why: 'It’s a range-bound strategy.' },
+          { q: 'Wings are $2.50 wide and the credit is $1.05. Max loss per condor?', o: ['$145', '$105', '$250', 'Unlimited'], why: '($2.50 − $1.05) × 100 = $145.' },
+          { q: 'An iron condor is made of…', o: ['A put credit spread and a call credit spread', 'Two long straddles', 'Stock and a put'], why: 'Two credit spreads, one on each side.' }] },
+ { id: 't9', world: 4, title: 'Managing trades: close, roll, exercise', terms: ['Closing a trade', 'Rolling', 'Exercise', 'Assignment', 'Pin risk'],
+   kid: `<p>You don't have to wait until expiration! You can <strong>close</strong> a trade any time by doing the opposite: if you bought an option, sell it.</p><p>Most traders close early to lock in wins or stop losses. <strong>Rolling</strong> means closing one option and opening a new one later in time. If you sold an option, you might be <strong>assigned</strong>, which means you have to buy or sell the shares.</p>`,
+   adult: `<p>Most options are <strong>closed</strong> before expiration: sell to close a long, buy to close a short. Closing captures remaining extrinsic value, while exercising throws it away, so exercising early rarely makes sense except around dividends.</p><p><strong>Rolling</strong> = close the current option and open one at a later date or different strike. Short options can be <strong>assigned</strong> any time; at expiration, options $0.01 or more in the money are normally auto-exercised. A stock finishing right at your strike creates <strong>pin risk</strong>: uncertainty about assignment. Have an exit plan before you enter.</p>`,
+   quiz: [{ q: 'You bought a call that’s up 80%. The simplest way to take the profit is to…', o: ['Sell to close it', 'Exercise it', 'Wait for expiration'], why: 'Selling captures intrinsic and extrinsic value; exercising forfeits extrinsic.' },
+          { q: '"Rolling" an option means…', o: ['Closing it and opening a new one at a later date or new strike', 'Letting it expire', 'Giving it to a friend'], why: 'Rolling extends or adjusts a position.' },
+          { q: 'At expiration, an option $0.50 in the money is usually…', o: ['Automatically exercised', 'Expires worthless', 'Refunded'], why: 'Options $0.01 or more in the money are normally auto-exercised.' }] },
+ { id: 'b4', world: 4, boss: true, title: 'Boss: The Strategy Titan', pool: ['t1','t2','t3','t4','t5','t6','t7','t8','t9'] },
+
+ // ---------------- WORLD 5: MASTER'S SUMMIT ----------------
+ { id: 'm1', world: 5, title: 'Order types', terms: ['Market order', 'Limit order', 'Stop order', 'Stop-limit order', 'Gap'],
+   kid: `<p>When you trade, you choose how your order works.</p><p>A <strong>market order</strong> says "buy it now at whatever the price is." A <strong>limit order</strong> says "only buy if it's this price or cheaper." A <strong>stop order</strong> is a safety alarm: "if the price falls to here, sell." Try them all in the Practice Market.</p>`,
+   adult: `<p><strong>Market order:</strong> fills right away at the best available price, so it's fast but the price isn't guaranteed. <strong>Limit order:</strong> fills only at your price or better, so the price is guaranteed but the fill isn't. <strong>Stop order:</strong> becomes a market order once the stop price trades; it's used for stop-losses. <strong>Stop-limit:</strong> becomes a limit order at the stop, so it may not fill in a fast drop.</p><p>Watch out for <strong>gaps</strong>: if a stock opens far below your stop, a stop order fills at the open, below your stop. For options, use limit orders because spreads can be wide. The Practice Market supports limit and stop orders on stocks.</p>`,
+   quiz: [{ q: 'Which order guarantees your price but not that it fills?', o: ['Limit order', 'Market order', 'Stop order'], why: 'A limit only fills at your price or better.' },
+          { q: 'Your stop-loss is at $40. Bad news hits overnight and the stock opens at $35. Your stop order likely fills near…', o: ['$35', '$40', '$45'], why: 'Stops become market orders, so a gap fills at the open price.' },
+          { q: 'For options with wide spreads, it’s usually smarter to use…', o: ['Limit orders', 'Market orders', 'No orders'], why: 'Limits stop you from paying the full ask in a thin market.' }] },
+ { id: 'm2', world: 5, title: 'Position sizing and risk', terms: ['Position sizing', 'Risk per trade', '1% rule', 'Drawdown'], widget: 'sizing',
+   kid: `<p>Pros don't bet everything on one trade. They decide ahead of time how much they're willing to lose, often just 1 or 2 out of every 100 dollars.</p><p>That way, even a bunch of losses in a row won't knock them out of the game. Try the calculator below.</p>`,
+   adult: `<p><strong>Position sizing</strong> decides how big a trade is from how much you're willing to lose, not how sure you feel. A common guideline: risk 1–2% of the account per trade.</p><p>Shares = (account × risk %) ÷ (entry − stop). With $10,000, 1% risk, entry $50 and stop $46: $100 ÷ $4 = 25 shares. Losses compound harshly: a 50% <strong>drawdown</strong> needs a 100% gain to recover. For options, size by the premium you could lose entirely.</p>`,
+   quiz: [{ q: 'Account $20,000, risking 1% per trade. What’s the most you should lose on one trade?', o: ['$200', '$2,000', '$20', '$1,000'], why: '1% of $20,000 = $200.' },
+          { q: 'You risk $100 and your stop is $5 below entry. How many shares?', o: ['20', '100', '5', '500'], why: '$100 ÷ $5 per share = 20 shares.' },
+          { q: 'After a 50% loss, what gain do you need to get back to even?', o: ['100%', '50%', '25%'], why: '$100 → $50 needs to double to get back to $100.' }] },
+ { id: 'm3', world: 5, title: 'Your trading plan and journal', terms: ['Trading plan', 'Expectancy', 'Win rate', 'Trade journal'],
+   kid: `<p>Great players have a game plan. Before every trade, write down <strong>why</strong> you're buying, <strong>when</strong> you'll take profit, and <strong>when</strong> you'll get out if you're wrong.</p><p>Afterward, write what happened in a <strong>journal</strong>. Over time you'll see what works for you and what doesn't.</p>`,
+   adult: `<p>A <strong>trading plan</strong> defines what you trade, your setups, entries, exits, position size and maximum daily or weekly loss, before money is at risk.</p><p>Judge strategies by <strong>expectancy</strong>, not win rate: (win rate × average win) − (loss rate × average loss). A 40% win rate with $300 wins and $100 losses has expectancy (0.4 × 300) − (0.6 × 100) = +$60 a trade. A <strong>trade journal</strong> (reason, entry, exit, result, emotion) is how you find your real expectancy.</p>`,
+   quiz: [{ q: 'Win rate 40%, average win $300, average loss $100. What’s the expectancy per trade?', o: ['+$60', '−$60', '+$120', '$0'], why: '(0.4 × 300) − (0.6 × 100) = 120 − 60 = +$60.' },
+          { q: 'When should you decide your exit point?', o: ['Before you enter the trade', 'After it starts losing', 'Never'], why: 'Deciding in advance keeps emotions out of it.' },
+          { q: 'A high win rate always means a profitable strategy.', o: ['False', 'True'], why: 'A few big losses can wipe out many small wins.' }] },
+ { id: 'm4', world: 5, title: 'Reading a company', terms: ['Revenue', 'Earnings per share (EPS)', 'P/E ratio', 'Market cap'],
+   kid: `<p>Before buying a stock, look at the business behind it. <strong>Revenue</strong> is all the money it takes in. <strong>Profit</strong> is what's left after paying the bills.</p><p>The <strong>P/E ratio</strong> tells you how many dollars people pay for each $1 of yearly profit. A P/E of 20 means you pay $20 for every $1 the company earns.</p>`,
+   adult: `<p><strong>Revenue</strong> is total sales; <strong>net income</strong> is profit after all costs. <strong>EPS</strong> = net income ÷ shares outstanding. <strong>P/E</strong> = price ÷ EPS: how much investors pay per dollar of earnings. <strong>Market cap</strong> = price × shares outstanding.</p><p>Compare these with a company's own history and its industry peers. A high P/E can mean high expected growth or an overpriced stock; a low P/E can mean a bargain or a business in trouble. Numbers start the research, they don't finish it.</p>`,
+   quiz: [{ q: 'A stock is $60 and earnings per share are $3. What’s the P/E?', o: ['20', '180', '3', '57'], why: '$60 ÷ $3 = 20.' },
+          { q: 'Market cap is…', o: ['Share price × shares outstanding', 'Yearly revenue', 'The highest price ever'], why: 'It’s the total market value of the company.' },
+          { q: 'A very high P/E always means a stock is a bad buy.', o: ['False', 'True'], why: 'It can reflect expected growth. Context matters.' }] },
+ { id: 'm11', world: 5, title: 'Reading charts: support, resistance and RSI', terms: ['Support', 'Resistance', 'Trendline', 'Breakout', 'RSI'], widget: 'minichart',
+   kid: `<p>On a chart, <strong>support</strong> is a floor where the price keeps bouncing up, and <strong>resistance</strong> is a ceiling where it keeps getting pushed down.</p><p>When the price smashes through a ceiling with lots of volume, that's a <strong>breakout</strong>. Charts give clues, not promises, so always have your safety exit ready.</p>`,
+   adult: `<p><strong>Support</strong> and <strong>resistance</strong> are price zones where buying or selling has repeatedly shown up. <strong>Trendlines</strong> connect higher lows (uptrend) or lower highs (downtrend). A <strong>breakout</strong> on rising volume is more convincing than one on light volume.</p><p>The <strong>RSI</strong> (Relative Strength Index, 0–100) measures recent momentum; above 70 is often called overbought and below 30 oversold, but strong trends can stay there for a long time. Technical analysis deals in probabilities. Use it to plan entries and stop-loss levels, not to predict the future.</p>`,
+   quiz: [{ q: 'A price level where a stock keeps bouncing back up is called…', o: ['Support', 'Resistance', 'Volume'], why: 'Support acts like a floor.' },
+          { q: 'Which breakout is usually more convincing?', o: ['One on rising volume', 'One on very low volume', 'They’re always the same'], why: 'Volume shows real buying interest behind the move.' },
+          { q: 'An RSI above 70 means…', o: ['Momentum is strong and the stock may be overbought', 'The stock must fall tomorrow', 'The company is bankrupt'], why: 'It’s a momentum signal, not a guarantee.' }] },
+ { id: 'm12', world: 5, title: 'The economic calendar and market hours', terms: ['Market hours', 'Pre-market', 'After-hours', 'Federal Reserve', 'CPI', 'Earnings season'],
+   kid: `<p>The U.S. stock market is open on weekdays from <strong>9:30 a.m. to 4:00 p.m. Eastern time</strong>. Some trading happens before and after, but it's thinner and jumpier.</p><p>Big news days move the whole market: when the government reports prices (inflation), jobs, or when the <strong>Federal Reserve</strong> changes interest rates. Smart traders check the calendar before they trade.</p>`,
+   adult: `<p>Regular U.S. trading runs 9:30 a.m.–4:00 p.m. ET on weekdays, closed on market holidays. <strong>Pre-market</strong> and <strong>after-hours</strong> sessions have less liquidity and wider spreads; many earnings reports land then, causing gaps at the open.</p><p>Market-moving events: <strong>Federal Reserve</strong> rate decisions, <strong>CPI</strong> inflation reports, the monthly jobs report, and <strong>earnings season</strong> (a few weeks after each quarter ends). Implied volatility often rises before scheduled events. Check an economic calendar and your positions' earnings dates every week.</p>`,
+   quiz: [{ q: 'Regular U.S. stock market hours are…', o: ['9:30 a.m. to 4:00 p.m. Eastern', '24 hours a day', '8:00 a.m. to 8:00 p.m. Pacific'], why: 'The regular session is 9:30–4:00 ET on weekdays.' },
+          { q: 'Why can after-hours trading be riskier?', o: ['Less liquidity and wider spreads', 'Prices can’t move', 'It’s not allowed'], why: 'Fewer traders means thinner, jumpier prices.' },
+          { q: 'Which event can move the whole market?', o: ['A Federal Reserve interest rate decision', 'A company changing its logo', 'A weekend'], why: 'Rate decisions affect almost every asset.' }] },
+ { id: 'm13', world: 5, title: 'Beta, correlation and sector risk', terms: ['Beta', 'Correlation', 'Sector', 'Concentration risk'],
+   kid: `<p>Some stocks swing much more than the whole market. If the market goes up 1% and a stock usually goes up 2%, that stock is twice as jumpy. That's its <strong>beta</strong>.</p><p>Also, if all your stocks are the same kind, like five video game companies, they tend to fall together. Mix different kinds of businesses.</p>`,
+   adult: `<p><strong>Beta</strong> measures how much a stock tends to move relative to the market: 1.5 means about 1.5× the market's moves on average. High-beta stocks amplify both gains and losses.</p><p><strong>Correlation</strong> measures how closely two investments move together (−1 to +1). Owning five stocks in the same <strong>sector</strong> isn't real diversification, because they're highly correlated. Watch <strong>concentration risk</strong>, including options: ten bullish calls on related tech stocks are really one big bet. In the Practice Market, compare Rocket Rides' swings with the Everything Fund's.</p>`,
+   quiz: [{ q: 'A stock with beta 2.0 tends to move…', o: ['About twice as much as the market', 'Opposite the market', 'Half as much as the market'], why: 'Beta 2 means roughly double the market’s moves.' },
+          { q: 'You own five chipmaker stocks. Your biggest risk is…', o: ['They’re highly correlated and can fall together', 'They pay too many dividends', 'Nothing, that’s diversified'], why: 'Same-sector stocks tend to move together.' },
+          { q: 'Correlation of +1 between two stocks means they…', o: ['Move together perfectly', 'Move opposite', 'Are unrelated'], why: '+1 is perfect positive correlation.' }] },
+ { id: 'm5', world: 5, title: 'Index funds, fees and dollar-cost averaging', terms: ['Expense ratio', 'Dollar-cost averaging', 'Rebalancing'], widget: 'grow',
+   kid: `<p>Many grown-ups build wealth the "boring" way: buying an index fund a little at a time, every month, for years. That's called <strong>dollar-cost averaging</strong>.</p><p>Funds charge a small yearly fee called an <strong>expense ratio</strong>. Smaller fees mean more money stays yours.</p>`,
+   adult: `<p><strong>Dollar-cost averaging</strong> means investing a fixed amount on a schedule, so you buy more shares when prices are low and fewer when they're high, and you never have to time the market.</p><p>The <strong>expense ratio</strong> is a fund's yearly fee as a percent of your money. Broad index funds can cost under 0.10% a year, while some funds charge over 1%. On $100,000 that's under $100 versus over $1,000 every year. <strong>Rebalancing</strong> brings your mix back to target once in a while. For most people this is the core of a portfolio; trading and options, if any, are a small slice.</p>`,
+   quiz: [{ q: 'Dollar-cost averaging means…', o: ['Investing a fixed amount on a regular schedule', 'Buying only when prices crash', 'Putting all your money in at once'], why: 'A set amount every period, no matter the price.' },
+          { q: 'On $50,000, what does a 1% expense ratio cost per year?', o: ['$500', '$50', '$5,000', '$5'], why: '1% of $50,000 = $500 a year.' },
+          { q: 'For most long-term investors, the core of a portfolio is usually…', o: ['Low-cost diversified funds', 'Short-dated options', 'One hot stock'], why: 'Broad, cheap diversification is the usual foundation.' }] },
+ { id: 'm6', world: 5, title: 'Bear markets and staying calm', terms: ['Bull market', 'Bear market', 'Correction', 'Volatility'],
+   kid: `<p>Sometimes the whole market falls a lot. A drop of 20% or more is called a <strong>bear market</strong>. Rising markets are <strong>bull markets</strong>.</p><p>Bear markets are scary, but they've happened many times before. People who panic and sell at the bottom often lock in their losses. Having a plan helps you stay calm.</p>`,
+   adult: `<p>A <strong>correction</strong> is a 10% drop from a recent high; a <strong>bear market</strong> is a 20% drop. The S&P 500 fell about 57% in 2007–2009 and about 34% in early 2020; in both cases it later recovered, though recovery times vary and are never guaranteed.</p><p>Drawdowns test your plan. Investors who sold in panic often missed the rebound. Defenses: an emergency fund so you never have to sell, diversification, position sizing, and only using money you won't need for years.</p>`,
+   quiz: [{ q: 'A bear market is usually defined as a drop of at least…', o: ['20% from a recent high', '5%', '50%'], why: '20% marks a bear market; 10% is a correction.' },
+          { q: 'Why does an emergency fund help in a bear market?', o: ['You won’t be forced to sell investments at a low', 'It earns more than stocks', 'It stops markets from falling'], why: 'Having cash for emergencies means you can wait out drops.' },
+          { q: 'Past recoveries guarantee future recoveries.', o: ['False', 'True'], why: 'History is encouraging but never a promise.' }] },
+ { id: 'm14', world: 5, title: 'Trading psychology', terms: ['FOMO', 'Revenge trading', 'Loss aversion', 'Overconfidence', 'Discipline'],
+   kid: `<p>The hardest part of trading happens inside your head. After a loss, you might want to win it back right away (<strong>revenge trading</strong>). After a win, you might feel unstoppable (<strong>overconfidence</strong>).</p><p>The best traders follow their plan even when they feel excited or upset. If you're angry, take a break. The market will still be there tomorrow.</p>`,
+   adult: `<p>Common traps: <strong>FOMO</strong> (chasing a move you missed), <strong>revenge trading</strong> (sizing up to win back a loss), <strong>loss aversion</strong> (holding losers too long and cutting winners too soon), and <strong>overconfidence</strong> after a streak.</p><p>Defenses: written rules for entries, exits and size; a daily loss limit that ends your day; a journal that records your emotions; and taking breaks after big wins or losses. <strong>Discipline</strong>, meaning doing the boring right thing repeatedly, separates long-term traders from people who blow up their accounts.</p>`,
+   quiz: [{ q: 'After a big loss you double your next trade size to win it back. That’s…', o: ['Revenge trading', 'Good risk management', 'Dollar-cost averaging'], why: 'Sizing up out of emotion is revenge trading.' },
+          { q: 'What’s a good defense against emotional trading?', o: ['A daily loss limit and written rules', 'Trading more after losses', 'Ignoring your stop-losses'], why: 'Rules decided in advance protect you from your feelings.' },
+          { q: '"Loss aversion" often makes traders…', o: ['Hold losing trades too long', 'Sell every winner immediately for no reason', 'Buy only index funds'], why: 'People hate realizing losses, so they hold losers hoping they come back.' }] },
+ { id: 'm7', world: 5, title: 'Account types', terms: ['Brokerage account', 'Roth IRA', 'Traditional IRA', '401(k)', 'Custodial account'],
+   kid: `<p>Investments live in accounts, like a backpack for your money. A regular <strong>brokerage account</strong> lets you buy and sell anytime.</p><p>Retirement accounts like a <strong>Roth IRA</strong> come with tax superpowers if you leave the money alone until you're older. Kids can have accounts too, through a grown-up: a <strong>custodial account</strong>.</p>`,
+   adult: `<p><strong>Taxable brokerage account:</strong> flexible, no limits, gains taxed. <strong>Traditional IRA / 401(k):</strong> contributions may be tax-deductible; withdrawals in retirement are taxed. <strong>Roth IRA:</strong> contribute after-tax money; qualified withdrawals in retirement are tax-free. Both have yearly contribution limits and require earned income.</p><p>Minors invest through <strong>custodial accounts</strong> (UTMA/UGMA), or a custodial Roth IRA if they have earned income such as a job. An employer 401(k) match is effectively free money. Rules and limits change, so check current IRS limits.</p>`,
+   quiz: [{ q: 'Which account offers tax-free qualified withdrawals in retirement?', o: ['Roth IRA', 'Taxable brokerage account', 'Savings account'], why: 'Roth contributions go in after tax and qualified withdrawals come out tax-free.' },
+          { q: 'A 15-year-old with a summer job could invest through…', o: ['A custodial Roth IRA or custodial account', 'Their own adult brokerage account', 'No account at all'], why: 'Minors need a custodian; earned income makes a custodial Roth possible.' },
+          { q: 'What’s an employer 401(k) match?', o: ['Extra money your employer adds when you contribute', 'A fee', 'A type of option'], why: 'It’s part of your pay you only get if you contribute.' }] },
+ { id: 'm8', world: 5, title: 'Taxes on investing', terms: ['Capital gains tax', 'Short-term gain', 'Long-term gain', 'Wash sale'],
+   kid: `<p>When you make money investing, the government usually takes a share called <strong>tax</strong>.</p><p>Here's a cool rule: if you hold an investment for <strong>more than a year</strong> before selling, you usually pay less tax than if you sell quickly. Patience pays in more ways than one!</p>`,
+   adult: `<p>In the U.S., profits are <strong>capital gains</strong>. Assets held one year or less produce <strong>short-term gains</strong>, taxed like regular income. Held more than a year, they're <strong>long-term gains</strong>, taxed at lower rates for most people. Most options trades are short-term.</p><p>Losses can offset gains. The <strong>wash sale rule</strong> blocks claiming a loss if you buy the same or a substantially identical investment within 30 days before or after selling at a loss. Brokers send a 1099 each year. This is general education, not tax advice.</p>`,
+   quiz: [{ q: 'To usually get the lower long-term tax rate, you hold an investment for…', o: ['More than one year', 'More than one week', 'Exactly 30 days'], why: 'Over one year = long-term in the U.S.' },
+          { q: 'You sell at a loss and buy the same stock back 10 days later. That triggers…', o: ['The wash sale rule', 'A dividend', 'Long-term gains'], why: 'Rebuying within 30 days disallows the loss for now.' },
+          { q: 'Most short-dated options profits are taxed as…', o: ['Short-term capital gains', 'Tax-free', 'Long-term gains'], why: 'They’re usually held less than a year.' }] },
+ { id: 'm9', world: 5, title: 'Options approval, margin and the rules', terms: ['Options approval level', 'Margin', 'Cash account', 'Pattern day trader'],
+   kid: `<p>Real brokers don't let everyone trade every kind of option. You must be an adult, and you get approved for different <strong>levels</strong>, starting with the safest strategies.</p><p>Some accounts let you borrow money to invest. That's called <strong>margin</strong>, and it can make losses bigger than the money you put in. Beginners should stay away from it.</p>`,
+   adult: `<p>Brokers assign <strong>options approval levels</strong> based on experience and finances. Typically covered calls and cash-secured puts come first, then buying calls and puts, then spreads, and finally uncovered selling. Levels vary by broker. You must be 18 or older.</p><p><strong>Margin</strong> is borrowing from your broker; it magnifies gains and losses and can trigger margin calls. A <strong>cash account</strong> avoids borrowing but must wait for trades to settle before reusing the money. Margin accounts have long had a "pattern day trader" rule requiring $25,000 for frequent day trading. Regulators review these rules, so always check your broker's current requirements.</p>`,
+   quiz: [{ q: 'Which strategy do brokers usually approve first?', o: ['Covered calls', 'Selling naked calls', 'Complex spreads on margin'], why: 'Covered calls carry limited extra risk, so they’re usually the first level.' },
+          { q: 'Trading on margin means…', o: ['Investing with borrowed money', 'Trading only on weekends', 'Using limit orders'], why: 'Margin is a loan from your broker.' },
+          { q: 'Why can margin be dangerous for beginners?', o: ['Losses can exceed what you put in', 'It’s illegal', 'It makes trades free'], why: 'Borrowed money magnifies losses too.' }] },
+ { id: 'm10', world: 5, title: 'Scams, red flags and your first real step', terms: ['Pump and dump', 'Guaranteed returns', 'Paper trading'],
+   kid: `<p>Watch out for anyone who says you'll "definitely get rich fast," asks for your passwords, or wants you to send money to a stranger. Those are <strong>red flags</strong>.</p><p>Your first real step is simple: keep practicing here, talk with a grown-up, and when the time is right, start small with something boring and diversified.</p>`,
+   adult: `<p>Red flags: <strong>guaranteed returns</strong>, pressure to act now, "secret" strategies sold in courses or chat groups, requests for passwords or crypto transfers, and <strong>pump and dumps</strong> (hyping a tiny stock so insiders can sell). Check that any broker is registered (FINRA BrokerCheck in the U.S.).</p><p>A responsible path: build an emergency fund, invest core money in low-cost diversified funds, keep <strong>paper trading</strong> options for months and track your real expectancy, then start with small, defined-risk trades you've practiced. Beat the Grandmaster Exam to graduate.</p>`,
+   quiz: [{ q: 'Someone guarantees 30% a month if you send them crypto. This is…', o: ['A classic scam red flag', 'A great opportunity', 'Normal investing'], why: 'Guaranteed high returns and crypto transfers are hallmarks of fraud.' },
+          { q: 'A "pump and dump" is…', o: ['Hyping a stock so insiders can sell at a high price', 'A type of index fund', 'A tax rule'], why: 'Promoters inflate the price, sell, and leave others with losses.' },
+          { q: 'Before trading real options, a sensible step is…', o: ['Paper trading for months and tracking your results', 'Using your whole savings', 'Borrowing on margin'], why: 'Practice and data before real money.' }] },
+ { id: 'bf', world: 5, boss: true, final: true, title: 'Final boss: The Grandmaster Exam', pool: ['g1','g2','g3','g4','g5','g6','g7','g8','g9','t1','t2','t3','t4','t5','t6','t7','t8','t9','m1','m2','m3','m4','m11','m12','m13','m5','m6','m14','m7','m8','m9','m10'] },
 ];
 const STAGES = L.map(x => x.id);
 const BYID = Object.fromEntries(L.map(x => [x.id, x]));
-const WORLDS = [{ n: 1, name: 'Stock Street', sub: 'World 1 · Stocks' }, { n: 2, name: 'Options Island', sub: 'World 2 · Options' }];
+const WORLDS = [{ n: 1, name: 'Stock Street', sub: 'World 1 · Stocks' }, { n: 2, name: 'Options Island', sub: 'World 2 · Options basics' }, { n: 3, name: 'Greek Peaks', sub: 'World 3 · Pricing and the Greeks' },
+  { n: 4, name: 'Strategy City', sub: 'World 4 · Options strategies' }, { n: 5, name: 'Master\u2019s Summit', sub: 'World 5 · Becoming a real trader' }];
 const LAB_GATE = { market: 's3', charts: 's4', options: 'o2' };
 
 const MISSIONS = [
  { id: 'm1', title: 'First share', d: 'Buy any stock in the Practice Market.', xp: 40 },
  { id: 'm2', title: 'Basket builder', d: 'Own 3 different stocks at the same time.', xp: 60 },
- { id: 'm3', title: 'Steady hands', d: 'Keep the Practice Market going until Day 30.', xp: 60 },
+ { id: 'm3', title: 'Steady hands', d: 'Trade in the Practice Market for 20 trading days.', xp: 60 },
  { id: 'm4', title: 'Grow it', d: 'Reach a portfolio worth $10,500 or more.', xp: 80 },
  { id: 'm5', title: 'Trend spotter', d: 'Get a 5-answer streak in Trend Spotter.', xp: 60 },
  { id: 'm6', title: 'Candle detective', d: 'Tap or hover a candle in the Chart Lab.', xp: 30 },
  { id: 'm7', title: 'Break-even finder', d: 'In the Options Lab, slide the expiration price onto the break-even.', xp: 60 },
  { id: 'm8', title: 'Insurance agent', d: 'Build a put in the Options Lab.', xp: 30 },
  { id: 'm9', title: 'Snowball', d: 'Make the snowball calculator reach $100,000.', xp: 40 },
+ { id: 'm12', title: 'Patient buyer', d: 'Get a limit order filled in the Practice Market.', xp: 40 },
+ { id: 'm13', title: 'Safety net', d: 'Have a stop order trigger in the Practice Market.', xp: 40 },
+ { id: 'm10', title: 'First contract', d: 'Buy your first option in the Practice Market.', xp: 60 },
+ { id: 'm11', title: 'Theta collector', d: 'Sell a covered call or cash-secured put that expires worthless.', xp: 80 },
+ { id: 'm14', title: 'Earnings survivor', d: 'Hold an option through an earnings report.', xp: 60 },
+ { id: 'm16', title: 'Exercise day', d: 'Have an option exercised or assigned at expiration.', xp: 50 },
+ { id: 'm15', title: 'Graduate', d: 'Beat the Grandmaster Exam.', xp: 200 },
 ];
 
 const WORDS = [
@@ -577,6 +857,27 @@ const WORDS = [
  ['In the money', 'Options', 'A call with the stock above the strike, or a put with the stock below it.'], ['Out of the money', 'Options', 'An option that would be worth nothing if used right now.'],
  ['Covered call', 'Options', 'Selling a call on shares you already own.'], ['Naked call', 'Options', 'Selling a call without owning the shares. Risk has no limit.'],
  ['Cash-secured put', 'Options', 'Selling a put while holding enough cash to buy the shares if needed.'], ['Protective put', 'Options', 'Buying a put on shares you own, like insurance.'],
+ ['Extrinsic value', 'Greeks', 'The part of an option\u2019s price above its intrinsic value. Melts to zero by expiration.'], ['Implied volatility (IV)', 'Greeks', 'The market\u2019s forecast of how much a stock will move, backed out of option prices.'],
+ ['Delta', 'Greeks', 'How much an option\u2019s price changes for a $1 move in the stock. Also a rough chance of finishing in the money.'], ['Gamma', 'Greeks', 'How fast delta changes as the stock moves.'],
+ ['Theta', 'Greeks', 'How much value an option loses per day from time passing.'], ['Vega', 'Greeks', 'How much an option\u2019s price changes for a 1-point change in implied volatility.'],
+ ['Rho', 'Greeks', 'How much an option\u2019s price changes when interest rates move.'], ['IV crush', 'Greeks', 'The sharp drop in implied volatility right after an expected event like earnings.'],
+ ['Open interest', 'Options', 'The number of option contracts still open.'], ['Bid-ask spread', 'Trading', 'The gap between the highest bid and the lowest ask. A hidden cost of trading.'],
+ ['Assignment', 'Options', 'When an option seller is required to buy or sell shares because the buyer exercised.'], ['Exercise', 'Options', 'Using an option to buy or sell shares at the strike price.'],
+ ['Vertical spread', 'Strategies', 'Buying one option and selling another of the same type and expiration at a different strike.'], ['Credit spread', 'Strategies', 'A spread where you collect money up front and risk is capped by the option you buy.'],
+ ['Straddle', 'Strategies', 'Buying a call and a put at the same strike to profit from a big move either way.'], ['Strangle', 'Strategies', 'Like a straddle but with out-of-the-money strikes: cheaper, needs a bigger move.'],
+ ['Iron condor', 'Strategies', 'Two credit spreads, one on each side, that profit if the stock stays in a range.'], ['Collar', 'Strategies', 'Owning stock with a protective put and a covered call.'],
+ ['Rolling', 'Strategies', 'Closing an option and opening a similar one at a later date or new strike.'], ['Limit order', 'Trading', 'An order that fills only at your price or better.'],
+ ['Stop order', 'Trading', 'An order that becomes a market order once a price is hit. Used for stop-losses.'], ['Market order', 'Trading', 'An order that fills right away at the best available price.'],
+ ['Position sizing', 'Risk', 'Choosing trade size based on how much you\u2019re willing to lose.'], ['Expectancy', 'Risk', 'Average profit per trade: (win rate × average win) − (loss rate × average loss).'],
+ ['Drawdown', 'Risk', 'The drop from a portfolio\u2019s peak to its low point.'], ['Beta', 'Risk', 'How much a stock tends to move compared with the whole market.'],
+ ['Correlation', 'Risk', 'How closely two investments move together, from −1 to +1.'], ['Support', 'Charts', 'A price level where buying has repeatedly stopped a fall.'],
+ ['Resistance', 'Charts', 'A price level where selling has repeatedly stopped a rise.'], ['RSI', 'Charts', 'Relative Strength Index, a 0–100 momentum gauge. Above 70 is often called overbought.'],
+ ['P/E ratio', 'Companies', 'Share price divided by yearly earnings per share.'], ['EPS', 'Companies', 'Earnings per share: profit divided by the number of shares.'],
+ ['Market cap', 'Companies', 'Share price × number of shares: the market value of a company.'], ['Expense ratio', 'Funds', 'A fund\u2019s yearly fee as a percent of your money.'],
+ ['Dollar-cost averaging', 'Funds', 'Investing a fixed amount on a regular schedule.'], ['Bear market', 'Markets', 'A fall of 20% or more from a recent high.'],
+ ['Roth IRA', 'Accounts', 'A retirement account funded with after-tax money; qualified withdrawals are tax-free.'], ['Wash sale', 'Taxes', 'Rebuying the same investment within 30 days of selling at a loss, which disallows the loss for now.'],
+ ['Long-term capital gain', 'Taxes', 'Profit on an investment held more than one year, usually taxed at a lower rate.'], ['Margin', 'Accounts', 'Borrowing money from a broker to invest. Magnifies gains and losses.'],
+ ['Revenge trading', 'Psychology', 'Trading bigger or more often to win back a loss. A common way to blow up an account.'], ['Pump and dump', 'Safety', 'Hyping a stock so insiders can sell at an inflated price.'],
 ];
 
 /* ================= state ================= */
@@ -683,7 +984,7 @@ function confetti() { if (reduce) return; const cv = $('#confetti'); const dpr =
     if (++f < 110) requestAnimationFrame(tick); else ctx.clearRect(0, 0, innerWidth, innerHeight); })(); }
 
 /* ================= routing ================= */
-const PAID = new Set(['b1', 'o1', 'o2', 'o3', 'o4', 'o5', 'o6', 'b2']);
+const PAID = new Set(L.filter(x => x.world >= 2 || x.id === 'b1').map(x => x.id));
 const paid = id => PAID.has(id) && !S.full;
 function isOpen(tab) { if (tab === 'options' && !S.full) return false; const g = LAB_GATE[tab]; return !g || S.teacher || !!S.stars[g]; }
 function isUnlocked(id) { if (S.teacher) return true; const i = STAGES.indexOf(id); return i === 0 || !!S.stars[STAGES[i - 1]]; }
@@ -700,7 +1001,7 @@ document.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.prevent
 function lockScreen(tab) { const v = $('#v-' + tab); [...v.children].forEach(c => { if (!c.classList.contains('lockscreen')) c.hidden = true; }); let ls = v.querySelector('.lockscreen');
   if (!ls) { ls = document.createElement('div'); ls.className = 'lockscreen'; v.appendChild(ls); } const st = BYID[LAB_GATE[tab]];
   if (tab === 'options' && !S.full) { ls.hidden = false; ls.innerHTML = `<div class="pad">🔑</div><h2>Part of the full game</h2><p>The Options Lab comes with the full game, along with Options Island and both boss battles.</p><div class="row" style="justify-content:center;margin-top:16px"><button class="btn sun" id="ls-buy">Unlock full game · ${priceStr()}</button></div>`; ls.querySelector('#ls-buy').onclick = openPaywall; return; }
-  ls.hidden = false; ls.innerHTML = `<div class="pad">🔒</div><h2>Locked for now</h2><p>Clear <b>Stage ${STAGES.indexOf(st.id) + 1 - (st.world === 2 ? 8 : 0)}: ${st.title}</b> on ${st.world === 1 ? 'Stock Street' : 'Options Island'} to unlock this lab.</p><div class="row" style="justify-content:center;margin-top:16px"><button class="btn sun" id="ls-go">Go to the map</button></div>`;
+  ls.hidden = false; ls.innerHTML = `<div class="pad">🔒</div><h2>Locked for now</h2><p>Clear <b>Stage ${L.filter(x => x.world === st.world && !x.boss).findIndex(x => x.id === st.id) + 1}: ${st.title}</b> on ${WORLDS[st.world - 1].name} to unlock this lab.</p><div class="row" style="justify-content:center;margin-top:16px"><button class="btn sun" id="ls-go">Go to the map</button></div>`;
   ls.querySelector('#ls-go').onclick = () => go('map'); }
 function unlockScreen(tab) { const v = $('#v-' + tab); const ls = v.querySelector('.lockscreen'); if (ls) ls.hidden = true; [...v.children].forEach(c => { if (!c.classList.contains('lockscreen')) c.hidden = false; }); }
 
@@ -716,8 +1017,9 @@ function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const nextI
       b.className = 'node' + (st ? ' done' : '') + (!un || pw ? ' locked' : '') + (s.id === nextId ? ' next' : '') + (s.boss ? ' boss' : ''); b.style.setProperty('--x', xs[k % 4]);
       b.innerHTML = `<span class="disc">${pw ? '🔑' : s.boss ? 'BOSS' : (un ? num : '🔒')}</span><span class="lbl"><b>${s.title}${pw ? '<span class="fullchip">Full game</span>' : ''}</b><small>${s.boss ? 'Mixed questions · 3 hearts' : 'Stage ' + num}${s.unlock ? ' · unlocks ' + { market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock] : ''}</small><br>${starStr(st)}</span>`;
       b.disabled = !un && !pw; b.onclick = () => pw ? openPaywall() : openStage(s.id); path.appendChild(b); });
-    if (w.n === 2 && !S.full) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔑<br>Options Island is part of the full game: 6 options stages, both boss battles and the Options Lab.<br><button class="btn sun" style="margin-top:12px">Unlock for ${priceStr()}</button></div>`; lk.querySelector('button').onclick = openPaywall; el.appendChild(lk); }
-    else if (w.n === 2 && !isUnlocked('o1')) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = '<div>🔒<br>Beat The Market Bull at the end of Stock Street to sail to Options Island.</div>'; el.appendChild(lk); }
+    const firstId = stages[0].id, prevBoss = L.find(x => x.world === w.n - 1 && x.boss);
+    if (w.n >= 2 && !S.full) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔑<br>${w.name} is part of the full game.${w.n === 2 ? ' Options Island, Greek Peaks, Strategy City and Master\u2019s Summit: 38 more stages, 4 boss battles and real options trading.' : ''}<br><button class="btn sun" style="margin-top:12px">Unlock for ${priceStr()}</button></div>`; lk.querySelector('button').onclick = openPaywall; el.appendChild(lk); }
+    else if (w.n >= 2 && !isUnlocked(firstId)) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔒<br>Beat ${prevBoss.title.replace(/^.*?: /, '')} to reach ${w.name}.</div>`; el.appendChild(lk); }
     box.appendChild(el); });
   requestAnimationFrame(drawTrails); renderMissions(); renderRanks();
   const needBuy = !nextId && !S.full; $('#continue').textContent = nextId ? 'Play next stage' : needBuy ? 'Unlock the full game' : 'All stages cleared!'; $('#continue').disabled = !nextId && !needBuy;
@@ -733,10 +1035,10 @@ function showMap() { $('#stage').hidden = true; $('#map-home').hidden = false; r
 /* ================= STAGE / QUIZ ================= */
 let Q = null;
 function openStage(id) { const s = BYID[id]; if (paid(id)) return openPaywall(); if (!isUnlocked(id)) return; go('map', true); $('#map-home').hidden = true; const st = $('#stage'); st.hidden = false;
-  const wname = s.world === 1 ? 'Stock Street' : 'Options Island'; const num = L.filter(x => x.world === s.world && !x.boss).findIndex(x => x.id === id) + 1;
-  if (s.boss) { const qs = shuffle(s.pool.flatMap(pid => BYID[pid].quiz.map(q => ({ ...q, from: pid })))).slice(0, 7);
+  const wname = WORLDS[s.world - 1].name; const num = L.filter(x => x.world === s.world && !x.boss).findIndex(x => x.id === id) + 1;
+  if (s.boss) { const qs = shuffle(s.pool.flatMap(pid => BYID[pid].quiz.map(q => ({ ...q, from: pid })))).slice(0, s.final ? 12 : 7);
     Q = { id, qs, i: 0, miss: 0, hearts: 3, boss: true };
-    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">Answer 7 mixed questions from this world. Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.world === 1 ? ' and unlock Options Island' : ' and finish the game'}.</p><div class="quiz card" id="quiz"></div></div>`; }
+    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">${s.final ? 'The final exam: 12 questions from Greek Peaks, Strategy City and Master\u2019s Summit.' : 'Answer 7 mixed questions from this world.'} Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.final ? ' and graduate from Ticker Town' : ' and unlock ' + (WORLDS[s.world] ? WORLDS[s.world].name : 'the next world')}.</p><div class="quiz card" id="quiz"></div></div>`; }
   else { Q = { id, qs: s.quiz.map(q => ({ ...q })), i: 0, miss: 0, boss: false };
     st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Stage ${num}</span></div>
       <h2>${s.title}</h2><div class="lesson-text" id="ltext">${S.mode === 'kid' ? s.kid : s.adult}</div><div class="terms">${s.terms.map(t => `<span>${t}</span>`).join('')}</div>
@@ -759,6 +1061,17 @@ function renderQ() { const box = $('#quiz'); const q = Q.qs[Q.i]; const n = Q.qs
         if (Q.hearts <= 0) { box.querySelectorAll('.opt').forEach(o => o.disabled = true); $('#why').innerHTML = `<div class="why no"><b>Out of hearts!</b>The boss wins this round. The right answer: ${q.o[0]}. Review the stages and try again.</div><div class="row" style="margin-top:12px"><button class="btn sun" id="retry">Try again</button><button class="btn ghost" id="tomap">Back to map</button></div>`;
           $('#retry').onclick = () => openStage(Q.id); $('#tomap').onclick = () => showMap(); return; } }
       $('#why').innerHTML = `<div class="why no"><b>Not quite.</b>Try another answer.</div>`; } }); }
+function graduation(stars) { $('#quiz').innerHTML = `<div class="grad"><div class="cert"><div class="eyebrow">Ticker Town</div><h3>You graduated!</h3><p>You cleared all 5 worlds and the Grandmaster Exam ${starStr(stars)}</p></div>
+  <h3 style="font-size:24px">Before you invest real money</h3><ul>
+  <li><b>Build an emergency fund first</b>, a few months of expenses in savings, so you never have to sell at a bad time.</li>
+  <li><b>Under 18?</b> Invest with a grown-up through a custodial account. You must be 18 to open your own account or trade options.</li>
+  <li><b>Start with the core:</b> low-cost, diversified index funds, added to on a schedule.</li>
+  <li><b>Keep paper trading options</b> here for a few months and track your results. Only trade real options once your journal shows a plan that works.</li>
+  <li><b>Start small and defined-risk:</b> covered calls, cash-secured puts or spreads, sized so one loss is 1–2% of your account.</li>
+  <li><b>Never risk money you need</b>, never use margin as a beginner, and walk away from anyone promising guaranteed returns.</li>
+  <li><b>Keep learning.</b> Markets change. Ticker Town is education, not financial advice.</li></ul>
+  <div class="row" style="justify-content:center;margin-top:18px"><button class="btn sun" id="g-mkt">Keep practicing in the market</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
+  $('#g-mkt').onclick = () => go('market'); $('#tomap2').onclick = () => showMap(); }
 function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts : (Q.miss === 0 ? 3 : Q.miss === 1 ? 2 : 1); const prev = S.stars[Q.id] || 0; const first = !prev;
   S.stars[Q.id] = Math.max(prev, stars); save(); let bonus = 0;
   if (first) bonus = Q.boss ? 150 : 50; else if (stars > prev) bonus = 10 * (stars - prev);
@@ -767,6 +1080,7 @@ function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts :
     <div class="row">${s.unlock && first ? `<button class="btn sun" id="golab">Open the lab</button>` : ''}${nextId && !BYID[nextId] ? '' : nextId ? `<button class="btn" id="nexts">Next stage</button>` : ''}<button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
   if (bonus) setTimeout(() => addXP(bonus, $('#quiz .big')), 250);
   if (Q.boss && first) setTimeout(confetti, 300);
+  if (s.final) { mission('m15'); graduation(stars); }
   hud(); const gl = $('#golab'); if (gl) gl.onclick = () => go(s.unlock); const ns = $('#nexts'); if (ns) ns.onclick = () => openStage(nextId); $('#tomap2').onclick = () => showMap(); }
 
 /* ================= lesson widgets ================= */
@@ -820,7 +1134,88 @@ const WIDGETS = {
   preset(el, p) { const t = { bc: 'Try this call in the Options Lab', bp: 'Try this put in the Options Lab', sc: 'See the seller’s side in the Options Lab' }[p];
     el.innerHTML = `<div class="widget"><h4>See it on a chart</h4><p class="muted" style="font-size:14.5px">${isOpen('options') ? 'Open the Options Lab with this example loaded.' : 'The Options Lab unlocks when you clear Calls (Stage 2). Here is the example as a chart:'}</p><canvas id="pcv" style="height:220px;margin-top:10px" aria-label="Example payoff"></canvas>${isOpen('options') ? `<div class="row" style="margin-top:10px"><button class="btn" id="pgo">${t}</button></div>` : ''}</div>`;
     const cv = el.querySelector('#pcv'); const o = { ...PRESETS[p], days: 0, vol: .35 }; reg(cv, () => drawPayoff(cv, o, true)); const b = el.querySelector('#pgo'); if (b) b.onclick = () => { Object.assign(O, PRESETS[p]); go('options'); }; },
+  greeks(el) { el.innerHTML = `<div class="widget"><h4>Option X-ray</h4><p class="muted" style="font-size:14.5px">A $50-strike option. Move the sliders and watch its price split into intrinsic and extrinsic value, and how each Greek changes.</p>
+      <div class="seg" role="group" aria-label="Option type" style="margin-top:8px"><button data-gt="call" aria-pressed="true">Call</button><button data-gt="put" aria-pressed="false">Put</button></div>
+      <div class="trade" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+        <div class="slider"><label for="gx-S">Stock price <b id="gx-Sv"></b></label><input type="range" id="gx-S" min="35" max="65" step="0.5" value="50"></div>
+        <div class="slider"><label for="gx-d">Days to expiration <b id="gx-dv"></b></label><input type="range" id="gx-d" min="0" max="120" step="1" value="30"></div>
+        <div class="slider"><label for="gx-v">Implied volatility <b id="gx-vv"></b></label><input type="range" id="gx-v" min="10" max="120" step="1" value="35"></div></div>
+      <div class="xbar" id="gx-bar"></div><div class="stats" id="gx-stats" style="margin-top:10px"></div>
+      <canvas id="gx-cv" style="height:210px;margin-top:12px" aria-label="Option value across stock prices"></canvas>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Value today</span><span><i style="background:var(--ink)"></i>Value at expiration (intrinsic only)</span></div></div>`;
+    let type = 'call'; const K = 50; const S_ = el.querySelector('#gx-S'), D_ = el.querySelector('#gx-d'), V_ = el.querySelector('#gx-v'), cv = el.querySelector('#gx-cv');
+    const f = () => { const S0 = +S_.value, d = +D_.value, v = +V_.value / 100, T = d / 365, g = greeksFull(type, S0, K, T, v), intr = Math.max(0, type === 'call' ? S0 - K : K - S0), ext = Math.max(0, g.price - intr);
+      el.querySelector('#gx-Sv').textContent = money(S0); el.querySelector('#gx-dv').textContent = d; el.querySelector('#gx-vv').textContent = Math.round(v * 100) + '%';
+      const tot = Math.max(g.price, .01), wI = intr / Math.max(tot, 1) , scale = Math.min(1, tot / 16);
+      el.querySelector('#gx-bar').innerHTML = `<div class="xb"><span style="width:${(intr / tot) * scale * 100}%;background:var(--up)"></span><span style="width:${(ext / tot) * scale * 100}%;background:var(--sun)"></span></div><p><b>${money(g.price)}</b> = <b class="u">${money(intr)}</b> intrinsic + <b style="color:var(--ma)">${money(ext)}</b> extrinsic</p>`;
+      el.querySelector('#gx-stats').innerHTML = [['Delta', g.delta.toFixed(3)], ['Gamma', g.gamma.toFixed(4)], ['Theta / day', g.theta.toFixed(3)], ['Vega (per 1% IV)', g.vega.toFixed(3)], ['Rho', g.rho.toFixed(3)], ['Chance ITM', Math.round(g.pitm * 100) + '%']].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+      reg(cv, () => { const G = prep(cv); if (!G) return; const { ctx } = G; const xs = Array.from({ length: 121 }, (_, i) => 30 + i * 40 / 120); const yT = xs.map(x => greeksFull(type, x, K, T, v).price), yE = xs.map(x => Math.max(0, type === 'call' ? x - K : K - x));
+        const P = plot(G, { x0: 30, x1: 70, y0: 0, y1: Math.max(...yT, ...yE) * 1.05, xticks: [30, 40, 50, 60, 70].map(x => [x, '$' + x]) }); const { X, Y, box } = P;
+        linePath(ctx, xs.map((x, i) => [X(x), Y(yE[i])])); ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2.5; ctx.stroke();
+        linePath(ctx, xs.map((x, i) => [X(x), Y(yT[i])])); ctx.strokeStyle = css('--accent'); ctx.lineWidth = 2.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(X(S0), Y(g.price), 6, 0, 7); ctx.fillStyle = css('--sun'); ctx.fill(); ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2; ctx.stroke(); }); };
+    el.querySelectorAll('[data-gt]').forEach(b => b.onclick = () => { type = b.dataset.gt; el.querySelectorAll('[data-gt]').forEach(x => x.setAttribute('aria-pressed', x === b)); f(); });
+    [S_, D_, V_].forEach(i => i.oninput = f); f(); },
+  strat(el, id) { const st = STRATS[id]; el.innerHTML = `<div class="widget"><h4>${st.name} at expiration</h4><p class="muted" style="font-size:14.5px">${st.legs.map(legText).join(' · ')}</p>
+      <canvas id="sx-cv" style="height:230px;margin-top:10px" aria-label="Strategy profit and loss chart"></canvas>
+      <div class="stats" id="sx-stats" style="margin-top:10px"></div>
+      <div class="slider" style="margin-top:12px"><label for="sx-P">Stock price at expiration <b id="sx-Pv"></b></label><input type="range" id="sx-P" min="30" max="70" step="0.5" value="50"></div><p id="sx-txt" style="margin-top:6px;font-weight:700"></p></div>`;
+    const cv = el.querySelector('#sx-cv'), r = el.querySelector('#sx-P'), plx = x => stratPL(st.legs, x);
+    const xsW = Array.from({ length: 3001 }, (_, i) => i * .05), ysW = xsW.map(plx), mx = Math.max(...ysW), mn = Math.min(...ysW), upInf = plx(150) > plx(149) + .01, dnInf = false;
+    const bes = []; for (let i = 1; i < xsW.length; i++) if ((ysW[i - 1] < 0 && ysW[i] >= 0) || (ysW[i - 1] >= 0 && ysW[i] < 0)) bes.push(xsW[i]);
+    el.querySelector('#sx-stats').innerHTML = [['Max gain', upInf ? 'No limit' : money(mx)], ['Max loss', money(mn)], ['Break-even', bes.map(b => money(b)).join(' & ') || '—'], ['Net premium', (() => { const n = st.legs.filter(l => l.t !== 'stock').reduce((a, l) => a - l.side * l.p * 100, 0); return (n >= 0 ? 'Collect ' : 'Pay ') + money(Math.abs(n)); })()]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+    const f = () => { const P0 = +r.value; el.querySelector('#sx-Pv').textContent = money(P0); const v = plx(P0); el.querySelector('#sx-txt').innerHTML = `At ${money(P0)}: <span class="${v >= 0 ? 'u' : 'd'}">${v >= 0 ? 'profit' : 'loss'} of ${money(Math.abs(v))}</span>`;
+      reg(cv, () => { const G = prep(cv); if (!G) return; const { ctx } = G; const xs = Array.from({ length: 161 }, (_, i) => 30 + i * .25), ys = xs.map(plx); const lo = Math.min(...ys, 0), hi = Math.max(...ys, 0), m = (hi - lo) * .08 || 50;
+        const P = plot(G, { x0: 30, x1: 70, y0: lo - m, y1: hi + m, padL: 66, xticks: [30, 40, 50, 60, 70].map(x => [x, '$' + x]) }); const { X, Y, box } = P; const z = Y(0);
+        const shape = () => { ctx.beginPath(); ctx.moveTo(X(30), z); xs.forEach((x, i) => ctx.lineTo(X(x), Y(ys[i]))); ctx.lineTo(X(70), z); ctx.closePath(); };
+        ctx.save(); ctx.beginPath(); ctx.rect(box.x, box.y, box.w, z - box.y); ctx.clip(); shape(); ctx.fillStyle = css('--up-soft'); ctx.fill(); ctx.restore();
+        ctx.save(); ctx.beginPath(); ctx.rect(box.x, z, box.w, box.y + box.h - z); ctx.clip(); shape(); ctx.fillStyle = css('--down-soft'); ctx.fill(); ctx.restore();
+        ctx.strokeStyle = css('--muted'); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(box.x, z); ctx.lineTo(box.x + box.w, z); ctx.stroke();
+        linePath(ctx, xs.map((x, i) => [X(x), Y(ys[i])])); ctx.strokeStyle = css('--ink'); ctx.lineWidth = 3; ctx.stroke();
+        ctx.beginPath(); ctx.arc(X(P0), Y(plx(P0)), 7, 0, 7); ctx.fillStyle = css('--sun'); ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = css('--ink'); ctx.stroke(); }); };
+    r.oninput = f; f(); },
+  sizing(el) { el.innerHTML = `<div class="widget"><h4>Position size calculator</h4><div class="trade" style="margin-top:0">
+      <div class="field"><label for="ps-a">Account size ($)</label><input type="number" id="ps-a" value="10000" min="0" step="100"></div>
+      <div class="field"><label for="ps-r">Risk per trade (%)</label><input type="number" id="ps-r" value="1" min="0.1" max="10" step="0.1"></div>
+      <div class="field"><label for="ps-e">Entry price ($)</label><input type="number" id="ps-e" value="50" min="0.01" step="0.01"></div>
+      <div class="field"><label for="ps-s">Stop-loss price ($)</label><input type="number" id="ps-s" value="46" min="0.01" step="0.01"></div></div>
+      <div class="stats" id="ps-out" style="margin-top:12px"></div><p id="ps-txt" style="margin-top:8px"></p></div>`;
+    const ids = ['a', 'r', 'e', 's'].map(k => el.querySelector('#ps-' + k));
+    const f = () => { const [a, r, e, s] = ids.map(i => +i.value || 0), risk = a * r / 100, per = e - s;
+      if (per <= 0) { el.querySelector('#ps-out').innerHTML = ''; el.querySelector('#ps-txt').textContent = 'For a buy, the stop-loss must be below the entry price.'; return; }
+      const sh = Math.floor(risk / per), pos = sh * e;
+      el.querySelector('#ps-out').innerHTML = [['Max risk', money(risk)], ['Risk per share', money(per)], ['Shares to buy', sh.toLocaleString()], ['Position size', money(pos)], ['% of account', a ? (pos / a * 100).toFixed(1) + '%' : '—']].map(([x, y]) => `<div class="stat"><span>${x}</span><b>${y}</b></div>`).join('');
+      el.querySelector('#ps-txt').innerHTML = `If the stop hits, you lose about <b>${money(sh * per)}</b>, which is ${r}% of your account. ${pos > a ? '<b class="d">That position is bigger than your account. Tighten the risk or pick a closer stop.</b>' : 'Ten losses in a row like that would still leave most of your account.'}`; };
+    ids.forEach(i => i.oninput = f); f(); },
+  ivcrush(el) { el.innerHTML = `<div class="widget"><h4>Watch the IV crush</h4><p class="muted" style="font-size:14.5px">A $100 stock with earnings coming. The option expires 5 days after the report. Normal IV is 30%; the market expects about an 8% earnings move.</p>
+      <canvas id="iv-cv" style="height:200px;margin-top:10px" aria-label="Implied volatility around earnings"></canvas>
+      <div class="slider" style="margin-top:12px"><label for="iv-m">Actual stock move on earnings <b id="iv-mv"></b></label><input type="range" id="iv-m" min="-12" max="12" step="0.5" value="3"></div>
+      <div class="stats" id="iv-out" style="margin-top:10px"></div><p id="iv-txt" style="margin-top:8px"></p></div>`;
+    const base = .30, em = .08, cv = el.querySelector('#iv-cv'), r = el.querySelector('#iv-m');
+    const ivAt = t => { const T = (5 - t) / 365; return t < 0 ? Math.sqrt(base * base + em * em / T) : base; };
+    reg(cv, () => { const G = prep(cv); if (!G) return; const { ctx } = G; const ts = Array.from({ length: 26 }, (_, i) => i - 20), ys = ts.map(t => ivAt(t + (t >= 0 ? 0 : 0)) * 100);
+      const P = plot(G, { x0: -20, x1: 5, y0: 0, y1: Math.max(...ys) * 1.1, yfmt: v => v.toFixed(0) + '%', xticks: [[-20, '20d before'], [-10, '10d'], [0, 'Earnings'], [5, 'Expiry']] }); const { X, Y, box } = P;
+      linePath(ctx, ts.map((t, i) => [X(t), Y(ys[i])])); ctx.strokeStyle = css('--accent'); ctx.lineWidth = 2.6; ctx.stroke();
+      ctx.setLineDash([4, 4]); ctx.strokeStyle = css('--down'); ctx.beginPath(); ctx.moveTo(X(-.5), box.y); ctx.lineTo(X(-.5), box.y + box.h); ctx.stroke(); ctx.setLineDash([]); });
+    const f = () => { const mv = +r.value / 100; el.querySelector('#iv-mv').textContent = (mv >= 0 ? '+' : '') + (mv * 100).toFixed(1) + '%';
+      const before = greeksFull('call', 100, 100, 6 / 365, ivAt(-1)).price, after = greeksFull('call', 100 * (1 + mv), 100, 5 / 365, base).price, pl = (after - before) * 100;
+      const sb = greeksFull('call', 100, 100, 6 / 365, ivAt(-1)).price + greeksFull('put', 100, 100, 6 / 365, ivAt(-1)).price;
+      el.querySelector('#iv-out').innerHTML = [['IV before', (ivAt(-1) * 100).toFixed(0) + '%'], ['IV after', '30%'], ['$100 call before', money(before)], ['Same call after', money(after)], ['P/L per contract', `<span class="${pl >= 0 ? 'u' : 'd'}">${pl >= 0 ? '+' : ''}${money(pl)}</span>`], ['Expected move (straddle)', '±' + money(sb)]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+      el.querySelector('#iv-txt').innerHTML = mv > 0 && pl < 0 ? '<b>You were right about the direction and still lost money.</b> The move was smaller than the market expected, and the IV crush ate the option’s value.' : pl >= 0 ? 'The move was big enough to beat the IV crush. That’s the bet option buyers make before earnings.' : 'Wrong direction plus the IV crush: a double hit for the call buyer.'; };
+    r.oninput = f; f(); },
 };
+const STRATS = {
+  cc: { name: 'Covered call', legs: [{ t: 'stock', side: 1, K: 50 }, { t: 'call', side: -1, K: 55, p: 1.5 }] },
+  csp: { name: 'Cash-secured put', legs: [{ t: 'put', side: -1, K: 45, p: 1.2 }] },
+  collar: { name: 'Collar', legs: [{ t: 'stock', side: 1, K: 50 }, { t: 'put', side: 1, K: 45, p: 1.0 }, { t: 'call', side: -1, K: 55, p: 1.1 }] },
+  bcs: { name: 'Bull call spread', legs: [{ t: 'call', side: 1, K: 50, p: 3.0 }, { t: 'call', side: -1, K: 55, p: 1.2 }] },
+  bps: { name: 'Bear put spread', legs: [{ t: 'put', side: 1, K: 50, p: 2.8 }, { t: 'put', side: -1, K: 45, p: 1.0 }] },
+  bpcs: { name: 'Bull put credit spread', legs: [{ t: 'put', side: -1, K: 47.5, p: 1.6 }, { t: 'put', side: 1, K: 45, p: .9 }] },
+  straddle: { name: 'Long straddle', legs: [{ t: 'call', side: 1, K: 50, p: 3.0 }, { t: 'put', side: 1, K: 50, p: 2.8 }] },
+  ic: { name: 'Iron condor', legs: [{ t: 'put', side: 1, K: 42.5, p: .5 }, { t: 'put', side: -1, K: 45, p: 1.0 }, { t: 'call', side: -1, K: 55, p: 1.1 }, { t: 'call', side: 1, K: 57.5, p: .55 }] },
+};
+function stratPL(legs, x) { return legs.reduce((a, l) => a + (l.t === 'stock' ? (x - l.K) * 100 * l.side : ((l.t === 'call' ? Math.max(0, x - l.K) : Math.max(0, l.K - x)) - l.p) * 100 * l.side), 0); }
+function legText(l) { return l.t === 'stock' ? `Own 100 shares at ${money(l.K)}` : `${l.side > 0 ? 'Buy' : 'Sell'} the ${money(l.K)} ${l.t} for ${money(l.p)}`; }
 function candleText(c, i) { const up = c.c >= c.o; return `<b>Day ${i + 1}</b> · <span class="mono">Open ${money(c.o)} · High ${money(c.h)} · Low ${money(c.l)} · Close ${money(c.c)}</span><br>${S.mode === 'kid'
   ? (up ? 'Green candle: the price ended the day <b class="u">higher</b> than it started.' : 'Red candle: the price ended the day <b class="d">lower</b> than it started.')
   : `${up ? 'Up' : 'Down'} ${pct(c.c / c.o - 1)} from open to close. Range ${money(c.h - c.l)}. Volume ${(c.v / 1e6).toFixed(2)}M shares.`}`; }
@@ -844,72 +1239,263 @@ document.querySelectorAll('[data-trend]').forEach(b => b.onclick = () => { if (T
   else { TR.streak = 0; fb.className = 'fb no'; fb.textContent = `Nope, that one was ${name}. Look at where the yellow average line is heading.`; }
   $('#t-streak').textContent = TR.streak; $('#t-best').textContent = S.best || 0; setTimeout(newTrend, 1300); });
 
-/* ================= MARKET ================= */
+/* ================= MARKET (v2: candles, volume, earnings, orders, options) ================= */
+const MK_START = Date.UTC(2026, 6, 6); // day 0 = Monday, July 6, 2026 (weekends skipped, holidays ignored)
+const DAYMS = 864e5, RATE = .04, FEE = .65;
 const STOCKS = [
-  { sym: 'EVRY', name: 'Everything Fund', desc: 'A pretend index fund that owns a little of every company below. Calmer moves.', col: '#5B6CF0', p: 50 },
-  { sym: 'LEMN', name: 'Sunny Lemonade Co.', desc: 'Pretend lemonade stands in every park. Slow and steady.', mu: .0006, sig: .016, col: '#E0A100', p: 24 },
-  { sym: 'RPUP', name: 'Robo Pup Toys', desc: 'Pretend robot dogs. Big hits and big flops.', mu: .0009, sig: .032, col: '#D9468C', p: 38 },
-  { sym: 'RKTR', name: 'Rocket Rides', desc: 'Pretend trips to space. Very jumpy.', mu: .0007, sig: .055, col: '#E2552D', p: 72 },
-  { sym: 'GRDN', name: 'Green Garden Foods', desc: 'Pretend veggie snacks in grocery stores. Steady, small dividends.', mu: .0004, sig: .013, col: '#1E9E62', p: 31 },
+  { sym: 'EVRY', name: 'Everything Fund', desc: 'Pretend index fund that owns a slice of the whole market. Calm and low cost.', col: '#5B6CF0', p: 50, beta: 1, sig: .003, mu: .0001, liq: 1, vol0: 9e6, ov: 60000, em: 0 },
+  { sym: 'LEMN', name: 'Sunny Lemonade Co.', desc: 'Pretend drinks company. Steady, low beta.', col: '#E0A100', p: 24, beta: .7, sig: .013, mu: .0002, liq: .7, vol0: 3.2e6, ov: 9000, em: .045 },
+  { sym: 'GRDN', name: 'Green Garden Foods', desc: 'Pretend snack maker. Very steady and pays a $0.30 quarterly dividend.', col: '#1E9E62', p: 31, beta: .5, sig: .010, mu: .0001, liq: .55, vol0: 1.8e6, ov: 4000, em: .035, div: .30 },
+  { sym: 'PIGB', name: 'Piggy Bank Corp.', desc: 'Pretend bank. Moves with the economy and pays a $0.40 quarterly dividend.', col: '#8A5CF0', p: 62, beta: 1.1, sig: .015, mu: .0002, liq: .8, vol0: 5e6, ov: 12000, em: .05, div: .40 },
+  { sym: 'RPUP', name: 'Robo Pup Toys', desc: 'Pretend robot pets. Big hits and big flops.', col: '#D9468C', p: 38, beta: 1.2, sig: .026, mu: .0003, liq: .7, vol0: 4.5e6, ov: 15000, em: .09 },
+  { sym: 'BYTC', name: 'Byte Chips Inc.', desc: 'Pretend chipmaker. High beta and a busy options market.', col: '#0E8C86', p: 142, beta: 1.45, sig: .022, mu: .0004, liq: .95, vol0: 11e6, ov: 60000, em: .07 },
+  { sym: 'ZMTR', name: 'Zoomer Motors', desc: 'Pretend electric cars. Wild swings and huge option volume.', col: '#2D5BE3', p: 214, beta: 1.6, sig: .032, mu: .0003, liq: .9, vol0: 14e6, ov: 80000, em: .10 },
+  { sym: 'RKTR', name: 'Rocket Rides', desc: 'Pretend space tourism. Tiny, extremely jumpy, thin options with wide spreads.', col: '#E2552D', p: 18, beta: 1.8, sig: .048, mu: .0002, liq: .3, vol0: 6e6, ov: 5000, em: .16 },
 ];
+const SBY = Object.fromEntries(STOCKS.map(s => [s.sym, s]));
 const NEWS = {
-  LEMN: [['Record heat wave! Lemonade sales soar.', .07], ['A lemon shortage raises costs.', -.06], ['Sunny Lemonade opens 50 new stands.', .05]],
-  RPUP: [['Robo Pup’s new puppy is the hottest toy of the year!', .14], ['Robo Pup recalls toys with squeaky wheels.', -.15], ['A famous YouTuber reviews Robo Pup. Fans love it.', .09]],
-  RKTR: [['Rocket Rides lands its first passengers safely!', .22], ['A Rocket Rides launch is delayed again.', -.18], ['Rocket Rides signs a deal with the moon hotel.', .16], ['Rocket Rides is losing money faster than expected.', -.2]],
-  GRDN: [['Green Garden’s veggie chips win a taste award.', .05], ['Rainy season hurts the carrot harvest.', -.05]],
+  LEMN: [['Record heat wave! Lemonade sales soar.', .06], ['A lemon shortage raises costs.', -.05], ['Sunny Lemonade opens 50 new stands.', .04]],
+  GRDN: [['Green Garden’s veggie chips win a taste award.', .04], ['Rainy season hurts the carrot harvest.', -.04]],
+  PIGB: [['Piggy Bank beats loan-growth forecasts.', .04], ['Regulators fine Piggy Bank for fee mistakes.', -.05]],
+  RPUP: [['Robo Pup’s new puppy is the hottest toy of the year!', .12], ['Robo Pup recalls toys with squeaky wheels.', -.13], ['A famous YouTuber reviews Robo Pup. Fans love it.', .07]],
+  BYTC: [['Byte Chips wins a giant data-center order.', .08], ['A factory outage slows Byte Chips production.', -.08], ['Analysts raise Byte Chips price targets.', .04]],
+  ZMTR: [['Zoomer Motors deliveries beat expectations!', .1], ['Zoomer Motors recalls 40,000 cars.', -.11], ['Zoomer’s CEO posts a confusing message online.', -.06]],
+  RKTR: [['Rocket Rides lands its first passengers safely!', .2], ['A Rocket Rides launch is delayed again.', -.16], ['Rocket Rides signs a deal with the moon hotel.', .14], ['Rocket Rides is losing money faster than expected.', -.18]],
 };
-function newMarket() { const m = { day: 1, cash: 10000, hold: {}, sel: 'EVRY', news: [{ day: 1, t: 'Welcome to the Practice Market! You have $10,000 of pretend cash.', dir: '' }], val: [10000], h: {} };
-  STOCKS.forEach(s => { if (s.sym !== 'EVRY') { const h = [s.p]; for (let i = 0; i < 40; i++) h.unshift(h[0] / Math.exp((s.mu || 0) + gauss() * s.sig)); m.h[s.sym] = h.map(v => +v.toFixed(2)); } });
-  const ev = [50]; for (let i = 1; i < 41; i++) { const r = STOCKS.filter(s => s.sym !== 'EVRY').reduce((a, s) => a + Math.log(m.h[s.sym][i] / m.h[s.sym][i - 1]), 0) / 4; ev.push(ev[i - 1] * Math.exp(r)); }
-  m.h.EVRY = ev.map(v => +v.toFixed(2)); return m; }
-if (!S.mkt || !S.mkt.h) S.mkt = newMarket();
+const calDate = d => new Date(MK_START + (Math.floor(d / 5) * 7 + (d % 5)) * DAYMS);
+const fmtD = (d, wk) => calDate(d).toLocaleDateString('en-US', { weekday: wk ? 'short' : undefined, month: 'short', day: 'numeric', timeZone: 'UTC' });
+const calDays = (a, b) => Math.round((calDate(b) - calDate(a)) / DAYMS);
+function strHash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+const r2 = v => Math.round(v * 100) / 100;
+
+function newMarket() {
+  const m = { v: 2, day: 0, cash: 10000, hold: {}, opts: [], orders: [], sel: 'EVRY', news: [], log: [], val: [], c: {}, earn: {}, earnPast: {}, exdiv: {}, shock: {}, nid: 1,
+    ui: { type: 'candle', vol: true, ma20: true, ma50: false, range: 63, tab: 'stock', side: 'call', exp: null, k: null } };
+  STOCKS.forEach(s => { m.c[s.sym] = [{ o: s.p, h: s.p, l: s.p, c: s.p, v: s.vol0 }]; m.earn[s.sym] = s.em ? 3 + Math.floor(Math.random() * 60) : 1e9; m.earnPast[s.sym] = []; m.exdiv[s.sym] = s.div ? 10 + Math.floor(Math.random() * 50) : 1e9; m.shock[s.sym] = 1; });
+  for (let i = 0; i < 130; i++) simDay(m, false);
+  m.startDay = m.day; m.val = [10000];
+  m.news = [{ day: m.day, t: 'Welcome to the Practice Market! You have $10,000 of pretend cash. Prices, news and earnings are all simulated.', dir: '' }];
+  return m;
+}
+function simDay(m, live) {
+  const d = m.day + 1; const crash = Math.random() < .02 ? -(.025 + Math.random() * .03) : Math.random() < .02 ? .02 : 0;
+  const mret = .0003 + .0085 * gauss() + crash;
+  if (live && crash) m.news.unshift({ day: d, t: crash < 0 ? 'Market-wide selloff: worries about the economy hit almost every stock.' : 'Strong economic report! Most stocks rallied.', dir: crash < 0 ? 'd' : 'u' });
+  STOCKS.forEach(s => {
+    const arr = m.c[s.sym], prev = arr[arr.length - 1].c; let base = s.mu + s.beta * (mret - .0003) + s.sig * gauss(), jump = 0, vm = 1;
+    if (s.sym !== 'EVRY' && Math.random() < .025) { const e = NEWS[s.sym][Math.floor(Math.random() * NEWS[s.sym].length)]; jump += e[1] * (.6 + Math.random() * .6); vm *= 2.2; if (live) m.news.unshift({ day: d, t: `${s.sym}: ${e[0]}`, dir: e[1] > 0 ? 'u' : 'd' }); }
+    if (m.earn[s.sym] === d) { const j = s.em * gauss() * 1.1; jump += j; vm *= 3.2; m.earnPast[s.sym].push(d); m.earn[s.sym] = d + 61 + Math.floor(Math.random() * 5);
+      if (live) { m.news.unshift({ day: d, t: `${s.sym} reported earnings: the stock ${j >= 0 ? 'jumped' : 'dropped'} about ${Math.abs(j * 100).toFixed(1)}% at the open. Option IV collapsed afterward.`, dir: j >= 0 ? 'u' : 'd' });
+        if (m.opts.some(p => p.sym === s.sym)) mission('m14'); } }
+    if (m.exdiv[s.sym] === d) { jump -= s.div / prev; m.exdiv[s.sym] = d + 63; const h = m.hold[s.sym];
+      if (live && h && h.sh) { const amt = r2(h.sh * s.div); m.cash += amt; m.log.unshift({ day: d, t: `Dividend: ${s.sym} paid you ${money(amt)} (${money(s.div)} × ${h.sh} shares).` }); m.news.unshift({ day: d, t: `${s.sym} went ex-dividend and paid ${money(s.div)} per share. The stock price dropped by about that much.`, dir: '' }); } }
+    const r = base + jump, o = prev * Math.exp(jump + base * .3 + s.sig * .2 * gauss()), c = prev * Math.exp(r);
+    const hi = Math.max(o, c) * Math.exp(Math.abs(gauss()) * s.sig * .45 + .0005), lo = Math.min(o, c) * Math.exp(-Math.abs(gauss()) * s.sig * .45 - .0005);
+    arr.push({ o: r2(o), h: r2(hi), l: r2(lo), c: r2(c), v: Math.round(s.vol0 * (.75 + .5 * Math.random()) * (1 + 1.2 * Math.abs(base) / Math.max(.008, s.sig)) * vm) });
+    if (arr.length > 260) arr.splice(0, arr.length - 260);
+    m.shock[s.sym] = Math.min(2.5, Math.max(.8, 1 + (m.shock[s.sym] - 1) * .9 + (r < 0 ? Math.min(.35, -r / Math.max(.008, s.sig) * .045) : 0) + (crash < 0 ? .25 : 0)));
+  });
+  m.day = d;
+}
+if (!S.mkt || S.mkt.v !== 2) S.mkt = newMarket();
 const M = () => S.mkt;
-const price = sym => { const h = M().h[sym]; return h[h.length - 1]; };
-function total() { return M().cash + Object.entries(M().hold).reduce((a, [k, v]) => a + v.sh * price(k), 0); }
-function nextDay(quiet) { const m = M(); m.day++; const rets = {}; const crash = Math.random() < .03 ? -(.03 + Math.random() * .03) : Math.random() < .03 ? .025 : 0;
-  if (crash) m.news.unshift({ day: m.day, t: crash < 0 ? 'The whole market had a rough day. Almost everything fell.' : 'Great news for the economy! Most stocks rose.', dir: crash < 0 ? 'd' : 'u' });
-  STOCKS.filter(s => s.sym !== 'EVRY').forEach(s => { let r = s.mu + gauss() * s.sig + crash;
-    if (Math.random() < .07) { const e = NEWS[s.sym][Math.floor(Math.random() * NEWS[s.sym].length)]; r += e[1]; m.news.unshift({ day: m.day, t: `${s.sym}: ${e[0]}`, dir: e[1] > 0 ? 'u' : 'd' }); }
-    rets[s.sym] = r; m.h[s.sym].push(+(price(s.sym) * Math.exp(r)).toFixed(2)); });
-  const er = Object.values(rets).reduce((a, b) => a + b, 0) / 4; m.h.EVRY.push(+(price('EVRY') * Math.exp(er)).toFixed(2));
-  if (m.day % 30 === 0 && m.hold.GRDN) { const dv = +(m.hold.GRDN.sh * .15).toFixed(2); m.cash += dv; m.news.unshift({ day: m.day, t: `GRDN paid you a dividend of ${money(dv)} in cash!`, dir: 'u' }); }
-  Object.values(m.h).forEach(h => { if (h.length > 160) h.splice(0, h.length - 160); });
-  m.news = m.news.slice(0, 8); m.val.push(+total().toFixed(2)); if (m.val.length > 160) m.val.shift();
-  if (m.day >= 30) mission('m3', $('#m-next')); if (total() >= 10500) mission('m4', $('#m-next'));
+const candles = sym => M().c[sym];
+const px = sym => { const a = candles(sym); return a[a.length - 1].c; };
+const price = px;
+function annVol(s) { return Math.sqrt(s.sig * s.sig + (s.beta * .0085) ** 2) * Math.sqrt(252); }
+function tYears(exp) { return Math.max(calDays(M().day, exp), .25) / 365; }
+function ivOf(s, K, exp) { const m = M(), S0 = px(s.sym), T = tYears(exp); let base = annVol(s) * 1.0 * m.shock[s.sym]; let v = base * base * T;
+  if (m.earn[s.sym] > m.day && m.earn[s.sym] <= exp) v += s.em * s.em;
+  let iv = Math.sqrt(v / T); const k = Math.log(K / S0); iv *= Math.min(2, Math.max(.7, 1 - .35 * k + .9 * k * k)); return iv; }
+function greeksFull(type, S0, K, T, v) {
+  if (T <= 0) { const i = Math.max(0, type === 'call' ? S0 - K : K - S0); return { price: i, delta: i > 0 ? (type === 'call' ? 1 : -1) : 0, gamma: 0, theta: 0, vega: 0, rho: 0, pitm: i > 0 ? 1 : 0 }; }
+  const sq = Math.sqrt(T), d1 = (Math.log(S0 / K) + (RATE + v * v / 2) * T) / (v * sq), d2 = d1 - v * sq, pdf = Math.exp(-d1 * d1 / 2) / Math.sqrt(2 * Math.PI), disc = Math.exp(-RATE * T);
+  const price = type === 'call' ? S0 * ncdf(d1) - K * disc * ncdf(d2) : K * disc * ncdf(-d2) - S0 * ncdf(-d1);
+  const theta = type === 'call' ? (-S0 * pdf * v / (2 * sq) - RATE * K * disc * ncdf(d2)) / 365 : (-S0 * pdf * v / (2 * sq) + RATE * K * disc * ncdf(-d2)) / 365;
+  return { price: Math.max(0, price), delta: type === 'call' ? ncdf(d1) : ncdf(d1) - 1, gamma: pdf / (S0 * v * sq), theta, vega: S0 * pdf * sq / 100,
+    rho: (type === 'call' ? K * T * disc * ncdf(d2) : -K * T * disc * ncdf(-d2)) / 100, pitm: type === 'call' ? ncdf(d2) : ncdf(-d2) }; }
+function expirations() { const d = M().day; const f = d + ((4 - d % 5) + 5) % 5; const out = [0, 1, 2, 3].map(i => f + 5 * i); [8, 13, 17, 26].forEach(w => out.push(f + 5 * w)); return out; }
+function strikeInc(S0) { return S0 < 25 ? 1 : S0 < 60 ? 2.5 : S0 < 150 ? 5 : 10; }
+function strikes(sym) { const S0 = px(sym), inc = strikeInc(S0), c = Math.round(S0 / inc) * inc; const out = []; for (let i = -6; i <= 6; i++) { const k = +(c + i * inc).toFixed(2); if (k > 0) out.push(k); } return out; }
+function quote(sym, type, K, exp) { const s = SBY[sym], m = M(), S0 = px(sym), T = tYears(exp), iv = ivOf(s, K, exp), g = greeksFull(type, S0, K, T, iv);
+  const mny = Math.abs(Math.log(K / S0)), wk = calDays(m.day, exp) / 7, liq = s.liq * Math.exp(-mny * 7) / (1 + wk * .06);
+  const tick = g.price < 3 ? .01 : .05, spr = Math.max(tick, g.price * (.015 + .10 * (1 - Math.min(1, liq))), (1 - s.liq) * .12 + .02);
+  let bid = Math.max(0, Math.floor((g.price - spr / 2) / tick) * tick), ask = Math.max(tick, Math.ceil((g.price + spr / 2) / tick) * tick);
+  if (g.price < .01) { bid = 0; ask = .01; }
+  const key = sym + type + K + exp, rd = mulberry32(strHash(key) + m.day)(), rs = mulberry32(strHash(key))();
+  const last = candles(sym)[candles(sym).length - 1], vf = last.v / s.vol0;
+  const mine = m.opts.filter(p => p.sym === sym && p.type === type && p.K === K && p.exp === exp).reduce((a, p) => a + Math.abs(p.qty), 0);
+  return { ...g, iv, bid: r2(bid), ask: r2(ask), mid: r2((bid + ask) / 2), vol: Math.round(s.ov * liq * (.3 + rd) * vf / (1 + wk * .3)), oi: Math.round(s.ov * liq * 3 * (.4 + rs)) + mine, S: S0, T, intr: Math.max(0, type === 'call' ? S0 - K : K - S0) }; }
+const contractName = p => `${p.sym} ${fmtD(p.exp)} $${p.K} ${p.type === 'call' ? 'Call' : 'Put'}`;
+function reserved() { return M().opts.filter(p => p.qty < 0 && p.type === 'put').reduce((a, p) => a + p.K * 100 * -p.qty, 0); }
+function coveredUsed(sym) { return M().opts.filter(p => p.qty < 0 && p.type === 'call' && p.sym === sym).reduce((a, p) => a + 100 * -p.qty, 0); }
+const freeCash = () => M().cash - reserved();
+function optMark(p) { if (p.exp < M().day) return 0; return quote(p.sym, p.type, p.K, p.exp).mid; }
+function stockValue() { return Object.entries(M().hold).reduce((a, [k, v]) => a + v.sh * px(k), 0); }
+function optValue() { return M().opts.reduce((a, p) => a + optMark(p) * 100 * p.qty, 0); }
+function total() { return M().cash + stockValue() + optValue(); }
+function logT(t) { M().log.unshift({ day: M().day, t }); M().log = M().log.slice(0, 40); }
+function addShares(sym, q, cost) { const h = M().hold[sym] || { sh: 0, cost: 0 }; h.sh += q; h.cost += cost; M().hold[sym] = h; }
+function removeShares(sym, q) { const h = M().hold[sym]; const basis = h.cost * q / h.sh; h.cost -= basis; h.sh -= q; if (h.sh <= 0) delete M().hold[sym]; return basis; }
+
+function expireOptions() { const m = M(); const today = m.day; const keep = [];
+  m.opts.forEach(p => { if (p.exp > today) return keep.push(p); const S0 = px(p.sym), q = Math.abs(p.qty), sh = 100 * q, itm = (p.type === 'call' ? S0 - p.K : p.K - S0) >= .01, name = contractName(p);
+    if (!itm) { logT(`${name} expired worthless (stock at ${money(S0)}). ${p.qty > 0 ? `You lost the ${money(p.avg * sh)} premium.` : `You keep the full ${money(p.avg * sh)} premium.`}`); if (p.qty < 0) mission('m11'); return; }
+    mission('m16');
+    if (p.qty > 0 && p.type === 'call') { if (freeCash() >= p.K * sh) { m.cash -= p.K * sh; addShares(p.sym, sh, p.K * sh); logT(`${name} was in the money and auto-exercised: you bought ${sh} shares of ${p.sym} at ${money(p.K)}.`); }
+      else { const v = (S0 - p.K) * sh; m.cash += v; logT(`${name} was in the money, but you didn't have ${money(p.K * sh)} to exercise. Your broker closed it for its intrinsic value: ${money(v)}.`); } }
+    else if (p.qty > 0 && p.type === 'put') { const h = m.hold[p.sym]; if (h && h.sh - coveredUsed(p.sym) >= sh) { removeShares(p.sym, sh); m.cash += p.K * sh; logT(`${name} was exercised: you sold ${sh} shares of ${p.sym} at ${money(p.K)}.`); }
+      else { const v = (p.K - S0) * sh; m.cash += v; logT(`${name} finished in the money. Since you didn't own the shares to deliver, it was closed for its intrinsic value: ${money(v)}.`); } }
+    else if (p.qty < 0 && p.type === 'call') { removeShares(p.sym, sh); m.cash += p.K * sh; logT(`Assigned: your covered call ${name} finished in the money, so ${sh} shares of ${p.sym} were called away at ${money(p.K)}.`); }
+    else { m.cash -= p.K * sh; addShares(p.sym, sh, p.K * sh); logT(`Assigned: your cash-secured put ${name} finished in the money, so you bought ${sh} shares of ${p.sym} at ${money(p.K)} using the cash you set aside.`); } });
+  m.opts = keep; }
+function fillOrders() { const m = M(); const keep = [];
+  m.orders.forEach(o => { const c = candles(o.sym)[candles(o.sym).length - 1]; let fill = null;
+    if (o.kind === 'limit' && o.side === 'buy') fill = c.o <= o.px ? c.o : c.l <= o.px ? o.px : null;
+    if (o.kind === 'limit' && o.side === 'sell') fill = c.o >= o.px ? c.o : c.h >= o.px ? o.px : null;
+    if (o.kind === 'stop' && o.side === 'sell') fill = c.o <= o.px ? c.o : c.l <= o.px ? o.px : null;
+    if (o.kind === 'stop' && o.side === 'buy') fill = c.o >= o.px ? c.o : c.h >= o.px ? o.px : null;
+    if (fill == null) return keep.push(o);
+    if (o.side === 'buy') { if (freeCash() < fill * o.qty) { logT(`Canceled: your ${o.kind} order to buy ${o.qty} ${o.sym} triggered at ${money(fill)}, but you didn't have enough cash.`); return; }
+      m.cash -= fill * o.qty; addShares(o.sym, o.qty, fill * o.qty); }
+    else { const h = m.hold[o.sym], avail = h ? h.sh - coveredUsed(o.sym) : 0; if (avail < o.qty) { logT(`Canceled: your ${o.kind} order to sell ${o.qty} ${o.sym} triggered, but you no longer had those shares free.`); return; }
+      const basis = removeShares(o.sym, o.qty); m.cash += fill * o.qty; const g = fill * o.qty - basis; logT(`${o.kind === 'stop' ? 'Stop' : 'Limit'} order filled: sold ${o.qty} ${o.sym} at ${money(fill)} (${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}).${o.kind === 'stop' && fill < o.px ? ' The stock gapped below your stop, so it filled lower.' : ''}`); }
+    if (o.side === 'buy') logT(`${o.kind === 'stop' ? 'Stop' : 'Limit'} order filled: bought ${o.qty} ${o.sym} at ${money(fill)}.`);
+    mission(o.kind === 'stop' ? 'm13' : 'm12'); });
+  m.orders = keep; }
+function nextDay(quiet) { const m = M(); expireOptions(); simDay(m, true); fillOrders();
+  m.news = m.news.slice(0, 10); m.val.push(r2(total())); if (m.val.length > 260) m.val.shift();
+  if (m.day - m.startDay >= 20) mission('m3'); if (total() >= 10500) mission('m4');
   if (!quiet) { save(); renderMarket(); tape(); } }
-function renderMarket() { if (!isOpen('market')) return; const m = M(); $('#m-day').textContent = 'Day ' + m.day;
-  $('#m-list').innerHTML = STOCKS.map(s => { const h = m.h[s.sym], p = h[h.length - 1], c = p / h[h.length - 2] - 1; return `<button class="stk" data-s="${s.sym}" aria-pressed="${m.sel === s.sym}"><span class="tk" style="background:${s.col}">${s.sym[0]}</span><span><b>${s.name}</b><small>${s.sym} · ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${pct(c)}</span></small></span><canvas data-sp="${s.sym}" aria-hidden="true"></canvas></button>`; }).join('');
-  document.querySelectorAll('.stk').forEach(b => b.onclick = () => { m.sel = b.dataset.s; save(); renderMarket(); });
-  document.querySelectorAll('[data-sp]').forEach(cv => reg(cv, () => drawLine(cv, m.h[cv.dataset.sp].slice(-20), { spark: true })));
-  const s = STOCKS.find(x => x.sym === m.sel), h = m.h[s.sym], p = h[h.length - 1], c = p / h[h.length - 2] - 1;
-  $('#m-name').textContent = `${s.name} (${s.sym})`; $('#m-desc').textContent = s.desc; $('#m-price').textContent = money(p);
-  $('#m-chg').innerHTML = `<span class="${c >= 0 ? 'u' : 'd'}">${c >= 0 ? '▲' : '▼'} ${money(Math.abs(p - h[h.length - 2]))} (${pct(c)}) today</span>`;
-  const show = h.slice(-60); const cv = $('#cv-stock'); reg(cv, () => drawLine(cv, show, { first: m.day - show.length + 1 }));
-  updTotal();
-  const tv = total(), gain = tv - 10000, inv = tv - m.cash;
-  $('#m-stats').innerHTML = [['Pretend cash', money(m.cash)], ['Invested', money(inv)], ['Total worth', money(tv)], ['Since start', `<span class="${gain >= 0 ? 'u' : 'd'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
-  const pv = m.val.length > 1 ? m.val : [10000, 10000]; const pc = $('#cv-port'); reg(pc, () => drawLine(pc, pv, { base: 10000, first: m.day - pv.length + 1 }));
-  const rows = Object.entries(m.hold); $('#m-hold').innerHTML = rows.length ? rows.map(([k, v]) => { const pp = price(k), val = v.sh * pp, g = val - v.cost; return `<tr><td>${k}</td><td>${v.sh}</td><td>${money(v.cost / v.sh)}</td><td>${money(pp)}</td><td>${money(val)}</td><td class="${g >= 0 ? 'u' : 'd'}">${g >= 0 ? '+' : ''}${money(g)} (${pct(g / v.cost)})</td></tr>`; }).join('')
-    : `<tr><td colspan="6" style="font-family:var(--f-body);color:var(--muted);text-align:left">You don't own anything yet. Pick a stock above and press Buy.</td></tr>`;
-  $('#m-news').innerHTML = m.news.map(n => `<li class="${n.dir}"><small>Day ${n.day}</small>${n.t}</li>`).join(''); }
-function updTotal() { const q = Math.max(0, Math.floor(+$('#m-qty').value || 0)); $('#m-total').textContent = money(q * price(M().sel)); }
-$('#m-qty').oninput = updTotal;
-$('#m-buy').onclick = () => { const m = M(), q = Math.floor(+$('#m-qty').value || 0), p = price(m.sel), st = $('#m-status');
-  if (q < 1) { st.textContent = 'Type how many shares you want first.'; st.className = 'status d'; return; }
-  if (q * p > m.cash) { st.textContent = `Not enough pretend cash. You can afford ${Math.floor(m.cash / p)} shares.`; st.className = 'status d'; return; }
-  m.cash -= q * p; const h = m.hold[m.sel] || { sh: 0, cost: 0 }; h.sh += q; h.cost += q * p; m.hold[m.sel] = h; m.val[m.val.length - 1] = +total().toFixed(2);
-  st.textContent = `Bought ${q} shares of ${m.sel} for ${money(q * p)}.`; st.className = 'status u'; save(); renderMarket(); mission('m1', $('#m-buy')); if (Object.keys(m.hold).length >= 3) mission('m2', $('#m-buy')); };
-$('#m-sell').onclick = () => { const m = M(), q = Math.floor(+$('#m-qty').value || 0), p = price(m.sel), st = $('#m-status'), h = m.hold[m.sel];
-  if (!h) { st.textContent = `You don't own any ${m.sel} yet.`; st.className = 'status d'; return; }
-  if (q < 1 || q > h.sh) { st.textContent = `You can sell between 1 and ${h.sh} shares.`; st.className = 'status d'; return; }
-  const basis = h.cost * q / h.sh, gain = q * p - basis; h.cost -= basis; h.sh -= q; if (!h.sh) delete m.hold[m.sel]; m.cash += q * p;
-  st.textContent = `Sold ${q} shares for ${money(q * p)}: ${gain >= 0 ? 'a profit of ' + money(gain) : 'a loss of ' + money(-gain)}.`; st.className = 'status ' + (gain >= 0 ? 'u' : 'd'); save(); renderMarket(); };
+
+/* ---------- market rendering ---------- */
+function drawStock(cv, all, o) { const g = prep(cv); if (!g) return; const { ctx } = g; const n = Math.min(o.range, all.length), d = all.slice(-n), off = all.length - n;
+  const lo = Math.min(...d.map(x => x.l)), hi = Math.max(...d.map(x => x.h)), mg = (hi - lo) * .08 || 1;
+  const first = o.lastDay - n + 1; const step = n > 100 ? 21 : n > 40 ? 10 : 5; const xt = []; for (let i = n - 1; i >= 0; i -= step) xt.push([i, fmtD(first + i)]);
+  const P = plot(g, { x0: -.7, x1: n - .3, y0: lo - mg, y1: hi + mg, xticks: xt, padL: 60 }); cv._map = P; const { X, Y, box } = P;
+  const up = css('--up'), dn = css('--down'), bw = Math.max(1.5, box.w / n * .62);
+  if (o.vol) { const mv = Math.max(...d.map(x => x.v)); ctx.globalAlpha = .28; d.forEach((x, i) => { ctx.fillStyle = x.c >= x.o ? up : dn; const hh = x.v / mv * box.h * .22; ctx.fillRect(X(i) - bw / 2, box.y + box.h - hh, bw, hh); }); ctx.globalAlpha = 1; }
+  if (o.type === 'line') { const col = d[n - 1].c >= d[0].c ? up : dn; const pts = d.map((x, i) => [X(i), Y(x.c)]); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.lineTo(X(n - 1), box.y + box.h); ctx.lineTo(X(0), box.y + box.h); ctx.closePath(); ctx.globalAlpha = .12; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = 1; linePath(ctx, pts); ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.stroke(); }
+  else d.forEach((x, i) => { const c = x.c >= x.o ? up : dn; ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = 1.2; const xx = Math.round(X(i)) + .5; ctx.beginPath(); ctx.moveTo(xx, Y(x.h)); ctx.lineTo(xx, Y(x.l)); ctx.stroke(); const y1 = Y(Math.max(x.o, x.c)), y2 = Y(Math.min(x.o, x.c)); ctx.fillRect(X(i) - bw / 2, y1, bw, Math.max(1.2, y2 - y1)); });
+  const closes = all.map(x => x.c); [[20, o.ma20, css('--ma')], [50, o.ma50, css('--isle')]].forEach(([k, on, col]) => { if (!on) return; const a = sma(closes, k).slice(off); linePath(ctx, a.map((v, i) => [X(i), v == null ? null : Y(v)])); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke(); });
+  (o.marks || []).forEach(dd => { const i = dd - first; if (i < 0 || i >= n) return; ctx.fillStyle = css('--accent'); ctx.font = `700 10px ${MONO}`; ctx.textAlign = 'center'; ctx.beginPath(); ctx.arc(X(i), box.y + box.h - 7, 7, 0, 7); ctx.fill(); ctx.fillStyle = css('--accent-ink'); ctx.textBaseline = 'middle'; ctx.fillText('E', X(i), box.y + box.h - 6.5); });
+  if (o.hover != null && o.hover < n) { const x = X(o.hover); ctx.strokeStyle = css('--ink'); ctx.globalAlpha = .35; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x, box.y); ctx.lineTo(x, box.y + box.h); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; } }
+const fmtVol = v => v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : String(v);
+let MH = null;
+function optionsOpen() { return S.full && (!!S.stars.o2 || !!S.stars.b2); }
+function renderMarket() { if (!isOpen('market')) return; const m = M(), u = m.ui;
+  $('#m-day').textContent = fmtD(m.day, true); $('#m-dayn').textContent = `Trading day ${m.day - m.startDay + 1}`;
+  $('#m-list').innerHTML = STOCKS.map(s => { const a = candles(s.sym), p = a[a.length - 1].c, c = p / a[a.length - 2].c - 1; return `<button class="stk" data-s="${s.sym}" aria-pressed="${m.sel === s.sym}"><span class="tk" style="background:${s.col}">${s.sym[0]}</span><span><b>${s.name}</b><small>${s.sym} · ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${pct(c)}</span></small></span><canvas data-sp="${s.sym}" aria-hidden="true"></canvas></button>`; }).join('');
+  document.querySelectorAll('.stk').forEach(b => b.onclick = () => { m.sel = b.dataset.s; u.k = null; MH = null; save(); renderMarket(); });
+  document.querySelectorAll('[data-sp]').forEach(cv => reg(cv, () => drawLine(cv, candles(cv.dataset.sp).slice(-20).map(x => x.c), { spark: true })));
+  const s = SBY[m.sel], a = candles(s.sym), last = a[a.length - 1], prev = a[a.length - 2], ch = last.c - prev.c;
+  $('#m-name').textContent = `${s.name} (${s.sym})`; $('#m-desc').textContent = s.desc; $('#m-price').textContent = money(last.c);
+  $('#m-chg').innerHTML = `<span class="${ch >= 0 ? 'u' : 'd'}">${ch >= 0 ? '▲' : '▼'} ${money(Math.abs(ch))} (${pct(ch / prev.c)}) today</span>`;
+  const avgV = a.slice(-20).reduce((x, y) => x + y.v, 0) / Math.min(20, a.length), r6 = a.slice(-126), atm = Math.round(last.c / strikeInc(last.c)) * strikeInc(last.c), e30 = expirations().find(e => calDays(m.day, e) >= 25) || expirations()[4];
+  const facts = [['Open', money(last.o)], ['High', money(last.h)], ['Low', money(last.l)], ['Volume', fmtVol(last.v)], ['Avg volume (20d)', fmtVol(Math.round(avgV))], ['6-month range', `${money(Math.min(...r6.map(x => x.l)))}–${money(Math.max(...r6.map(x => x.h)))}`],
+    ['Beta', s.beta.toFixed(2)], ['Next earnings', s.em ? `${fmtD(m.earn[s.sym])} (${m.earn[s.sym] - m.day} days)` : 'None (fund)'], ['Implied vol (~30d)', (ivOf(s, atm, e30) * 100).toFixed(0) + '%'], ['Dividend', s.div ? `${money(s.div)} / quarter · next ex-date ${fmtD(m.exdiv[s.sym])}` : 'None']];
+  $('#m-facts').innerHTML = facts.map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('');
+  ['type', 'range'].forEach(k => document.querySelectorAll(`[data-mk-${k}]`).forEach(b => b.setAttribute('aria-pressed', String(u[k]) === b.getAttribute(`data-mk-${k}`))));
+  $('#mk-vol').checked = u.vol; $('#mk-ma20').checked = u.ma20; $('#mk-ma50').checked = u.ma50;
+  const cv = $('#cv-stock'); const drawIt = () => drawStock(cv, a, { ...u, lastDay: m.day, marks: m.earnPast[s.sym], hover: MH }); reg(cv, drawIt);
+  cv.onpointermove = cv.onpointerdown = e => { const n = Math.min(u.range, a.length), i = idxAt(cv, e, n); if (i == null || i === MH) return; MH = i; drawIt(); const c = a[a.length - n + i], pc = a[a.length - n + i - 1];
+    $('#m-read').innerHTML = `<b>${fmtD(m.day - n + 1 + i, true)}</b> · <span class="mono">O ${money(c.o)} · H ${money(c.h)} · L ${money(c.l)} · C ${money(c.c)} · Vol ${fmtVol(c.v)}</span>${pc ? ` · <span class="${c.c >= pc.c ? 'u' : 'd'}">${pct(c.c / pc.c - 1)}</span>` : ''}${m.earnPast[s.sym].includes(m.day - n + 1 + i) ? ' · <b>Earnings day</b>' : ''}`; };
+  if (MH == null) $('#m-read').innerHTML = 'Tap or hover the chart to read any day. <b>E</b> marks earnings days.';
+  document.querySelectorAll('[data-mk-tab]').forEach(b => b.setAttribute('aria-pressed', u.tab === b.dataset.mkTab));
+  $('#mk-stockpane').hidden = u.tab !== 'stock'; $('#mk-optpane').hidden = u.tab !== 'opt';
+  renderStockTicket(); if (u.tab === 'opt') renderChain();
+  renderPortfolio();
+  $('#m-news').innerHTML = m.news.map(n => `<li class="${n.dir}"><small>${fmtD(n.day)}</small>${n.t}</li>`).join('') || '<li>No news yet.</li>';
+  $('#m-log').innerHTML = m.log.slice(0, 15).map(n => `<li><small>${fmtD(n.day)}</small>${n.t}</li>`).join('') || '<li>Your fills, expirations, assignments and dividends show up here.</li>'; }
+function renderStockTicket() { const m = M(), u = m.ui; u.sside = u.sside || 'buy'; u.skind = u.skind || 'market';
+  document.querySelectorAll('[data-sside]').forEach(b => b.setAttribute('aria-pressed', u.sside === b.dataset.sside)); document.querySelectorAll('[data-skind]').forEach(b => b.setAttribute('aria-pressed', u.skind === b.dataset.skind));
+  $('#st-pxw').hidden = u.skind === 'market'; $('#st-pxl').textContent = u.skind === 'limit' ? 'Limit price' : 'Stop price';
+  const q = Math.max(0, Math.floor(+$('#st-qty').value || 0)), p = u.skind === 'market' ? px(m.sel) : (+$('#st-px').value || 0);
+  const h = m.hold[m.sel], free = h ? h.sh - coveredUsed(m.sel) : 0;
+  $('#st-est').textContent = money(q * p);
+  $('#st-help').innerHTML = { market: 'Fills right now at the current price.', limit: u.sside === 'buy' ? 'Buys only at your price or lower. Checked against each new day’s prices; stays open until it fills or you cancel.' : 'Sells only at your price or higher. Stays open until it fills or you cancel.',
+    stop: u.sside === 'sell' ? 'A stop-loss: if the price falls to your stop, it sells at the next available price. If the stock gaps down overnight, it fills below your stop.' : 'Buys once the price rises to your stop, often used for breakouts.' }[u.skind] +
+    ` <span class="muted">Free cash ${money(freeCash())}${h ? ` · you own ${h.sh} ${m.sel}${coveredUsed(m.sel) ? ` (${coveredUsed(m.sel)} covering calls)` : ''}` : ''}.</span>`;
+  $('#st-go').textContent = `${u.skind === 'market' ? '' : 'Place '}${u.sside === 'buy' ? 'Buy' : 'Sell'} ${q || ''} ${m.sel}${u.skind === 'market' ? '' : ' ' + u.skind + ' order'}`; $('#st-go').className = 'btn ' + (u.sside === 'buy' ? 'up' : 'down'); }
+function placeStock() { const m = M(), u = m.ui, q = Math.floor(+$('#st-qty').value || 0), st = $('#st-status'), sym = m.sel; const say = (t, ok) => { st.textContent = t; st.className = 'status ' + (ok ? 'u' : 'd'); };
+  if (q < 1) return say('Enter how many shares first.');
+  const h = m.hold[sym], free = h ? h.sh - coveredUsed(sym) : 0;
+  if (u.sside === 'sell' && free < q) return say(free ? `You can sell up to ${free} shares (the rest are covering calls you sold).` : `You don't own any free ${sym} shares. This cash account can't short-sell.`);
+  if (u.skind === 'market') { const p = px(sym);
+    if (u.sside === 'buy') { if (freeCash() < q * p) return say(`Not enough free cash. You can afford ${Math.floor(freeCash() / p)} shares.`); m.cash -= q * p; addShares(sym, q, q * p); logT(`Bought ${q} ${sym} at ${money(p)}.`); say(`Bought ${q} shares of ${sym} at ${money(p)}.`, true); mission('m1'); if (Object.keys(m.hold).length >= 3) mission('m2'); }
+    else { const basis = removeShares(sym, q); m.cash += q * p; const g = q * p - basis; logT(`Sold ${q} ${sym} at ${money(p)} (${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}).`); say(`Sold ${q} shares at ${money(p)}: ${g >= 0 ? 'profit' : 'loss'} of ${money(Math.abs(g))}.`, g >= 0); } }
+  else { const p = +$('#st-px').value; if (!(p > 0)) return say('Enter a price for your order.');
+    if (u.skind === 'stop' && u.sside === 'sell' && p >= px(sym)) return say(`A sell stop must be below the current price (${money(px(sym))}). It's meant to protect you if the price falls.`);
+    if (u.skind === 'stop' && u.sside === 'buy' && p <= px(sym)) return say(`A buy stop must be above the current price (${money(px(sym))}).`);
+    m.orders.push({ id: m.nid++, sym, side: u.sside, kind: u.skind, qty: q, px: r2(p) }); logT(`Placed ${u.skind} order: ${u.sside} ${q} ${sym} at ${money(p)} (good until canceled).`); say(`Order placed. It will be checked against the next day's prices.`, true); }
+  m.val[m.val.length - 1] = r2(total()); save(); renderMarket(); }
+function renderChain() { const m = M(), u = m.ui, box = $('#mk-chain');
+  if (!optionsOpen()) { box.innerHTML = `<div class="lockmini"><b>🔒 Options trading</b><p>${S.full ? 'Clear <b>Calls: betting the price goes up</b> on Options Island to unlock options trading here.' : 'Options trading is part of the full game.'}</p>${S.full ? '' : `<button class="btn sun" id="oc-buy">Unlock full game · ${priceStr()}</button>`}</div>`; const b = $('#oc-buy'); if (b) b.onclick = openPaywall; return; }
+  const exps = expirations(); if (!exps.includes(u.exp)) u.exp = exps.find(e => calDays(m.day, e) >= 20) || exps[0];
+  const sym = m.sel, ks = strikes(sym), S0 = px(sym); if (!ks.includes(u.k)) u.k = null;
+  box.innerHTML = `<div class="row" style="justify-content:space-between"><div class="exps">${exps.map(e => `<button class="chip ${e === u.exp ? 'on' : ''}" data-exp="${e}">${fmtD(e)}<small>${calDays(m.day, e)}d</small></button>`).join('')}</div>
+    <div class="seg" role="group" aria-label="Calls or puts"><button data-oside="call" aria-pressed="${u.side === 'call'}">Calls</button><button data-oside="put" aria-pressed="${u.side === 'put'}">Puts</button></div></div>
+    <p class="muted" style="font-size:13px;margin:8px 0 0">${sym} at ${money(S0)} · expires ${fmtD(u.exp, true)} · ${m.earn[sym] > m.day && m.earn[sym] <= u.exp ? '<b>earnings before this expiration: IV is inflated</b>' : 'no earnings before this expiration'}. Shaded rows are in the money. Tap a row to trade.</p>
+    <div class="tbl-wrap"><table class="chain"><thead><tr><th>Strike</th><th>Bid</th><th>Ask</th><th>Volume</th><th>Open int.</th><th>IV</th><th>Delta</th><th>Theta</th></tr></thead><tbody>
+    ${ks.map(k => { const q = quote(sym, u.side, k, u.exp); return `<tr class="${q.intr > 0 ? 'itm' : ''} ${u.k === k ? 'sel' : ''}" data-k="${k}" tabindex="0"><td><b>${money(k)}</b></td><td>${q.bid.toFixed(2)}</td><td>${q.ask.toFixed(2)}</td><td>${q.vol.toLocaleString()}</td><td>${q.oi.toLocaleString()}</td><td>${(q.iv * 100).toFixed(1)}%</td><td>${q.delta.toFixed(2)}</td><td>${q.theta.toFixed(3)}</td></tr>`; }).join('')}
+    </tbody></table></div><div id="mk-ticket"></div>`;
+  box.querySelectorAll('[data-exp]').forEach(b => b.onclick = () => { u.exp = +b.dataset.exp; u.k = null; renderChain(); });
+  box.querySelectorAll('[data-oside]').forEach(b => b.onclick = () => { u.side = b.dataset.oside; u.k = null; renderChain(); });
+  box.querySelectorAll('tr[data-k]').forEach(r => { r.onclick = () => { u.k = +r.dataset.k; renderChain(); $('#mk-ticket').scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }; r.onkeydown = e => { if (e.key === 'Enter') r.onclick(); }; });
+  if (u.k != null) renderTicket(); }
+function renderTicket() { const m = M(), u = m.ui, sym = m.sel, K = u.k, q = quote(sym, u.side, K, u.exp), name = contractName({ sym, type: u.side, K, exp: u.exp });
+  const be = u.side === 'call' ? K + q.ask : K - q.ask, dte = calDays(m.day, u.exp);
+  const shFree = (m.hold[sym] ? m.hold[sym].sh : 0) - coveredUsed(sym);
+  const canSell = u.side === 'call' ? shFree >= 100 : freeCash() >= K * 100;
+  $('#mk-ticket').innerHTML = `<div class="ticket"><div class="row" style="justify-content:space-between"><h4>${name}</h4><span class="mono muted" style="font-size:13px">${dte} days to expiration</span></div>
+    <div class="stats" style="margin-top:10px">${[['Bid / Ask', `${q.bid.toFixed(2)} / ${q.ask.toFixed(2)}`], ['Intrinsic', q.intr.toFixed(2)], ['Extrinsic', Math.max(0, q.mid - q.intr).toFixed(2)], ['Implied vol', (q.iv * 100).toFixed(1) + '%'],
+      ['Delta', q.delta.toFixed(3)], ['Gamma', q.gamma.toFixed(4)], ['Theta / day', q.theta.toFixed(3)], ['Vega', q.vega.toFixed(3)], ['Break-even (buyer)', money(be)], ['Chance ITM', Math.round(q.pitm * 100) + '%'], ['Volume', q.vol.toLocaleString()], ['Open interest', q.oi.toLocaleString()]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('')}</div>
+    <div class="trade"><div class="field"><label for="ot-qty">Contracts</label><input type="number" id="ot-qty" min="1" step="1" value="1"></div>
+      <button class="btn up" id="ot-bto">Buy to open · pay ${money(q.ask * 100)} each</button>
+      <button class="btn ghost" id="ot-sto" ${canSell ? '' : 'disabled'}>Sell to open · collect ${money(q.bid * 100)} each</button></div>
+    <p class="muted" style="font-size:13px;margin-top:8px">${u.side === 'call' ? `Selling a call here is a <b>covered call</b>: it needs 100 free ${sym} shares per contract (you have ${Math.max(0, shFree)}).` : `Selling a put here is a <b>cash-secured put</b>: it sets aside ${money(K * 100)} per contract (free cash ${money(freeCash())}).`} Each contract costs a ${money(FEE)} fee. Buying pays the ask; selling gets the bid.</p>
+    <div class="status" id="ot-status" aria-live="polite"></div></div>`;
+  $('#ot-bto').onclick = () => tradeOpt('bto'); $('#ot-sto').onclick = () => tradeOpt('sto'); }
+function tradeOpt(act) { const m = M(), u = m.ui, sym = m.sel, K = u.k, exp = u.exp, n = Math.floor(+$('#ot-qty').value || 0), q = quote(sym, u.side, K, exp), st = $('#ot-status');
+  const say = (t, ok) => { st.textContent = t; st.className = 'status ' + (ok ? 'u' : 'd'); };
+  if (n < 1) return say('Enter how many contracts.');
+  const find = sgn => m.opts.find(p => p.sym === sym && p.type === u.side && p.K === K && p.exp === exp && Math.sign(p.qty) === sgn);
+  if (act === 'bto') { const cost = q.ask * 100 * n + FEE * n; if (freeCash() < cost) return say(`Not enough free cash: this costs ${money(cost)}.`);
+    m.cash -= cost; const p = find(1); if (p) { p.avg = (p.avg * p.qty + q.ask * n) / (p.qty + n); p.qty += n; } else m.opts.push({ id: m.nid++, sym, type: u.side, K, exp, qty: n, avg: q.ask, open: m.day });
+    logT(`Bought to open ${n} ${contractName({ sym, type: u.side, K, exp })} at ${q.ask.toFixed(2)} (${money(cost)} incl. fees).`); mission('m10'); say(`Filled at ${q.ask.toFixed(2)}. See it under Option positions.`, true); }
+  else { if (q.bid <= 0) return say('There are no buyers at this strike (bid is 0). Pick a different contract.');
+    if (u.side === 'call') { const free = (m.hold[sym] ? m.hold[sym].sh : 0) - coveredUsed(sym); if (free < 100 * n) return say(`Covered calls need ${100 * n} free shares; you have ${Math.max(0, free)}.`); }
+    else if (freeCash() < K * 100 * n) return say(`Cash-secured puts need ${money(K * 100 * n)} set aside; you have ${money(freeCash())} free.`);
+    const cr = q.bid * 100 * n - FEE * n; m.cash += cr; const p = find(-1); if (p) { p.avg = (p.avg * -p.qty + q.bid * n) / (-p.qty + n); p.qty -= n; } else m.opts.push({ id: m.nid++, sym, type: u.side, K, exp, qty: -n, avg: q.bid, open: m.day });
+    logT(`Sold to open ${n} ${contractName({ sym, type: u.side, K, exp })} at ${q.bid.toFixed(2)} (collected ${money(cr)} after fees).`); say(`Filled at ${q.bid.toFixed(2)}. You collected ${money(cr)}.`, true); }
+  m.val[m.val.length - 1] = r2(total()); save(); renderMarket(); }
+function closeOpt(id) { const m = M(), p = m.opts.find(x => x.id === id); if (!p) return; const q = quote(p.sym, p.type, p.K, p.exp), n = Math.abs(p.qty);
+  if (p.qty > 0) { const v = q.bid * 100 * n - FEE * n; m.cash += v; const g = v - p.avg * 100 * n; logT(`Sold to close ${n} ${contractName(p)} at ${q.bid.toFixed(2)}: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}.`); toast(`Closed: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}`); }
+  else { const c = q.ask * 100 * n + FEE * n; if (m.cash < c) return toast('Not enough cash to buy it back.'); m.cash -= c; const g = p.avg * 100 * n - c; logT(`Bought to close ${n} ${contractName(p)} at ${q.ask.toFixed(2)}: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}.`); toast(`Closed: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}`); }
+  m.opts = m.opts.filter(x => x.id !== id); m.val[m.val.length - 1] = r2(total()); save(); renderMarket(); }
+function renderPortfolio() { const m = M(), tv = total(), gain = tv - 10000;
+  $('#m-stats').innerHTML = [['Cash', money(m.cash)], ['Set aside (puts)', money(reserved())], ['Stocks', money(stockValue())], ['Options', money(optValue())], ['Total worth', money(tv)], ['Since start', `<span class="${gain >= 0 ? 'u' : 'd'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+  const pv = m.val.length > 1 ? m.val : [10000, 10000]; const pc = $('#cv-port'); reg(pc, () => drawLine(pc, pv, { base: 10000, xticks: [] }));
+  const rows = Object.entries(m.hold); $('#m-hold').innerHTML = rows.length ? rows.map(([k, v]) => { const pp = px(k), val = v.sh * pp, g = val - v.cost; return `<tr><td>${k}</td><td>${v.sh}</td><td>${money(v.cost / v.sh)}</td><td>${money(pp)}</td><td>${money(val)}</td><td class="${g >= 0 ? 'u' : 'd'}">${g >= 0 ? '+' : ''}${money(g)} (${pct(g / v.cost)})</td></tr>`; }).join('')
+    : `<tr><td colspan="6" class="empty">No stocks yet. Pick one and place an order.</td></tr>`;
+  $('#m-opts').innerHTML = m.opts.length ? m.opts.map(p => { const q = quote(p.sym, p.type, p.K, p.exp), n = p.qty, pl = (q.mid - p.avg) * 100 * n; return `<tr><td>${contractName(p)}</td><td>${n > 0 ? '+' : ''}${n}</td><td>${p.avg.toFixed(2)}</td><td>${q.mid.toFixed(2)}</td><td class="${pl >= 0 ? 'u' : 'd'}">${pl >= 0 ? '+' : ''}${money(pl)}</td><td>${(q.delta * 100 * n).toFixed(0)}</td><td>${(q.theta * 100 * n).toFixed(2)}</td><td>${calDays(m.day, p.exp)}d</td><td><button class="btn ghost mini" data-close="${p.id}">Close</button></td></tr>`; }).join('')
+    : `<tr><td colspan="9" class="empty">${optionsOpen() ? 'No option positions. Open the Option chain tab to trade.' : 'Options trading unlocks on Options Island.'}</td></tr>`;
+  document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => closeOpt(+b.dataset.close));
+  $('#m-orders').innerHTML = m.orders.length ? m.orders.map(o => `<li><span><b>${o.side === 'buy' ? 'Buy' : 'Sell'} ${o.qty} ${o.sym}</b> · ${o.kind} at ${money(o.px)} · good until canceled</span><button class="btn ghost mini" data-cancel="${o.id}">Cancel</button></li>`).join('') : '<li class="muted">No open orders.</li>';
+  document.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { m.orders = m.orders.filter(o => o.id !== +b.dataset.cancel); logT('Order canceled.'); save(); renderMarket(); }); }
+document.querySelectorAll('[data-mk-type]').forEach(b => b.onclick = () => { M().ui.type = b.dataset.mkType; save(); renderMarket(); });
+document.querySelectorAll('[data-mk-range]').forEach(b => b.onclick = () => { M().ui.range = +b.dataset.mkRange; MH = null; save(); renderMarket(); });
+[['mk-vol', 'vol'], ['mk-ma20', 'ma20'], ['mk-ma50', 'ma50']].forEach(([id, k]) => $('#' + id).onchange = e => { M().ui[k] = e.target.checked; save(); renderMarket(); });
+document.querySelectorAll('[data-mk-tab]').forEach(b => b.onclick = () => { M().ui.tab = b.dataset.mkTab; save(); renderMarket(); });
+document.querySelectorAll('[data-sside]').forEach(b => b.onclick = () => { M().ui.sside = b.dataset.sside; renderStockTicket(); });
+document.querySelectorAll('[data-skind]').forEach(b => b.onclick = () => { M().ui.skind = b.dataset.skind; if (b.dataset.skind !== 'market' && !$('#st-px').value) $('#st-px').value = px(M().sel).toFixed(2); renderStockTicket(); });
+$('#st-qty').oninput = renderStockTicket; $('#st-px').oninput = renderStockTicket; $('#st-go').onclick = placeStock;
 $('#m-next').onclick = () => nextDay();
 $('#m-skip').onclick = () => { for (let i = 0; i < 5; i++) nextDay(true); save(); renderMarket(); tape(); };
 let resetArm = false; $('#m-reset').onclick = () => { if (!resetArm) { resetArm = true; $('#m-reset').textContent = 'Tap again to start over'; setTimeout(() => { resetArm = false; $('#m-reset').textContent = 'Start over'; }, 3000); return; }
-  resetArm = false; $('#m-reset').textContent = 'Start over'; S.mkt = newMarket(); save(); renderMarket(); tape(); $('#m-status').textContent = 'Fresh start: $10,000 of pretend cash.'; $('#m-status').className = 'status'; };
-function tape() { const items = STOCKS.map(s => { const h = M().h[s.sym], p = h[h.length - 1], c = p / h[h.length - 2] - 1; return `<span>${s.sym} ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${c >= 0 ? '▲' : '▼'}${pct(c)}</span></span>`; }).join('');
-  $('#tape').innerHTML = items + items + items + items; }
+  resetArm = false; $('#m-reset').textContent = 'Start over'; S.mkt = newMarket(); MH = null; save(); renderMarket(); tape(); toast('Fresh start: $10,000 of pretend cash.'); };
+function tape() { const items = STOCKS.map(s => { const a = candles(s.sym), p = a[a.length - 1].c, c = p / a[a.length - 2].c - 1; return `<span>${s.sym} ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${c >= 0 ? '▲' : '▼'}${pct(c)}</span></span>`; }).join('');
+  $('#tape').innerHTML = items + items + items; }
 
 /* ================= OPTIONS LAB ================= */
 function ncdf(x) { const t = 1 / (1 + .2316419 * Math.abs(x)); const d = .3989423 * Math.exp(-x * x / 2); const p = d * t * (.3193815 + t * (-.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
@@ -948,6 +1534,8 @@ function renderOpt() { if (!isOpen('options')) return; const o = O;
   const c = o.prem * 100 * o.n, b = be(o), unl = 'No limit';
   const stats = o.side === 'buy' ? [['You pay', money(c)], ['Break-even', money(b)], ['Max gain', o.type === 'call' ? unl : money((o.K - o.prem) * 100 * o.n)], ['Max loss', money(c)]]
     : [['You collect', money(c)], ['Break-even', money(b)], ['Max gain', money(c)], ['Max loss', o.type === 'call' ? unl : money((o.K - o.prem) * 100 * o.n)]];
+  const gk = greeksFull(o.type, o.S, o.K, Math.max(o.days, 0) / 365, o.vol), sg = o.side === 'buy' ? 1 : -1;
+  stats.push(['Delta', (gk.delta * sg).toFixed(2)], ['Theta / day', (gk.theta * sg).toFixed(3)], ['Vega', (gk.vega * sg).toFixed(3)], ['Value now', money(gk.price)]);
   $('#o-stats').innerHTML = stats.map(([a, v]) => `<div class="stat"><span>${a}</span><b class="${a === 'Max loss' && v === unl ? 'd' : ''}">${v}</b></div>`).join('');
   $('#o-explain').innerHTML = explainOpt(o);
   if (o.type === 'put') mission('m8', $('#o-put')); if (Math.abs(o.P - b) <= .25) mission('m7', $('#o-P')); }
@@ -991,7 +1579,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#paywa
 function openPaywall() { if (S.full) return toast('You already own the full game.');
   pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Unlock all of Ticker Town</h2>
     <div class="price" style="margin-top:10px">${priceStr()}<small>one time, no subscription</small></div>
-    <ul><li>Options Island: 6 new stages on calls, puts and more</li><li>Both boss battles: The Market Bull and The Options Kraken</li><li>The Options Lab with profit and loss charts</li><li>Every level up to Market Master</li></ul>
+    <ul><li>4 more worlds: Options Island, Greek Peaks, Strategy City and Master\u2019s Summit (38 stages)</li><li>4 boss battles and the Grandmaster Exam</li><li>Real-style options trading in the Practice Market: option chain, Greeks, covered calls, cash-secured puts</li><li>The Options Lab and every level up to Market Master</li></ul>
     <div class="actions"><button class="btn sun" id="pw-buy">Unlock for ${priceStr()}</button><button class="btn ghost" id="pw-later">Not now</button></div>
     <p class="fine">Kids: ask a grown-up first. A grown-up will need to answer a question before buying.</p>`);
   $('#pw-buy').onclick = () => gate(doBuy); $('#pw-later').onclick = pwClose; }
@@ -1014,7 +1602,7 @@ function webBuyPreview() { pwShow(`<div class="eyebrow">Web preview</div><h2 id=
     <div class="actions" style="margin-top:14px"><button class="btn sun" id="pw-test">Pretend purchase (testing only)</button><button class="btn ghost" id="pw-x">Close</button></div>
     <p class="fine">The test button exists so you can try the full game while building it. It is removed from the store versions.</p>`);
   $('#pw-test').onclick = grantFull; $('#pw-x').onclick = pwClose; }
-function grantFull() { S.full = true; save(); pwClose(); confetti(); toast('Full game unlocked. Options Island is open!'); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); }
+function grantFull() { S.full = true; save(); pwClose(); confetti(); toast('Full game unlocked. Options Island and beyond are open!'); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); }
 $('#restore').onclick = async () => { let r; try { r = await Store.restore(); } catch (e) { r = false; }
   if (r === null) return toast('Restore works in the App Store and Google Play versions.'); if (r) grantFull(); else toast('No earlier purchase found on this account.'); };
 /* ================= global controls ================= */
