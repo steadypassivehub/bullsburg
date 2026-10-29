@@ -37,7 +37,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
   <label for="em">Email</label><input id="em" type="email" autocomplete="username" placeholder="you@yourschool.org">
   <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
   <div class="err" id="em-err" aria-live="polite"></div><button class="btn" id="em-go">Sign in</button>
-  <p class="muted" style="margin-top:16px">First time here? <button class="btn link" id="to-setup">Set up your account</button> with the setup code from Bullsburg.<br>Forgot your password? Email <a href="mailto:steadypassivehub@gmail.com">steadypassivehub@gmail.com</a>.</p>
+  <p class="muted" style="margin-top:16px">First time here? <button class="btn link" id="to-setup">Set up your account</button> with the setup code from Bullsburg.<br>Forgot your password? Email <a href="mailto:jordan.carlock@bullsburg.com">jordan.carlock@bullsburg.com</a>.</p>
 </section>
 
 <section class="card narrow" id="s-code" hidden>
@@ -52,7 +52,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
   <h2>Link your account to your school</h2><p>You're signed in as <b id="no-em"></b>, but this account isn't linked to a school yet. Enter the setup code from Bullsburg.</p>
   <label for="cd3">Setup code</label><input id="cd3" autocomplete="off" autocapitalize="characters" maxlength="12" style="font-size:20px;letter-spacing:4px;text-transform:uppercase">
   <div class="err" id="cd3-err" aria-live="polite"></div><div class="row"><button class="btn" id="cd3-go">Link account</button><button class="btn ghost" id="no-out">Sign out</button></div>
-  <p class="muted">Don't have a code? To set up your school or start a free pilot, email <a href="mailto:steadypassivehub@gmail.com">steadypassivehub@gmail.com</a>.</p>
+  <p class="muted">Don't have a code? To set up your school or start a free pilot, email <a href="mailto:jordan.carlock@bullsburg.com">jordan.carlock@bullsburg.com</a>.</p>
 </section>
 
 <section id="s-dash" hidden style="display:grid;gap:18px">
@@ -92,7 +92,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
   $('#pw').onkeydown = function (e) { if (e.key === 'Enter') $('#em-go').click(); };
   $('#to-setup').onclick = function () { show('#s-code'); $('#cd').focus(); };
   $('#cd-back').onclick = function () { show('#s-email'); };
-  function claim(code, errEl) { return C.rpc('claim_teacher', { p_code: code }, true).then(function (r) { if (r && r.ok) return start(); errEl.textContent = 'That setup code didn\u2019t work. It may already be used. Email steadypassivehub@gmail.com for a new one.'; show(errEl.id === 'cd3-err' ? '#s-no' : '#s-code'); }); }
+  function claim(code, errEl) { return C.rpc('claim_teacher', { p_code: code }, true).then(function (r) { if (r && r.ok) return start(); errEl.textContent = 'That setup code didn\u2019t work. It may already be used. Email jordan.carlock@bullsburg.com for a new one.'; show(errEl.id === 'cd3-err' ? '#s-no' : '#s-code'); }); }
   $('#cd-go').onclick = function () { var code = $('#cd').value.trim(), em = $('#em2').value.trim(), pw = $('#pw2').value, b = this, err = $('#cd-err');
     if (code.replace(/\W/g, '').length < 8) { err.textContent = 'Type the 8-character setup code.'; return; } if (!okEmail(em)) { err.textContent = 'Type your school email.'; return; } if (pw.length < 8) { err.textContent = 'Use at least 8 characters for your password.'; return; }
     b.disabled = true; b.textContent = 'Creating\u2026';
