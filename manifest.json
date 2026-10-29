@@ -1,10 +1,10 @@
 {
- "name": "Ticker Town",
- "short_name": "Ticker Town",
+ "name": "Bullsburg",
+ "short_name": "Bullsburg",
  "start_url": "./",
  "display": "standalone",
- "background_color": "#EAF0FA",
- "theme_color": "#2D5BE3",
+ "background_color": "#0A1F1A",
+ "theme_color": "#0A1F1A",
  "icons": [
   {
    "src": "icon-192.png",

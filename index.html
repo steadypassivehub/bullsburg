@@ -1,37 +1,29 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Ticker Town</title><meta name="description" content="Learn stocks and options with a game: levels, boss battles and pretend money.">
-<meta name="theme-color" content="#2D5BE3"><link rel="stylesheet" href="fonts.css"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Bullsburg</title><meta name="description" content="Learn stocks and options with a game: levels, boss battles and pretend money.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://nvjlgiohvctocgbpegvi.supabase.co; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#0A1F1A"><link rel="stylesheet" href="fonts.css"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.TT_BUILD='web';window.TT_STORE_LINKS={};</script></head><body>
+<script>window.TT_BUILD='web';window.TT_STORE_LINKS={};window.TT_ADS={};window.TT_SB={"url": "https://nvjlgiohvctocgbpegvi.supabase.co", "key": "sb_publishable_uY-81hCWhNXbnreZKwT7Tg_USO1Wljj"};window.TT_SITE="https://steadypassivehub.github.io/bullsburg";</script></head><body>
 
 
 <style>
 /* Layout: a game map of stages (two worlds), with sticky HUD + tab rail; each lab is a workbench of instrument + readout. */
-:root {
-  --bg: #EAF0FA; --surface: #FFFFFF; --surface2: #F3F6FC; --ink: #14223D; --muted: #56678A; --line: #D3DCEB; --grid: #E2E8F2;
-  --accent: #2D5BE3; --accent-ink: #FFFFFF; --accent-soft: rgba(45,91,227,.12);
-  --isle: #0E8C86; --isle-soft: rgba(14,140,134,.13);
-  --sun: #FFC23A; --sun-ink: #3A2700; --ma: #B4730E;
-  --up: #0E9A60; --down: #D93C34; --up-soft: rgba(14,154,96,.15); --down-soft: rgba(217,60,52,.13);
-  --lock: #9AA7BF;
-  --w3: #7547D6; --w3-soft: rgba(117,71,214,.12); --w4: #D2611C; --w4-soft: rgba(210,97,28,.12); --w5: #A07800; --w5-soft: rgba(201,153,0,.15);
-  --shadow: 0 1px 0 rgba(20,34,61,.06), 0 10px 26px -14px rgba(20,34,61,.28);
-  --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+:root, :root[data-theme="dark"], :root[data-theme="light"] {
+  --bg: #0A1F1A; --surface: #112C25; --surface2: #163A31; --ink: #F4EFE2; --muted: #A9BCB2; --line: rgba(217,180,106,.22); --grid: rgba(217,180,106,.10);
+  --accent: #E3C179; --accent-ink: #1B1404; --accent-soft: rgba(227,193,121,.14);
+  --isle: #4FD6C4; --isle-soft: rgba(79,214,196,.14);
+  --sun: #F2D488; --sun-ink: #1B1404; --ma: #E3C179;
+  --up: #43DB9B; --down: #FF7A70; --up-soft: rgba(67,219,155,.15); --down-soft: rgba(255,122,112,.15);
+  --lock: #5E7A70;
+  --w1: #8FB2FF; --w3: #C3A6FF; --w3-soft: rgba(195,166,255,.14); --w4: #F4AE78; --w4-soft: rgba(244,174,120,.14); --w5: #F2D488; --w5-soft: rgba(242,212,136,.15);
+  --gold: linear-gradient(135deg, #F8E7B0 0%, #E3C179 38%, #B8893B 70%, #F1D892 100%);
+  --shadow: 0 1px 0 rgba(255,236,190,.06) inset, 0 18px 40px -22px rgba(0,0,0,.75), 0 2px 6px -2px rgba(0,0,0,.4);
+  --f-display: "Fraunces", Georgia, "Times New Roman", serif;
   --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
-  --r: 14px;
+  --r: 16px; color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0C1424; --surface: #142036; --surface2: #1A2842; --ink: #E8EEF9; --muted: #9DAAC5; --line: #2A3A59; --grid: #213050;
-  --accent: #7F9EFF; --accent-ink: #0C1424; --accent-soft: rgba(127,158,255,.16); --isle: #3FD0C6; --isle-soft: rgba(63,208,198,.15);
-  --sun: #FFD15C; --sun-ink: #2A1C00; --ma: #FFD15C; --up: #3AD49A; --down: #FF6F67; --up-soft: rgba(58,212,154,.17); --down-soft: rgba(255,111,103,.16);
-  --w3: #B49BFF; --w3-soft: rgba(180,155,255,.15); --w4: #FF9C5B; --w4-soft: rgba(255,156,91,.14); --w5: #FFD15C; --w5-soft: rgba(255,209,92,.14); --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; } }
-:root[data-theme="dark"] {
-  --bg: #0C1424; --surface: #142036; --surface2: #1A2842; --ink: #E8EEF9; --muted: #9DAAC5; --line: #2A3A59; --grid: #213050;
-  --accent: #7F9EFF; --accent-ink: #0C1424; --accent-soft: rgba(127,158,255,.16); --isle: #3FD0C6; --isle-soft: rgba(63,208,198,.15);
-  --sun: #FFD15C; --sun-ink: #2A1C00; --ma: #FFD15C; --up: #3AD49A; --down: #FF6F67; --up-soft: rgba(58,212,154,.17); --down-soft: rgba(255,111,103,.16);
-  --w3: #B49BFF; --w3-soft: rgba(180,155,255,.15); --w4: #FF9C5B; --w4-soft: rgba(255,156,91,.14); --w5: #FFD15C; --w5-soft: rgba(255,209,92,.14); --lock: #4F607F; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6); color-scheme: dark; }
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
@@ -173,6 +165,23 @@ canvas { display: block; width: 100%; touch-action: pan-y; }
 .why { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-size: 15.5px; }
 .why.ok { background: var(--up-soft); } .why.no { background: var(--down-soft); }
 .why b { display: block; font-family: var(--f-display); font-size: 18px; }
+.sh-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin: 16px 0 6px; }
+.sh-bar .modes button { padding: 7px 14px; }
+.sh-stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); margin-top: 12px; padding: 0 16px; box-shadow: var(--shadow); }
+.sh-stage summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; }
+.sh-stage summary::-webkit-details-marker { display: none; }
+.sh-stage summary b { display: block; font-family: var(--f-display); font-size: 19px; margin-top: 2px; }
+.sh-stage summary::after { content: '▾'; color: var(--muted); transition: transform .2s; }
+.sh-stage[open] summary::after { transform: rotate(180deg); }
+.sh-count { font-size: 13px; color: var(--muted); white-space: nowrap; margin-left: auto; } .sh-count em { color: var(--sun); font-style: normal; font-weight: 700; }
+.sh-list { display: grid; gap: 10px; padding-bottom: 6px; }
+.sh-q { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--surface2); }
+.sh-q.miss { border-color: var(--sun); }
+.sh-q .q { font-weight: 700; font-size: 16px; line-height: 1.35; }
+.sh-q .a { margin-top: 8px; display: flex; gap: 8px; color: var(--up); font-weight: 700; } .sh-q .a span { flex: none; }
+.sh-q .w { margin-top: 6px; font-size: 14.5px; color: var(--muted); }
+.sh-q .tag { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: var(--down-soft); }
+.sh-stage:last-child { margin-bottom: 8px; }
 .qprog { height: 8px; background: var(--surface2); border-radius: 99px; border: 1px solid var(--line); overflow: hidden; margin-top: 10px; }
 .qprog i { display: block; height: 100%; background: var(--accent); transition: width .35s; }
 .win { text-align: center; padding: 26px 16px; }
@@ -275,10 +284,18 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .levelup .lv { width: 96px; height: 96px; margin: -70px auto 6px; border-radius: 50%; background: var(--sun); color: var(--sun-ink); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 46px; border: 6px solid var(--surface); }
 .levelup h2 { font-size: 34px; } .levelup p { color: var(--muted); margin: 6px 0 16px; }
 @keyframes zoom { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.pw .box { text-align: left; max-width: 430px; }
+.pw .box { text-align: left; max-width: 430px; max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
 .pw .box h2 { font-size: 30px; }
 .pw .price { font-family: var(--f-display); font-weight: 800; font-size: 40px; color: var(--ink); line-height: 1; }
 .pw .price small { font-size: 15px; color: var(--muted); font-weight: 600; margin-left: 6px; }
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.plan { text-align: left; border: 1.5px solid var(--line); background: var(--surface2); color: var(--ink); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.plan.on { border-color: var(--sun); box-shadow: 0 0 0 3px rgba(242,212,136,.18); }
+.plan .pl-name { font-weight: 700; font-size: 14px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.plan .pl-name i { font-style: normal; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: var(--sun); color: var(--sun-ink); }
+.plan .pl-price { font-family: var(--f-display); font-size: 26px; font-weight: 800; } .plan .pl-price small { font-size: 14px; color: var(--muted); font-weight: 600; }
+.plan .pl-note { font-size: 12.5px; color: var(--muted); }
+.sub-terms { font-size: 11.5px; line-height: 1.45; } .sub-terms a { color: inherit; text-decoration: underline; }
 .pw ul { margin: 12px 0 16px; padding-left: 0; list-style: none; display: grid; gap: 7px; }
 .pw li { display: flex; gap: 9px; align-items: start; font-size: 15.5px; }
 .pw li::before { content: "\2713"; flex: none; width: 22px; height: 22px; border-radius: 6px; background: var(--up-soft); color: var(--up); display: grid; place-items: center; font-weight: 800; font-size: 13px; }
@@ -325,20 +342,107 @@ td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !im
 .grad { text-align: left; } .grad h3 { text-align: center; } .grad ul { margin: 12px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 15.5px; }
 .cert { border: 3px double var(--w5); border-radius: 18px; padding: 22px 18px; text-align: center; background: var(--w5-soft); margin-bottom: 16px; }
 .cert .eyebrow { color: var(--w5); } .cert h3 { font-size: 30px; margin-top: 6px; } .cert p { color: var(--muted); }
+.coinbox { display: grid; gap: 10px; margin-top: 14px; }
+.coin-row { display: flex; align-items: center; gap: 12px; border: 2px solid var(--line); border-radius: 16px; padding: 10px 12px; background: var(--surface); }
+.coin-row .ci { font-size: 26px; line-height: 1; } .coin-row .ct { flex: 1; min-width: 0; } .coin-row .ct b { font-family: var(--f-display); font-size: 19px; display: block; } .coin-row .ct small { color: var(--muted); font-size: 13.5px; }
+.coin-row.best { border-color: var(--sun); background: color-mix(in srgb, var(--sun) 12%, var(--surface)); } .coin-row .tagb { font-size: 11px; font-weight: 800; background: var(--sun); color: #2b1d00; border-radius: 99px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+.coin-row .btn { white-space: nowrap; } .coin-sec { font-family: var(--f-display); font-weight: 800; font-size: 15px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .04em; }
+#m-addcash { margin-left: auto; }
+
+/* ============ LUXE: banker's-green vault, gold leaf, banknote engraving ============ */
+body { background:
+   radial-gradient(1200px 600px at 50% -10%, rgba(227,193,121,.10), transparent 60%),
+   radial-gradient(900px 700px at 100% 110%, rgba(79,214,196,.06), transparent 60%), var(--bg); background-attachment: fixed; }
+body::before { background: #0A1F1A; }
+::selection { background: rgba(227,193,121,.35); }
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.015em; font-optical-sizing: auto; }
+.map-head h1, .lab-head h1 { font-weight: 800; letter-spacing: -.025em; background: var(--gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.eyebrow { font-family: var(--f-body); letter-spacing: .02em; text-transform: none; font-size: 13px; color: var(--accent); font-weight: 700; }
+/* HUD */
+.hud { background: rgba(10,31,26,.82); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); border-bottom: 1px solid var(--line); box-shadow: 0 10px 30px -20px rgba(0,0,0,.9); }
+.logo b { font-family: var(--f-display); font-weight: 800; letter-spacing: -.02em; background: var(--gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lvl-badge { position: relative; background: radial-gradient(circle at 35% 30%, #FFF4CF, #E3C179 45%, #9C7230 100%); color: #2A1D05; font-family: var(--f-display);
+  box-shadow: 0 0 0 2px #7A5620, 0 0 0 4px rgba(227,193,121,.35), 0 6px 14px -4px rgba(0,0,0,.7), inset 0 -3px 6px rgba(80,50,10,.45), inset 0 2px 3px rgba(255,255,255,.6); }
+.lvl-badge::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border: 1px dashed rgba(90,60,15,.45); pointer-events: none; }
+.xpbar { background: rgba(0,0,0,.35); border-color: var(--line); height: 9px; }
+.xpbar i { background: linear-gradient(90deg, #B8893B, #F2D488 60%, #FFF3C8); box-shadow: 0 0 12px rgba(242,212,136,.45); }
+.starcount span { color: #F2D488; text-shadow: 0 0 10px rgba(242,212,136,.5); }
+.modes { background: rgba(0,0,0,.25); border-color: var(--line); }
+.modes button[aria-pressed="true"] { background: var(--gold); color: #1B1404; }
+.tab { background: transparent; border-color: var(--line); color: var(--ink); font-weight: 700; }
+.tab:hover { border-color: rgba(227,193,121,.5); }
+.tab[aria-selected="true"] { background: var(--gold); border-color: transparent; color: #1B1404; box-shadow: 0 6px 16px -8px rgba(227,193,121,.7); }
+.tab.locked { color: var(--lock); }
+.tape { background: #071712; border-bottom: 1px solid var(--line); }
+.tape-in { color: #D9CFB8; }
+/* surfaces */
+.card { background: linear-gradient(180deg, rgba(255,236,190,.035), transparent 40%), var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.btn { border-radius: 12px; background: var(--gold); color: #1B1404; font-weight: 700; letter-spacing: .005em;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(90,60,15,.35), 0 8px 18px -10px rgba(227,193,121,.65); }
+.btn:hover { filter: brightness(1.05); }
+.btn:active { transform: translateY(1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(90,60,15,.35); }
+.btn.ghost { background: rgba(255,236,190,.04); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+.btn.ghost:hover { border-color: rgba(227,193,121,.55); background: rgba(227,193,121,.08); filter: none; }
+.btn.sun { background: linear-gradient(135deg, #FFF3C8, #F2D488 45%, #D3A548); color: #1B1404; }
+.btn.up { background: linear-gradient(180deg, #4FE6A6, #1FA670); color: #04200F; box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 8px 18px -10px rgba(67,219,155,.7); }
+.btn.down { background: linear-gradient(180deg, #FF8E84, #D9443A); color: #2A0503; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 8px 18px -10px rgba(255,122,112,.7); }
+.seg { background: rgba(0,0,0,.25); border-color: var(--line); }
+.seg button[aria-pressed="true"] { background: var(--surface2); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(227,193,121,.45); }
+input, select, textarea { background: rgba(0,0,0,.25) !important; color: var(--ink) !important; border-color: var(--line) !important; }
+input:focus, select:focus { border-color: var(--accent) !important; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline-color: #F2D488; }
+/* the map: each world is an engraved certificate */
+.world { border-radius: 22px; border: 1px solid var(--line); box-shadow: var(--shadow); isolation: isolate; }
+.world::before { content: ""; position: absolute; inset: 0 0 auto; height: 150px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22240%22%20height%3D%22120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23D9B46A%22%20stroke-width%3D%22.6%22%20opacity%3D%22.55%22%3E%3Cpath%20d%3D%22M0%2C60.0%20L4%2C67.9%20L8%2C75.1%20L12%2C81.2%20L16%2C85.8%20L20%2C88.5%20L24%2C89.2%20L28%2C88.1%20L32%2C85.3%20L36%2C81.2%20L40%2C76.5%20L44%2C71.5%20L48%2C66.9%20L52%2C63.2%20L56%2C60.8%20L60%2C60.0%20L64%2C60.8%20L68%2C63.2%20L72%2C66.9%20L76%2C71.5%20L80%2C76.5%20L84%2C81.2%20L88%2C85.3%20L92%2C88.1%20L96%2C89.2%20L100%2C88.5%20L104%2C85.8%20L108%2C81.2%20L112%2C75.1%20L116%2C67.9%20L120%2C60.0%20L124%2C52.1%20L128%2C44.9%20L132%2C38.8%20L136%2C34.2%20L140%2C31.5%20L144%2C30.8%20L148%2C31.9%20L152%2C34.7%20L156%2C38.8%20L160%2C43.5%20L164%2C48.5%20L168%2C53.1%20L172%2C56.8%20L176%2C59.2%20L180%2C60.0%20L184%2C59.2%20L188%2C56.8%20L192%2C53.1%20L196%2C48.5%20L200%2C43.5%20L204%2C38.8%20L208%2C34.7%20L212%2C31.9%20L216%2C30.8%20L220%2C31.5%20L224%2C34.2%20L228%2C38.8%20L232%2C44.9%20L236%2C52.1%20L240%2C60.0%22/%3E%3Cpath%20d%3D%22M0%2C72.8%20L4%2C79.4%20L8%2C84.5%20L12%2C87.8%20L16%2C89.2%20L20%2C88.7%20L24%2C86.4%20L28%2C82.7%20L32%2C78.1%20L36%2C73.1%20L40%2C68.4%20L44%2C64.3%20L48%2C61.5%20L52%2C60.1%20L56%2C60.4%20L60%2C62.3%20L64%2C65.6%20L68%2C69.9%20L72%2C74.8%20L76%2C79.7%20L80%2C84.1%20L84%2C87.3%20L88%2C89.1%20L92%2C89.0%20L96%2C86.9%20L100%2C83.0%20L104%2C77.3%20L108%2C70.4%20L112%2C62.6%20L116%2C54.7%20L120%2C47.2%20L124%2C40.6%20L128%2C35.5%20L132%2C32.2%20L136%2C30.8%20L140%2C31.3%20L144%2C33.6%20L148%2C37.3%20L152%2C41.9%20L156%2C46.9%20L160%2C51.6%20L164%2C55.7%20L168%2C58.5%20L172%2C59.9%20L176%2C59.6%20L180%2C57.7%20L184%2C54.4%20L188%2C50.1%20L192%2C45.2%20L196%2C40.3%20L200%2C35.9%20L204%2C32.7%20L208%2C30.9%20L212%2C31.0%20L216%2C33.1%20L220%2C37.0%20L224%2C42.7%20L228%2C49.6%20L232%2C57.4%20L236%2C65.3%20L240%2C72.8%22/%3E%3Cpath%20d%3D%22M0%2C83.0%20L4%2C86.9%20L8%2C89.0%20L12%2C89.1%20L16%2C87.3%20L20%2C84.1%20L24%2C79.7%20L28%2C74.8%20L32%2C69.9%20L36%2C65.6%20L40%2C62.3%20L44%2C60.4%20L48%2C60.1%20L52%2C61.5%20L56%2C64.3%20L60%2C68.4%20L64%2C73.1%20L68%2C78.1%20L72%2C82.7%20L76%2C86.4%20L80%2C88.7%20L84%2C89.2%20L88%2C87.8%20L92%2C84.5%20L96%2C79.4%20L100%2C72.8%20L104%2C65.3%20L108%2C57.4%20L112%2C49.6%20L116%2C42.7%20L120%2C37.0%20L124%2C33.1%20L128%2C31.0%20L132%2C30.9%20L136%2C32.7%20L140%2C35.9%20L144%2C40.3%20L148%2C45.2%20L152%2C50.1%20L156%2C54.4%20L160%2C57.7%20L164%2C59.6%20L168%2C59.9%20L172%2C58.5%20L176%2C55.7%20L180%2C51.6%20L184%2C46.9%20L188%2C41.9%20L192%2C37.3%20L196%2C33.6%20L200%2C31.3%20L204%2C30.8%20L208%2C32.2%20L212%2C35.5%20L216%2C40.6%20L220%2C47.2%20L224%2C54.7%20L228%2C62.6%20L232%2C70.4%20L236%2C77.3%20L240%2C83.0%22/%3E%3Cpath%20d%3D%22M0%2C88.5%20L4%2C89.2%20L8%2C88.1%20L12%2C85.3%20L16%2C81.2%20L20%2C76.5%20L24%2C71.5%20L28%2C66.9%20L32%2C63.2%20L36%2C60.8%20L40%2C60.0%20L44%2C60.8%20L48%2C63.2%20L52%2C66.9%20L56%2C71.5%20L60%2C76.5%20L64%2C81.2%20L68%2C85.3%20L72%2C88.1%20L76%2C89.2%20L80%2C88.5%20L84%2C85.8%20L88%2C81.2%20L92%2C75.1%20L96%2C67.9%20L100%2C60.0%20L104%2C52.1%20L108%2C44.9%20L112%2C38.8%20L116%2C34.2%20L120%2C31.5%20L124%2C30.8%20L128%2C31.9%20L132%2C34.7%20L136%2C38.8%20L140%2C43.5%20L144%2C48.5%20L148%2C53.1%20L152%2C56.8%20L156%2C59.2%20L160%2C60.0%20L164%2C59.2%20L168%2C56.8%20L172%2C53.1%20L176%2C48.5%20L180%2C43.5%20L184%2C38.8%20L188%2C34.7%20L192%2C31.9%20L196%2C30.8%20L200%2C31.5%20L204%2C34.2%20L208%2C38.8%20L212%2C44.9%20L216%2C52.1%20L220%2C60.0%20L224%2C67.9%20L228%2C75.1%20L232%2C81.2%20L236%2C85.8%20L240%2C88.5%22/%3E%3Cpath%20d%3D%22M0%2C88.7%20L4%2C86.4%20L8%2C82.7%20L12%2C78.1%20L16%2C73.1%20L20%2C68.4%20L24%2C64.3%20L28%2C61.5%20L32%2C60.1%20L36%2C60.4%20L40%2C62.3%20L44%2C65.6%20L48%2C69.9%20L52%2C74.8%20L56%2C79.7%20L60%2C84.1%20L64%2C87.3%20L68%2C89.1%20L72%2C89.0%20L76%2C86.9%20L80%2C83.0%20L84%2C77.3%20L88%2C70.4%20L92%2C62.6%20L96%2C54.7%20L100%2C47.2%20L104%2C40.6%20L108%2C35.5%20L112%2C32.2%20L116%2C30.8%20L120%2C31.3%20L124%2C33.6%20L128%2C37.3%20L132%2C41.9%20L136%2C46.9%20L140%2C51.6%20L144%2C55.7%20L148%2C58.5%20L152%2C59.9%20L156%2C59.6%20L160%2C57.7%20L164%2C54.4%20L168%2C50.1%20L172%2C45.2%20L176%2C40.3%20L180%2C35.9%20L184%2C32.7%20L188%2C30.9%20L192%2C31.0%20L196%2C33.1%20L200%2C37.0%20L204%2C42.7%20L208%2C49.6%20L212%2C57.4%20L216%2C65.3%20L220%2C72.8%20L224%2C79.4%20L228%2C84.5%20L232%2C87.8%20L236%2C89.2%20L240%2C88.7%22/%3E%3Cpath%20d%3D%22M0%2C84.1%20L4%2C79.7%20L8%2C74.8%20L12%2C69.9%20L16%2C65.6%20L20%2C62.3%20L24%2C60.4%20L28%2C60.1%20L32%2C61.5%20L36%2C64.3%20L40%2C68.4%20L44%2C73.1%20L48%2C78.1%20L52%2C82.7%20L56%2C86.4%20L60%2C88.7%20L64%2C89.2%20L68%2C87.8%20L72%2C84.5%20L76%2C79.4%20L80%2C72.8%20L84%2C65.3%20L88%2C57.4%20L92%2C49.6%20L96%2C42.7%20L100%2C37.0%20L104%2C33.1%20L108%2C31.0%20L112%2C30.9%20L116%2C32.7%20L120%2C35.9%20L124%2C40.3%20L128%2C45.2%20L132%2C50.1%20L136%2C54.4%20L140%2C57.7%20L144%2C59.6%20L148%2C59.9%20L152%2C58.5%20L156%2C55.7%20L160%2C51.6%20L164%2C46.9%20L168%2C41.9%20L172%2C37.3%20L176%2C33.6%20L180%2C31.3%20L184%2C30.8%20L188%2C32.2%20L192%2C35.5%20L196%2C40.6%20L200%2C47.2%20L204%2C54.7%20L208%2C62.6%20L212%2C70.4%20L216%2C77.3%20L220%2C83.0%20L224%2C86.9%20L228%2C89.0%20L232%2C89.1%20L236%2C87.3%20L240%2C84.1%22/%3E%3Cpath%20d%3D%22M0%2C76.5%20L4%2C71.5%20L8%2C66.9%20L12%2C63.2%20L16%2C60.8%20L20%2C60.0%20L24%2C60.8%20L28%2C63.2%20L32%2C66.9%20L36%2C71.5%20L40%2C76.5%20L44%2C81.2%20L48%2C85.3%20L52%2C88.1%20L56%2C89.2%20L60%2C88.5%20L64%2C85.8%20L68%2C81.2%20L72%2C75.1%20L76%2C67.9%20L80%2C60.0%20L84%2C52.1%20L88%2C44.9%20L92%2C38.8%20L96%2C34.2%20L100%2C31.5%20L104%2C30.8%20L108%2C31.9%20L112%2C34.7%20L116%2C38.8%20L120%2C43.5%20L124%2C48.5%20L128%2C53.1%20L132%2C56.8%20L136%2C59.2%20L140%2C60.0%20L144%2C59.2%20L148%2C56.8%20L152%2C53.1%20L156%2C48.5%20L160%2C43.5%20L164%2C38.8%20L168%2C34.7%20L172%2C31.9%20L176%2C30.8%20L180%2C31.5%20L184%2C34.2%20L188%2C38.8%20L192%2C44.9%20L196%2C52.1%20L200%2C60.0%20L204%2C67.9%20L208%2C75.1%20L212%2C81.2%20L216%2C85.8%20L220%2C88.5%20L224%2C89.2%20L228%2C88.1%20L232%2C85.3%20L236%2C81.2%20L240%2C76.5%22/%3E%3Cpath%20d%3D%22M0%2C68.4%20L4%2C64.3%20L8%2C61.5%20L12%2C60.1%20L16%2C60.4%20L20%2C62.3%20L24%2C65.6%20L28%2C69.9%20L32%2C74.8%20L36%2C79.7%20L40%2C84.1%20L44%2C87.3%20L48%2C89.1%20L52%2C89.0%20L56%2C86.9%20L60%2C83.0%20L64%2C77.3%20L68%2C70.4%20L72%2C62.6%20L76%2C54.7%20L80%2C47.2%20L84%2C40.6%20L88%2C35.5%20L92%2C32.2%20L96%2C30.8%20L100%2C31.3%20L104%2C33.6%20L108%2C37.3%20L112%2C41.9%20L116%2C46.9%20L120%2C51.6%20L124%2C55.7%20L128%2C58.5%20L132%2C59.9%20L136%2C59.6%20L140%2C57.7%20L144%2C54.4%20L148%2C50.1%20L152%2C45.2%20L156%2C40.3%20L160%2C35.9%20L164%2C32.7%20L168%2C30.9%20L172%2C31.0%20L176%2C33.1%20L180%2C37.0%20L184%2C42.7%20L188%2C49.6%20L192%2C57.4%20L196%2C65.3%20L200%2C72.8%20L204%2C79.4%20L208%2C84.5%20L212%2C87.8%20L216%2C89.2%20L220%2C88.7%20L224%2C86.4%20L228%2C82.7%20L232%2C78.1%20L236%2C73.1%20L240%2C68.4%22/%3E%3Cpath%20d%3D%22M0%2C62.3%20L4%2C60.4%20L8%2C60.1%20L12%2C61.5%20L16%2C64.3%20L20%2C68.4%20L24%2C73.1%20L28%2C78.1%20L32%2C82.7%20L36%2C86.4%20L40%2C88.7%20L44%2C89.2%20L48%2C87.8%20L52%2C84.5%20L56%2C79.4%20L60%2C72.8%20L64%2C65.3%20L68%2C57.4%20L72%2C49.6%20L76%2C42.7%20L80%2C37.0%20L84%2C33.1%20L88%2C31.0%20L92%2C30.9%20L96%2C32.7%20L100%2C35.9%20L104%2C40.3%20L108%2C45.2%20L112%2C50.1%20L116%2C54.4%20L120%2C57.7%20L124%2C59.6%20L128%2C59.9%20L132%2C58.5%20L136%2C55.7%20L140%2C51.6%20L144%2C46.9%20L148%2C41.9%20L152%2C37.3%20L156%2C33.6%20L160%2C31.3%20L164%2C30.8%20L168%2C32.2%20L172%2C35.5%20L176%2C40.6%20L180%2C47.2%20L184%2C54.7%20L188%2C62.6%20L192%2C70.4%20L196%2C77.3%20L200%2C83.0%20L204%2C86.9%20L208%2C89.0%20L212%2C89.1%20L216%2C87.3%20L220%2C84.1%20L224%2C79.7%20L228%2C74.8%20L232%2C69.9%20L236%2C65.6%20L240%2C62.3%22/%3E%3C/g%3E%3C/svg%3E") repeat-x top left / 240px 120px; opacity: .22; z-index: -1;
+  -webkit-mask: linear-gradient(180deg, #000 30%, transparent); mask: linear-gradient(180deg, #000 30%, transparent); }
+.world::after { content: ""; position: absolute; inset: 7px; border-radius: 16px; border: 1px solid rgba(227,193,121,.14); pointer-events: none; z-index: -1; }
+.world.w1 { --wc: var(--w1); } .world.w2 { --wc: var(--isle); } .world.w3 { --wc: var(--w3); } .world.w4 { --wc: var(--w4); } .world.w5 { --wc: var(--w5); }
+.world.w1, .world.w2, .world.w3, .world.w4, .world.w5 { background: radial-gradient(700px 260px at 0% 0%, color-mix(in srgb, var(--wc) 16%, transparent), transparent 70%), linear-gradient(180deg, rgba(255,236,190,.03), transparent 50%), var(--surface); }
+.world .world-top h2, .world.w1 .world-top h2, .world.w2 .world-top h2, .world.w3 .world-top h2, .world.w4 .world-top h2, .world.w5 .world-top h2 { color: var(--wc); font-weight: 800; letter-spacing: -.02em; }
+.world .node .disc, .w1 .node .disc, .w2 .node .disc, .w3 .node .disc, .w4 .node .disc, .w5 .node .disc { font-family: var(--f-display); background: radial-gradient(circle at 35% 30%, #1E4A3F, #0F2A23); color: var(--wc); border: 2px solid var(--wc);
+  box-shadow: 0 0 0 4px rgba(0,0,0,.25), 0 0 0 5px color-mix(in srgb, var(--wc) 35%, transparent), 0 10px 18px -8px rgba(0,0,0,.8); }
+.world .node.done .disc, .w1 .node.done .disc, .w2 .node.done .disc, .w3 .node.done .disc, .w4 .node.done .disc, .w5 .node.done .disc { background: radial-gradient(circle at 35% 28%, #fff 0%, color-mix(in srgb, var(--wc) 85%, #fff) 22%, var(--wc) 55%, color-mix(in srgb, var(--wc) 55%, #000) 100%); color: #0A1F1A; border-color: color-mix(in srgb, var(--wc) 70%, #fff); }
+.world-lock { background: rgba(10,31,26,.72); backdrop-filter: blur(4px); }
+.world-lock div { color: var(--ink); }
+/* modal */
+.pw .box, #pw-box { background: linear-gradient(180deg, rgba(255,236,190,.05), transparent 35%), var(--surface) !important; border: 1px solid rgba(227,193,121,.35) !important; box-shadow: 0 30px 80px -20px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,236,190,.08) !important; }
+.pw .price { background: var(--gold); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: var(--f-display); }
+.coin-row { background: rgba(0,0,0,.18); border: 1px solid var(--line); }
+.coin-row.best { border-color: rgba(242,212,136,.7); background: linear-gradient(90deg, rgba(242,212,136,.12), rgba(0,0,0,.18)); box-shadow: 0 0 0 1px rgba(242,212,136,.25), 0 10px 24px -14px rgba(242,212,136,.6); }
+.coin-row .tagb { background: var(--gold); color: #1B1404; }
+.coin-sec { font-family: var(--f-display); text-transform: none; letter-spacing: 0; color: var(--accent); font-size: 16px; }
+@media (prefers-reduced-motion: reduce) { .tape-in, .node.next .disc { animation: none !important; } }
+.streak { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: rgba(0,0,0,.22); color: var(--ink); border-radius: 99px; padding: 5px 11px 5px 9px; font-family: var(--f-display); font-weight: 800; font-size: 17px; }
+.streak .fl { font-size: 17px; filter: drop-shadow(0 0 6px rgba(255,150,60,.6)); } .streak.cold .fl { filter: grayscale(1) opacity(.55); } .streak.cold { color: var(--muted); }
+.streak:hover { border-color: rgba(227,193,121,.55); }
+.daily { display: grid; gap: 12px; }
+.daily .goal { display: flex; align-items: center; gap: 12px; } .daily .goal b { font-family: var(--f-display); font-size: 18px; display: block; }
+.ring { --p: 0; width: 54px; height: 54px; border-radius: 50%; flex: none; display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 20px;
+  background: radial-gradient(closest-side, var(--surface) 76%, transparent 78%), conic-gradient(#F2D488 calc(var(--p) * 1%), rgba(255,236,190,.1) 0); }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; font-size: 12px; color: var(--muted); }
+.week i { display: grid; place-items: center; height: 30px; border-radius: 10px; border: 1px solid var(--line); font-style: normal; font-size: 15px; margin-top: 4px; }
+.week i.on { background: var(--gold); border-color: transparent; color: #1B1404; } .week i.fz { background: rgba(143,178,255,.18); border-color: rgba(143,178,255,.5); }
+.dq-opt { display: block; width: 100%; text-align: left; margin-top: 8px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(0,0,0,.18); color: var(--ink); font-weight: 700; }
+.dq-opt.ok { border-color: var(--up); background: var(--up-soft); } .dq-opt.no { border-color: var(--down); background: var(--down-soft); }
+.rep { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.rep div { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: rgba(0,0,0,.18); } .rep span { display: block; color: var(--muted); font-size: 13px; } .rep b { font-family: var(--f-display); font-size: 20px; }
+.toast { background: #0F2A23; color: var(--ink); border: 1px solid rgba(227,193,121,.45); box-shadow: 0 16px 40px -12px rgba(0,0,0,.9); }
+.coin-row .ct b { font-size: 17px; }
 </style>
 
 <header class="hud">
   <div class="wrap">
     <div class="hud-row">
-      <a class="logo" href="#map" data-go="map" aria-label="Ticker Town home">
+      <a class="logo" href="#map" data-go="map" aria-label="Bullsburg home">
         <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="4" y="12" width="7" height="13" rx="2" fill="var(--down)"/><line x1="7.5" y1="7" x2="7.5" y2="29" stroke="var(--down)" stroke-width="2"/><rect x="14" y="8" width="7" height="14" rx="2" fill="var(--up)"/><line x1="17.5" y1="4" x2="17.5" y2="26" stroke="var(--up)" stroke-width="2"/><rect x="24" y="5" width="7" height="12" rx="2" fill="var(--up)"/><line x1="27.5" y1="2" x2="27.5" y2="21" stroke="var(--up)" stroke-width="2"/></svg>
-        <b>Ticker Town</b>
+        <b>Bullsburg</b>
       </a>
       <div class="modes" role="group" aria-label="How to explain things">
-        <button id="m-kid" data-mode="kid">Like I'm 10</button>
+        <button id="m-kid" data-mode="kid">Kids</button>
         <button id="m-adult" data-mode="adult">Beginner</button>
       </div>
       <div class="player">
+        <button class="streak cold" id="h-streak" aria-label="Daily streak and goals"><span class="fl" aria-hidden="true">🔥</span><b id="h-sd">0</b></button>
         <div class="starcount" title="Stars earned"><span>★</span><b id="h-stars">0</b></div>
         <div class="lvl-badge" id="h-lvl" aria-label="Level">1</div>
         <div class="xpbox"><div class="rank" id="h-rank">Piggy Bank Rookie</div><div class="xpbar"><i id="h-bar"></i></div><div class="xpnum mono" id="h-xp">0 / 100 XP</div></div>
@@ -362,11 +466,12 @@ td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !im
       <div class="map-head">
         <div><div class="eyebrow">Your adventure</div><h1>Learn the market, one stage at a time</h1>
         <p>Clear each stage to earn XP and stars. Beat the boss at the end of Stock Street to sail to Options Island. Everything here uses pretend money.</p></div>
-        <div class="row"><button class="btn ghost" id="unlockbtn">Unlock full game</button><button class="btn sun" id="continue">Play next stage</button></div>
+        <div class="row"><button class="btn ghost" id="studybtn">📚 Study Hall</button><button class="btn ghost" id="unlockbtn">Unlock full game</button><button class="btn sun" id="continue">Play next stage</button></div>
       </div>
       <div class="map-grid">
         <div id="worlds"></div>
         <aside class="side">
+          <div class="card" id="today-card"></div>
           <div class="card"><h3>Missions</h3><div id="missions"></div></div>
           <div class="card ranks"><h3>Player levels</h3><div id="ranks"></div></div>
         </aside>
@@ -423,12 +528,13 @@ td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !im
 
   <!-- MARKET -->
   <section class="view" id="v-market" hidden>
-    <div class="lab-head"><div><div class="eyebrow">Lab 2</div><h1>Practice Market</h1><p>$10,000 of pretend money in a simulated market: real-style candles, volume, earnings, dividends, order types and, once you reach Options Island, a full option chain. Nothing here is real.</p></div></div>
+    <div class="lab-head"><div><div class="eyebrow">Lab 2</div><h1>Practice Market</h1><p>Start with $10,000 of pretend money (add more with free daily coins) in a simulated market: real-style candles, volume, earnings, dividends, order types and, once you reach Options Island, a full option chain. Nothing here is real.</p></div></div>
     <div class="mkt-bar">
       <span class="daychip"><span id="m-day">Mon</span><small id="m-dayn" class="mono"></small></span>
       <button class="btn" id="m-next">Next day</button>
       <button class="btn ghost" id="m-skip">Skip 5 days</button>
       <button class="btn ghost" id="m-reset">Start over</button>
+      <button class="btn sun" id="m-addcash">+ Add cash</button>
     </div>
     <div class="mkt-grid">
       <div class="stocklist" id="m-list"></div>
@@ -521,8 +627,9 @@ td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !im
 
 <footer>
   <div class="wrap row">
-    <p style="max-width:70ch">Ticker Town is for learning only. All companies, prices and news are pretend. Nothing here is financial advice. Real investing, and especially options trading, has real risk. In the U.S. you must be 18 to open your own account; kids can invest through a grown-up's custodial account.</p>
-    <div class="row"><label class="chk"><input type="checkbox" id="teacher"> Teacher mode (unlock free stages)</label><button class="btn ghost" id="restore" style="font-size:13px;padding:7px 12px">Restore purchase</button><a href="privacy.html" style="font-size:13px;color:var(--muted);font-weight:700">Privacy policy</a><button class="btn ghost" id="resetall" style="font-size:13px;padding:7px 12px">Reset progress</button></div>
+    <p style="max-width:70ch">Bullsburg is for learning only. All companies, prices and news are pretend. Nothing here is financial advice. Real investing, and especially options trading, has real risk. In the U.S. you must be 18 to open your own account; kids can invest through a grown-up's custodial account.</p>
+    <div class="row"><label class="chk"><input type="checkbox" id="teacher"> Teacher mode (unlock free stages)</label><button class="btn ghost" id="restore" style="font-size:13px;padding:7px 12px">Restore purchase</button><a href="privacy.html" style="font-size:13px;color:var(--muted);font-weight:700">Privacy policy</a><button class="btn ghost" id="managesub" style="font-size:13px;padding:7px 12px">Manage subscription</button><button class="btn ghost" id="resetall" style="font-size:13px;padding:7px 12px">Reset progress</button></div>
+    <div class="row" id="extras" style="justify-content:flex-start;gap:8px;width:100%"><button class="btn ghost" id="student-btn" style="font-size:13px;padding:7px 12px">🎓 I'm a student</button><button class="btn ghost" id="invite-btn" style="font-size:13px;padding:7px 12px">🎁 Invite a friend</button><a class="btn ghost" id="parents-link" href="parents.html" target="_blank" rel="noopener" style="font-size:13px;padding:7px 12px;text-decoration:none">For parents</a><a class="btn ghost" href="teacher.html" id="teacher-link" target="_blank" rel="noopener" style="font-size:13px;padding:7px 12px;text-decoration:none">For teachers</a></div>
   </div>
 </footer>
 
@@ -573,7 +680,7 @@ const L = [
    quiz: [{ q: 'Two friends invest $50 a month at the same rate until age 65. Who usually ends up with more?', o: ['The one who starts at 15', 'The one who starts at 35', 'They end up the same'], why: 'Twenty extra years of compounding makes a huge difference.' },
           { q: 'Compound growth means…', o: ['Your gains start earning gains too', 'Prices never go down', 'You pay interest to the bank'], why: 'Growth on top of growth is the snowball effect.' }] },
  { id: 's7', world: 1, title: 'Smart habits and staying safe', terms: ['Risk', 'FOMO', 'Custodial account', 'Emergency fund'],
-   kid: `<p>Smart investors follow a few rules:</p><p><strong>Practice first</strong> with pretend money, like in Ticker Town. <strong>Ask a grown-up</strong>; kids under 18 invest through a grown-up's custodial account. <strong>Never invest money you need</strong> for things like food or school trips. <strong>Be suspicious of hype</strong>: if a video says a stock will "go to the moon," it's a warning sign, not a tip.</p>`,
+   kid: `<p>Smart investors follow a few rules:</p><p><strong>Practice first</strong> with pretend money, like in Bullsburg. <strong>Ask a grown-up</strong>; kids under 18 invest through a grown-up's custodial account. <strong>Never invest money you need</strong> for things like food or school trips. <strong>Be suspicious of hype</strong>: if a video says a stock will "go to the moon," it's a warning sign, not a tip.</p>`,
    adult: `<p>Build an <strong>emergency fund</strong> before investing, and only invest money you won't need for five or more years. Watch fees, since they quietly eat returns. Avoid hype and <strong>FOMO</strong> (fear of missing out), and don't panic-sell during drops.</p><p>Minors in the U.S. can invest through a <strong>custodial account</strong> (UTMA/UGMA) that a parent manages, or a custodial Roth IRA if they have earned income.</p>`,
    quiz: [{ q: 'Someone online promises a stock will "definitely triple next week." What should you do?', o: ['Be skeptical; nobody can promise that', 'Buy as much as you can', 'Borrow money to buy more'], why: 'Guaranteed quick riches are a classic warning sign.' },
           { q: 'In the U.S., a 12-year-old who wants to invest usually needs…', o: ['A grown-up to open a custodial account', 'Nothing, they can open one alone', 'A driver’s license'], why: 'You must be 18 to open your own brokerage account.' }] },
@@ -813,6 +920,206 @@ const L = [
 ];
 const STAGES = L.map(x => x.id);
 const BYID = Object.fromEntries(L.map(x => [x.id, x]));
+/* ================= QUESTION BANK =================
+   Extra questions per stage. Each play draws a random set in a random order, and the
+   number questions (GEN) make fresh numbers every time, so two players sitting next to
+   each other almost never see the same quiz. Format: [question, right answer, [wrong answers], why] */
+const QB = {
+ s1: [["Where do people buy and sell shares of stock?", "On an exchange, like the NYSE or Nasdaq", ["At the post office", "Only inside the company’s building"], "Exchanges are the big marketplaces where buyers and sellers meet."],
+      ["If you own a share of a company, you own…", "A small piece of that company", ["A loan you gave the company", "A coupon for its products"], "A share is a slice of ownership."],
+      ["Why do companies sell shares?", "To raise money to grow the business", ["To pay for their workers’ lunches only", "Because the law forces every company to"], "Selling slices of ownership brings in cash to build and grow."],
+      ["What does the ticker symbol MSFT stand for?", "Microsoft", ["Most Stocks Fall Today", "Market Safety Fund"], "Every listed company has a short code. MSFT is Microsoft."]],
+ s2: [["A company’s new product flops and few people buy it. What usually happens to the stock?", "The price tends to drop", ["The price must rise", "Trading stops forever"], "Bad news makes fewer people want to own the stock."],
+      ["A stock’s price is…", "The last price a buyer and seller agreed on", ["Set once a year by the government", "Always equal to the company’s profit"], "Every trade sets the latest price."],
+      ["Over many years, what tends to drive a stock’s price most?", "How much money the business makes", ["The weather", "How many letters are in its name"], "Short-term moves are noisy, but long-term prices follow earnings."],
+      ["More people want to sell a stock than buy it. What usually happens?", "The price goes down", ["The price goes up", "The company gets more shares"], "Extra sellers have to lower their price to find buyers."]],
+ s3: [["You bought a stock at $30. It’s now $40, but you haven’t sold. Your $10 gain is…", "Unrealized (a paper gain)", ["Realized and taxed already", "A dividend"], "It only becomes a realized gain when you sell."],
+      ["You buy 5 shares at $40 and sell at $32. What happened?", "You lost $40", ["You made $40", "You lost $8"], "You lost $8 per share × 5 shares = $40."],
+      ["A dividend is usually paid…", "In cash, often every three months", ["Only when the stock price falls", "Only to the company’s workers"], "Many companies pay dividends quarterly."],
+      ["Which of these is a way to make money from a stock?", "The price rises or it pays a dividend", ["Only by holding it forever", "Only if the company closes"], "Gains come from price growth and dividends."]],
+ s4: [["A red candle means…", "The price closed lower than it opened", ["The stock is in danger of closing", "The market was closed that day"], "Red candles close below where they opened."],
+      ["The thin lines (wicks) on a candle show…", "The highest and lowest prices of the day", ["The number of buyers", "The company’s profit"], "Wicks stretch to the day’s high and low."],
+      ["Volume on a chart tells you…", "How many shares were traded", ["How loud the trading floor was", "The stock’s price"], "Volume counts shares traded in a period."],
+      ["The price stays above its moving average line and the line slopes up. That usually signals…", "An uptrend", ["A downtrend", "A stock split"], "Price above a rising average points to an uptrend."]],
+ s5: [["An ETF is…", "A fund that trades on an exchange like a stock", ["A type of bank loan", "A single company’s share"], "ETFs hold many investments and trade all day like a stock."],
+      ["Which is more diversified?", "A fund holding 500 companies", ["One tech stock", "Two stocks in the same industry"], "More companies across more industries spreads risk."],
+      ["An index fund tries to…", "Match a market index, not beat it", ["Pick only the hottest stocks", "Guarantee a profit"], "Index funds copy an index at low cost."],
+      ["You own just one company and it goes bankrupt. What happens to your money?", "You could lose almost all of it", ["The government pays you back", "It doubles"], "That’s why one-basket investing is risky."]],
+ s6: [["$100 grows 10% a year. After two years (with compounding) you have…", "$121", ["$120", "$110"], "Year 1: $110. Year 2: $110 × 1.10 = $121."],
+      ["Which helps compound growth the most?", "Starting early and leaving it alone", ["Checking the price every hour", "Selling every time it rises"], "Time lets gains build on gains."],
+      ["Over the long run, U.S. stocks have historically…", "Grown, with lots of ups and downs along the way", ["Never gone down", "Lost money every decade"], "Past growth came with big dips; nothing is guaranteed."]],
+ s7: [["An emergency fund is…", "Savings for surprise expenses", ["Money you invest in risky stocks", "A loan from a friend"], "It keeps you from selling investments in a pinch."],
+      ["FOMO means…", "Fear of missing out", ["Find only money options", "Fund of many owners"], "FOMO pushes people to chase hot stocks without a plan."],
+      ["A stranger messages you a ‘secret stock tip.’ The safest move is to…", "Ignore it", ["Buy right away", "Send them your account password"], "Unsolicited tips are a classic scam tactic."],
+      ["Before investing, a smart habit is to…", "Have a plan and know why you’re buying", ["Buy whatever is trending", "Invest money you need next week"], "A plan keeps emotions in check."]],
+ o1: [["Buying an option gives you…", "The right, but not the obligation, to buy or sell", ["The duty to buy shares", "Ownership of the company"], "Option buyers can choose whether to use it."],
+      ["The strike price is…", "The price at which the option lets you buy or sell", ["The price of the option itself", "The stock’s highest price ever"], "The strike is the locked-in price."],
+      ["The price you pay for an option is called the…", "Premium", ["Strike", "Dividend"], "The premium is the cost of the option."],
+      ["What happens to most options on their expiration date?", "They stop existing after that day", ["They turn into shares forever", "They double in value"], "After expiration, the contract is over."]],
+ o2: [["A call option makes money when the stock…", "Rises above the break-even", ["Falls", "Stays exactly flat"], "Calls profit from upward moves past strike + premium."],
+      ["You buy a call and the stock never gets above the strike by expiration. What happens?", "The call expires worthless and you lose the premium", ["You lose unlimited money", "You get your premium back"], "A buyer’s max loss is the premium paid."],
+      ["Why might someone buy a call instead of the stock?", "It costs less up front, with risk limited to the premium", ["It never loses value", "It pays dividends"], "Calls give leverage with a capped loss."],
+      ["A call buyer’s potential profit is…", "Unlimited in theory", ["Capped at the premium", "Always zero"], "The stock can keep rising, so profit can keep growing."]],
+ o3: [["Why might you buy a put on a stock you own?", "As insurance against a big drop", ["To get dividends twice", "To double your shares"], "A protective put sets a floor under your stock."],
+      ["You buy a $40 put. The stock falls to $30. The put is worth at least…", "$10 per share", ["$0", "$40 per share"], "You can sell at $40 something now worth $30."],
+      ["A put buyer’s maximum loss is…", "The premium paid", ["Unlimited", "The strike price × 1,000"], "If the put expires worthless, you lose just the premium."],
+      ["Buying a put is a bet that the stock will…", "Go down", ["Go up", "Pay a dividend"], "Puts gain as the stock falls."]],
+ o4: [["Time decay means an option…", "Loses value as expiration gets closer", ["Gains value every day", "Never changes price"], "Time value melts away each day."],
+      ["Intrinsic value is…", "How much an option is in the money right now", ["The time left on the option", "The commission you pay"], "It’s the value if exercised right now."],
+      ["An out-of-the-money option is made of…", "Only time (extrinsic) value", ["Only intrinsic value", "Nothing at all"], "It has no intrinsic value, so its whole price is time value."]],
+ o5: [["A call is at the money when…", "The stock price equals the strike", ["The stock is far above the strike", "The option has expired"], "At the money means price ≈ strike."],
+      ["The stock is $80. Which put is in the money?", "The $85 put", ["The $75 put", "The $70 put"], "A put is in the money when the strike is above the stock price."],
+      ["The stock is $80. Which call is out of the money?", "The $90 call", ["The $70 call", "The $75 call"], "A call is out of the money when the strike is above the stock price."]],
+ o6: [["A covered call seller owns…", "100 shares for each call sold", ["No shares at all", "Only cash"], "The shares cover the duty to deliver."],
+      ["A cash-secured put seller must be ready to…", "Buy 100 shares at the strike", ["Sell 100 shares they don’t own", "Pay unlimited losses"], "The cash is set aside to buy the shares if assigned."],
+      ["Option sellers mostly hope the option will…", "Expire worthless so they keep the premium", ["Become very valuable", "Be exercised immediately"], "Sellers keep the premium when the option expires worthless."]],
+ g1: [["Which part of an option’s price disappears by expiration?", "Extrinsic value", ["Intrinsic value", "The strike price"], "At expiration only intrinsic value is left."],
+      ["Stock $70. A $60 put is worth $0.50. Its intrinsic value is…", "$0", ["$10", "$0.50"], "The put is out of the money, so it has no intrinsic value."],
+      ["Extrinsic value is usually biggest for…", "At-the-money options with lots of time", ["Deep in-the-money options expiring today", "Expired options"], "Uncertainty is highest at the money with time left."]],
+ g2: [["IV rank near 90 means IV is…", "High compared with its past year", ["Low compared with its past year", "Exactly 90%"], "IV rank shows where today’s IV sits in its own range."],
+      ["Historical volatility measures…", "How much the stock has actually moved", ["What traders expect next", "The company’s debt"], "It looks backward at real moves."],
+      ["When IV is high, option sellers often…", "Collect bigger premiums", ["Can’t trade at all", "Get paid less"], "Higher IV means richer premiums."]],
+ g3: [["A deep in-the-money call has a delta close to…", "1.00", ["0.00", "−1.00"], "It moves almost dollar-for-dollar with the stock."],
+      ["Traders often use delta as a rough guess of…", "The chance the option ends in the money", ["The dividend yield", "The bid-ask spread"], "A 0.30 delta is roughly a 30% chance of finishing ITM."],
+      ["A put has delta −0.40. The stock rises $1. The put changes by about…", "−$0.40 per share", ["+$0.40 per share", "−$4.00 per share"], "Negative delta: the put loses when the stock rises."]],
+ g4: [["Gamma measures…", "How fast delta changes as the stock moves", ["How fast time passes", "Interest rate risk"], "Gamma is the speed of delta."],
+      ["Option buyers have…", "Positive gamma", ["Negative gamma", "No gamma"], "Long options gain delta in the direction the stock moves."],
+      ["Why is high gamma risky for an option seller near expiration?", "Small moves can swing the position fast", ["It lowers the premium they keep", "It removes all risk"], "Delta can jump quickly against them."]],
+ g5: [["Theta is usually shown as a negative number for option buyers because…", "They lose value as time passes", ["They gain value each day", "It measures dividends"], "Each day costs the buyer some time value."],
+      ["Which loses more value per day from time decay?", "An at-the-money option a week from expiration", ["A deep in-the-money LEAPS option", "A share of stock"], "Decay is steepest at the money near expiration."],
+      ["An option seller has positive theta. That means…", "Time passing helps them", ["Time passing hurts them", "They pay interest"], "Sellers earn the daily melt."]],
+ g6: [["Vega measures how much an option’s price changes when…", "Implied volatility changes 1 point", ["The stock moves $1", "One day passes"], "Vega is sensitivity to IV."],
+      ["Long options have…", "Positive vega", ["Negative vega", "No vega"], "Buyers benefit when IV rises."],
+      ["Which option usually has less vega?", "One expiring in 3 days", ["One expiring in 6 months", "Both have the same vega"], "Less time means IV changes matter less."]],
+ g7: [["European-style options can be exercised…", "Only at expiration", ["Any day", "Never"], "European style means exercise at expiration only."],
+      ["When might a call owner exercise early?", "Just before an ex-dividend date to capture the dividend", ["Whenever the stock rises a little", "Every Monday"], "Early exercise mostly makes sense to grab a dividend."],
+      ["Higher interest rates usually make call prices…", "A little higher", ["Much lower", "Exactly zero"], "Rho is small but positive for calls."]],
+ g8: [["Implied volatility usually rises in the days before earnings because…", "Traders expect a big move", ["Companies pay extra dividends", "Markets close early"], "Uncertainty before the report pumps IV."],
+      ["To profit from buying options over earnings, the stock usually needs to…", "Move more than the expected move", ["Stay exactly flat", "Move less than expected"], "You need to beat the move priced in."],
+      ["Which strategy benefits from an IV crush?", "Selling options", ["Buying a straddle", "Buying calls"], "Sellers gain when inflated IV drops."]],
+ g9: [["A wide bid-ask spread means…", "It costs more to get in and out", ["The option is free", "Trading is easier"], "You lose more to the spread on every trade."],
+      ["Slippage is…", "Getting filled at a worse price than you expected", ["A dividend payment", "A type of option"], "Slippage is common in thin, fast markets."],
+      ["Volume counts contracts traded today. Open interest counts…", "Contracts still open overall", ["Contracts that expired", "Shares outstanding"], "Open interest builds up over time."]],
+ t1: [["When is a covered call most likely to be ‘called away’?", "The stock finishes above the strike", ["The stock falls a lot", "The stock stays below the strike"], "Above the strike, the call is exercised and your shares are sold."],
+      ["Covered calls work best when you expect the stock to…", "Rise slowly or stay flat", ["Skyrocket", "Crash"], "You collect premium while the stock drifts."],
+      ["Selling a covered call lowers your risk on the stock by…", "Only the premium you collect", ["All of it", "Nothing at all, ever"], "The premium cushions a drop a little, not a lot."]],
+ t2: [["Selling a cash-secured put is a way to…", "Get paid while waiting to buy a stock at a lower price", ["Bet the stock will crash", "Avoid ever owning shares"], "You collect premium and may buy at the strike."],
+      ["Being ‘assigned’ on a short put means…", "You must buy the shares at the strike", ["You must sell your shares", "You get a refund"], "The put buyer sells to you at the strike."],
+      ["What’s the biggest risk of a cash-secured put?", "The stock drops far below the strike", ["The stock rises a lot", "The stock pays a dividend"], "You’d own shares worth much less than you paid."]],
+ t3: [["A collar usually costs little or nothing because…", "The call you sell pays for the put you buy", ["Brokers give it away", "Puts are always free"], "The premiums roughly cancel out."],
+      ["You own a stock at $100 and buy a $90 put. Your biggest loss to the put’s strike is…", "$10 per share, plus the put premium", ["Unlimited", "$90 per share"], "The put lets you sell at $90 no matter how far it falls."],
+      ["Why do investors hedge?", "To limit damage from a big drop", ["To double their gains", "To avoid taxes"], "A hedge is protection, not a profit engine."]],
+ t4: [["A bull call spread is…", "Buying a call and selling a higher-strike call", ["Buying two puts", "Selling a call with no stock"], "The short call lowers the cost and caps the gain."],
+      ["A bull call spread makes its maximum profit when the stock finishes…", "At or above the higher strike", ["Below the lower strike", "Exactly at zero"], "Above the short strike, the spread is worth its full width."],
+      ["A debit spread means you…", "Pay money to open it", ["Get paid to open it", "Pay nothing"], "Debit = you pay up front."]],
+ t5: [["A bear put spread is built by…", "Buying a put and selling a lower-strike put", ["Selling two calls", "Buying stock and a call"], "The short put lowers the cost."],
+      ["The max gain of a bear put spread is…", "The width of the strikes minus the cost", ["Unlimited", "The premium of one put"], "It’s capped by the short put."],
+      ["Bear put spreads are best when you expect…", "A moderate drop", ["A huge rally", "No movement at all"], "They profit from a fall down to the short strike."]],
+ t6: [["A bull put spread profits when the stock…", "Stays above the short put strike", ["Falls sharply", "Goes to zero"], "Both puts expire worthless and you keep the credit."],
+      ["A bear call spread profits when the stock…", "Stays below the short call strike", ["Rockets higher", "Doubles"], "The calls expire worthless and you keep the credit."],
+      ["The max profit of a credit spread is…", "The credit you received", ["Unlimited", "The width of the strikes"], "Your best case is keeping the whole credit."]],
+ t7: [["A strangle uses…", "An out-of-the-money call and an out-of-the-money put", ["Two calls at the same strike", "Stock and a call"], "Different strikes make it cheaper than a straddle."],
+      ["Compared with a straddle, a strangle usually…", "Costs less but needs a bigger move", ["Costs more", "Can’t lose money"], "Cheaper wings, wider break-evens."],
+      ["Buying straddles before earnings is risky because…", "IV crush can wipe out value even after a move", ["Earnings never move stocks", "Straddles have unlimited loss"], "The move must beat the expensive premium."]],
+ t8: [["An iron condor has how many options?", "Four", ["Two", "Six"], "Two puts and two calls."],
+      ["What makes an iron condor lose money?", "A big move past either short strike", ["The stock staying calm", "Time passing"], "It’s a bet on a quiet market."],
+      ["An iron condor’s max profit is…", "The total credit received", ["Unlimited", "The wing width"], "You keep the credit if the stock stays in range."]],
+ t9: [["Pin risk happens when…", "The stock closes right at your short strike at expiration", ["The stock moves a lot", "You close your trade early"], "You can’t be sure whether you’ll be assigned."],
+      ["Closing a short option early is often smart because…", "It removes the remaining risk", ["It always makes more money", "It’s required by law"], "Taking most of the profit early cuts risk."],
+      ["Exercising a call means you…", "Buy 100 shares at the strike", ["Sell 100 shares at the strike", "Cancel the contract for a refund"], "Calls give the right to buy."]],
+ m1: [["A market order…", "Fills right away at the best available price", ["Only fills at your exact price", "Waits until tomorrow"], "Speed over price."],
+      ["A stop-limit order might not fill if…", "The price gaps past your limit", ["The market is open", "You have enough cash"], "It only fills at the limit or better."],
+      ["A gap is…", "When a stock opens far from the last close", ["A fee from your broker", "An order type"], "Overnight news often causes gaps."]],
+ m2: [["Why size positions small?", "So one bad trade can’t wreck the account", ["To pay more fees", "To make trading boring"], "Small size keeps you in the game."],
+      ["A drawdown is…", "A drop from your account’s peak", ["A dividend", "A deposit"], "It measures how far you fell from the top."],
+      ["After a 20% loss, what gain gets you back to even?", "25%", ["20%", "40%"], "$80 needs +$20, which is 25% of $80."]],
+ m3: [["A trade journal helps you…", "Learn what works and what doesn’t", ["Hide losses", "Avoid paying taxes"], "Writing trades down shows your real habits."],
+      ["Expectancy tells you…", "What you make or lose per trade on average", ["How often you trade", "Your broker’s fees"], "It mixes win rate and win/loss size."],
+      ["A good trading plan includes…", "Entry, exit and how much to risk", ["Only the stock’s name", "A guaranteed profit"], "Plan the whole trade before you place it."]],
+ m4: [["Revenue is…", "The total money a company brings in from sales", ["Profit after all costs", "The stock price"], "Revenue is the top line."],
+      ["EPS stands for…", "Earnings per share", ["Exchange price spread", "Extra profit share"], "Profit divided by shares outstanding."],
+      ["A company has 10 million shares at $50. Its market cap is…", "$500 million", ["$50 million", "$10 million"], "10,000,000 × $50 = $500,000,000."]],
+ m11: [["Resistance is…", "A price level where rallies keep stalling", ["A price floor", "A type of order"], "Sellers tend to show up there."],
+       ["An RSI below 30 suggests…", "The stock may be oversold", ["The stock is overbought", "The company is bankrupt"], "Low RSI means weak recent momentum."],
+       ["A trendline connects…", "A series of higher lows or lower highs", ["The opening prices of every year", "Dividends paid"], "It shows the direction of the trend."]],
+ m12: [["CPI is a report about…", "Inflation, or how fast prices are rising", ["A company’s profits", "Option volume"], "Big CPI surprises can move the whole market."],
+       ["Earnings season is…", "The weeks when many companies report results", ["When the market is closed", "Tax day"], "It comes around four times a year."],
+       ["Pre-market trading happens…", "Before the regular 9:30 a.m. ET open", ["At midnight only", "On weekends only"], "Liquidity is lower outside regular hours."]],
+ m13: [["A stock with beta 0.5 tends to move…", "About half as much as the market", ["Twice as much", "Opposite the market"], "Lower beta means calmer moves."],
+       ["Correlation near 0 means two stocks…", "Don’t move in any steady relationship", ["Move together perfectly", "Move perfectly opposite"], "Zero correlation means no clear link."],
+       ["Concentration risk means…", "Too much money in one stock or sector", ["Owning an index fund", "Having cash"], "One bad event can hit everything at once."]],
+ m5: [["Rebalancing means…", "Bringing your mix back to its target", ["Selling everything", "Buying only winners"], "It trims what grew and adds to what lagged."],
+      ["Which usually has lower fees?", "A broad index fund", ["An actively managed fund", "A fund that trades every day"], "Index funds have low expense ratios."],
+      ["Dollar-cost averaging helps by…", "Removing the need to time the market", ["Guaranteeing a profit", "Avoiding all losses"], "You buy more shares when prices are low."]],
+ m6: [["A correction is usually a drop of…", "About 10% from a recent high", ["50%", "1%"], "10% is a correction; 20% is a bear market."],
+      ["A bull market is…", "A long stretch of rising prices", ["A market that only sells beef", "A crash"], "Bulls charge up."],
+      ["During a bear market, a common mistake is…", "Panic-selling at the bottom", ["Sticking with a long-term plan", "Keeping an emergency fund"], "Selling in a panic locks in losses."]],
+ m14: [["Overconfidence after a winning streak often leads traders to…", "Take bigger risks than their plan allows", ["Trade more carefully", "Stop trading"], "Winning streaks can make people careless."],
+       ["Discipline in trading means…", "Following your rules even when it’s hard", ["Trading every day no matter what", "Never taking a loss"], "Rules protect you from emotions."],
+       ["A stock is soaring and everyone’s talking about it. You feel you must buy now. That’s…", "FOMO", ["Discipline", "Diversification"], "Fear of missing out leads to chasing."]],
+ m7: [["A Traditional IRA usually gives you…", "A tax break now, taxes when you withdraw", ["No taxes ever", "Taxes twice"], "Pay tax later, in retirement."],
+      ["Money in a regular brokerage account…", "Can be taken out any time, but gains are taxed", ["Is locked until age 65", "Is never taxed"], "Flexible, but no special tax shelter."],
+      ["To contribute to a Roth IRA, you need…", "Earned income, like a paycheck", ["To be over 50", "A million dollars"], "Contributions must come from earned income."]],
+ m8: [["A capital gain is…", "Profit from selling an investment for more than you paid", ["A dividend", "A broker fee"], "Gains are taxed when you sell."],
+      ["Short-term gains in the U.S. are usually taxed…", "Like regular income", ["At 0% always", "Less than long-term gains"], "Holding a year or less = ordinary income rates."],
+      ["Losses can be used to…", "Offset gains and lower taxes", ["Raise your taxes", "Nothing at all"], "Losses can cancel out gains."]],
+ m9: [["A cash account means…", "You can only trade with money you’ve deposited", ["You borrow from the broker", "You can trade unlimited"], "No borrowing allowed."],
+      ["Why do brokers have options approval levels?", "Riskier strategies need more experience first", ["To charge higher prices", "Options are illegal without them"], "Brokers unlock riskier strategies step by step."],
+      ["A margin call happens when…", "Your account falls below the required level", ["You call your broker", "A stock pays a dividend"], "You must add money or the broker sells."]],
+ m10: [["‘Paper trading’ means…", "Practicing with pretend money", ["Trading newspapers", "Only buying paper companies"], "Practice first, risk real money later."],
+       ["A tiny unknown stock suddenly gets hyped all over social media. You should be…", "Very cautious; it could be a pump and dump", ["Buying as much as possible", "Borrowing to buy more"], "Hype on tiny stocks is a classic red flag."],
+       ["Which is a sign of a scam?", "Pressure to act right now", ["A low-cost index fund", "A regulated broker"], "Urgency is a manipulation tactic."]]
+};
+
+/* Number questions: new numbers every time. Each takes a random function r(). */
+const ri = (r, a, b) => a + Math.floor(r() * (b - a + 1));
+const pk = (r, a) => a[Math.floor(r() * a.length)];
+const $$ = v => '$' + (Math.round(v * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(Math.round(v * 100) / 100) ? 0 : 2, maximumFractionDigits: 2 });
+function mk(q, right, wrongs, why) { const seen = new Set([right]); const w = []; for (const x of wrongs) if (!seen.has(x) && w.length < 3) { seen.add(x); w.push(x); } return { q, o: [right, ...w], why }; }
+const GEN = {
+ s1: [r => { const T = pk(r, [100, 200, 400, 500, 1000]), p = pk(r, [5, 10, 20, 25, 40, 50]), N = T * p / 100;
+   return mk(`A company is split into ${T.toLocaleString()} shares. You own ${N}. How much of the company do you own?`, p + '%', [N / 10 + '%', (100 - p) + '%', p * 2 + '%', p / 2 + '%'], `${N} out of ${T.toLocaleString()} is ${p}%.`); }],
+ s3: [r => { const n = ri(r, 4, 20), b = ri(r, 10, 45); let d = ri(r, -8, 12); if (!d) d = 3; const s = b + d, pl = n * d;
+   const lbl = v => v >= 0 ? `${$$(v)} profit` : `${$$(-v)} loss`;
+   return mk(`You buy ${n} shares at ${$$(b)} and sell them at ${$$(s)}. What’s your result?`, lbl(pl), [lbl(-pl), lbl(d), lbl(n * s - b), lbl(pl * 10)], `${d >= 0 ? '+' : '−'}${$$(Math.abs(d))} per share × ${n} shares = ${lbl(pl)}.`); }],
+ s6: [r => { const p = pk(r, [4, 6, 8, 9, 12]);
+   return mk(`Using the Rule of 72, money growing ${p}% a year doubles in about…`, `${72 / p} years`, [`${p} years`, `${72 / p * 2} years`, `${Math.round(100 / p)} years`, `${72 * p} years`], `72 ÷ ${p} = ${72 / p} years.`); }],
+ o1: [r => { const p = ri(r, 3, 96) * 0.05;
+   return mk(`An option is quoted at ${$$(p)}. How much does one contract cost?`, $$(p * 100), [$$(p), $$(p * 10), $$(p * 1000)], `${$$(p)} × 100 shares = ${$$(p * 100)}.`); }],
+ o2: [r => { const K = ri(r, 4, 30) * 5, p = ri(r, 2, 20) * 0.25;
+   return mk(`You buy a ${$$(K)} call for ${$$(p)}. What’s your break-even at expiration?`, $$(K + p), [$$(K - p), $$(K), $$(K + p * 2), $$(K + p * 100)], `Strike ${$$(K)} + premium ${$$(p)} = ${$$(K + p)}.`); }],
+ o3: [r => { const K = ri(r, 4, 30) * 5, p = ri(r, 2, 16) * 0.25;
+   return mk(`You buy a ${$$(K)} put for ${$$(p)}. What’s your break-even at expiration?`, $$(K - p), [$$(K + p), $$(K), $$(K - p * 2)], `For a put: strike ${$$(K)} − premium ${$$(p)} = ${$$(K - p)}.`); }],
+ o5: [r => { const S = ri(r, 6, 30) * 5, put = r() < .5, d = pk(r, [-10, -5, 0, 5, 10]), K = S + d;
+   const itm = put ? K > S : K < S, ans = K === S ? 'At the money' : itm ? 'In the money' : 'Out of the money';
+   return mk(`The stock is ${$$(S)}. A ${$$(K)} ${put ? 'put' : 'call'} is…`, ans, ['In the money', 'Out of the money', 'At the money'], K === S ? 'Strike equals the stock price.' : put ? `A put is in the money when the strike is above the stock price.` : `A call is in the money when the strike is below the stock price.`); }],
+ g1: [r => { const K = ri(r, 4, 20) * 5, i = ri(r, 1, 8), e = ri(r, 2, 12) * 0.25, S = K + i;
+   return mk(`Stock ${$$(S)}. A ${$$(K)} call costs ${$$(i + e)}. What is its extrinsic value?`, $$(e), [$$(i), $$(i + e), $$(S - e)], `Intrinsic is ${$$(S)} − ${$$(K)} = ${$$(i)}. The other ${$$(e)} is extrinsic.`); }],
+ g3: [r => { const d = ri(r, 2, 8) / 10, m = ri(r, 1, 5);
+   return mk(`A call has a delta of ${d.toFixed(2)}. The stock rises ${$$(m)}. About how much does the option gain per share?`, $$(d * m), [$$(m), $$(d), $$(d * m * 100)], `${d.toFixed(2)} × ${$$(m)} = ${$$(d * m)} per share.`); }],
+ g5: [r => { const t = ri(r, 3, 25) / 100, n = ri(r, 1, 4);
+   return mk(`Your options have theta −${t.toFixed(2)}. You own ${n} contract${n > 1 ? 's' : ''}. About how much value do you lose per day?`, $$(t * 100 * n), [$$(t * n), $$(t * 100), $$(t * 10 * n)], `${t.toFixed(2)} × 100 shares × ${n} = ${$$(t * 100 * n)} per day.`); }],
+ g6: [r => { const v = ri(r, 5, 30) / 100, c = ri(r, 2, 8), up = r() < .5;
+   return mk(`An option has vega ${v.toFixed(2)}. IV ${up ? 'rises' : 'falls'} ${c} points. About how much does the price change per share?`, (up ? '+' : '−') + $$(v * c), [(up ? '−' : '+') + $$(v * c), (up ? '+' : '−') + $$(c), (up ? '+' : '−') + $$(v)], `${v.toFixed(2)} × ${c} = ${$$(v * c)} per share, ${up ? 'up' : 'down'}.`); }],
+ t2: [r => { const K = ri(r, 6, 30) * 5, p = ri(r, 3, 16) * 0.2;
+   return mk(`You sell the ${$$(K)} put for ${$$(p)} and get assigned. What’s your effective buy price?`, $$(K - p), [$$(K + p), $$(K), $$(K - p * 100)], `${$$(K)} strike − ${$$(p)} premium = ${$$(K - p)}.`); }],
+ t4: [r => { const K = ri(r, 6, 24) * 5, w = 5, a = ri(r, 10, 24) * 0.2, b = Math.round((a - ri(r, 4, 9) * 0.2) * 100) / 100, dbt = Math.round((a - b) * 100) / 100;
+   if (r() < .5) return mk(`Buy the ${$$(K)} call for ${$$(a)}, sell the ${$$(K + w)} call for ${$$(b)}. What’s the max loss per contract?`, $$(dbt * 100), [$$(a * 100), $$(w * 100), $$((w - dbt) * 100)], `Net debit ${$$(dbt)} × 100 = ${$$(dbt * 100)}.`);
+   return mk(`Buy the ${$$(K)} call for ${$$(a)}, sell the ${$$(K + w)} call for ${$$(b)}. What’s the max gain per contract?`, $$((w - dbt) * 100), [$$(dbt * 100), $$(w * 100), $$(b * 100)], `Width ${$$(w)} − debit ${$$(dbt)} = ${$$(w - dbt)}, × 100 = ${$$((w - dbt) * 100)}.`); }],
+ m2: [r => { const A = pk(r, [5000, 8000, 10000, 15000, 25000, 40000]), p = pk(r, [1, 2]);
+   return mk(`Account ${$$(A)}, risking ${p}% per trade. What’s the most you should lose on one trade?`, $$(A * p / 100), [$$(A * p / 10), $$(A * p / 1000), $$(A / 2)], `${p}% of ${$$(A)} = ${$$(A * p / 100)}.`); },
+     r => { const R = pk(r, [50, 100, 150, 200, 300]), st = pk(r, [2, 4, 5, 10]);
+   return mk(`You risk ${$$(R)} and your stop is ${$$(st)} below entry. How many shares?`, String(R / st), [String(R * st), String(R / st * 10), String(st)], `${$$(R)} ÷ ${$$(st)} = ${R / st} shares.`); }],
+ m4: [r => { const e = ri(r, 1, 8), pe = pk(r, [8, 10, 12, 15, 18, 20, 25, 30]), p = e * pe;
+   return mk(`A stock is ${$$(p)} and earnings per share are ${$$(e)}. What’s the P/E?`, String(pe), [String(p * e), String(e), String(p - e)], `${$$(p)} ÷ ${$$(e)} = ${pe}.`); }],
+ m5: [r => { const A = pk(r, [10000, 20000, 25000, 50000, 100000]), f = pk(r, [0.03, 0.1, 0.5, 1]);
+   return mk(`On ${$$(A)}, what does a ${f}% expense ratio cost per year?`, $$(A * f / 100), [$$(A * f / 10), $$(A * f / 1000), $$(A * f)], `${f}% of ${$$(A)} = ${$$(A * f / 100)}.`); }]
+};
+/* Every question gets a stable key so the Study Hall can remember it. */
+L.forEach(s => { if (s.boss) return; s.quiz.forEach((q, i) => q.key = s.id + ':' + i);
+  (QB[s.id] || []).forEach((a, j) => s.quiz.push({ q: a[0], o: [a[1], ...a[2]], why: a[3], key: s.id + ':x' + j }));
+  s.gens = (GEN[s.id] || []).map((g, j) => ({ gen: g, key: s.id + ':g' + j })); });
+
 const WORLDS = [{ n: 1, name: 'Stock Street', sub: 'World 1 · Stocks' }, { n: 2, name: 'Options Island', sub: 'World 2 · Options basics' }, { n: 3, name: 'Greek Peaks', sub: 'World 3 · Pricing and the Greeks' },
   { n: 4, name: 'Strategy City', sub: 'World 4 · Options strategies' }, { n: 5, name: 'Master\u2019s Summit', sub: 'World 5 · Becoming a real trader' }];
 const LAB_GATE = { market: 's3', charts: 's4', options: 'o2' };
@@ -821,7 +1128,7 @@ const MISSIONS = [
  { id: 'm1', title: 'First share', d: 'Buy any stock in the Practice Market.', xp: 40 },
  { id: 'm2', title: 'Basket builder', d: 'Own 3 different stocks at the same time.', xp: 60 },
  { id: 'm3', title: 'Steady hands', d: 'Trade in the Practice Market for 20 trading days.', xp: 60 },
- { id: 'm4', title: 'Grow it', d: 'Reach a portfolio worth $10,500 or more.', xp: 80 },
+ { id: 'm4', title: 'Grow it', d: 'Make $500 of trading profit in the Practice Market.', xp: 80 },
  { id: 'm5', title: 'Trend spotter', d: 'Get a 5-answer streak in Trend Spotter.', xp: 60 },
  { id: 'm6', title: 'Candle detective', d: 'Tap or hover a candle in the Chart Lab.', xp: 30 },
  { id: 'm7', title: 'Break-even finder', d: 'In the Options Lab, slide the expiration price onto the break-even.', xp: 60 },
@@ -882,9 +1189,30 @@ const WORDS = [
 
 /* ================= state ================= */
 const KEY = 'tickertown.v1';
-const S = { mode: 'kid', xp: 0, stars: {}, missions: {}, mkt: null, best: 0, teacher: false, full: false };
-try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const S = { mode: 'kid', xp: 0, stars: {}, missions: {}, mkt: null, best: 0, teacher: false, full: false, bought: 0, refillAt: 0, ads: { day: '', n: 0 }, tx: [], streak: { n: 0, best: 0, last: '', fz: 0, days: [] }, dq: { day: '', score: -1 }, onboarded: false, ql: {}, qg: {}, pid: '' };
+/* Save protection: every save is sealed with a checksum, so editing the saved data by hand (to add coins, XP or stars) is detected and rejected. */
+const _k = [84, 84, 45, 118, 97, 117, 108, 116, 45, 55, 51, 49].map(c => String.fromCharCode(c)).join('') + location.host.length;
+function seal(str) { let h1 = 0xdeadbeef ^ str.length, h2 = 0x41c6ce57 ^ str.length; const t = _k + str + _k;
+  for (let i = 0; i < t.length; i++) { const c = t.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (h2 >>> 0).toString(36) + (h1 >>> 0).toString(36); }
+let TAMPERED = false;
+function loadSave() { let raw; try { raw = localStorage.getItem(KEY); } catch (e) { return; } if (!raw) return;
+  let o; try { o = JSON.parse(raw); } catch (e) { TAMPERED = true; return; }
+  if (o && typeof o.d === 'string' && typeof o.h === 'string') { if (seal(o.d) !== o.h) { TAMPERED = true; try { const b = JSON.parse(localStorage.getItem(KEY + '.bak') || 'null'); if (b && seal(b.d) === b.h) { Object.assign(S, JSON.parse(b.d)); } } catch (e) {} return; }
+    try { Object.assign(S, JSON.parse(o.d)); } catch (e) { TAMPERED = true; } }
+  else if (o && typeof o === 'object' && !('h' in o)) Object.assign(S, o); /* older unsealed save from before this update: accepted once, then sealed */ }
+loadSave();
+if (!S.ql || typeof S.ql !== 'object') S.ql = {}; if (!S.qg || typeof S.qg !== 'object') S.qg = {};
+if (!S.pid) { try { S.pid = [...crypto.getRandomValues(new Uint32Array(2))].map(x => x.toString(36)).join(''); } catch (e) { S.pid = Math.random().toString(36).slice(2) + Date.now().toString(36); } }
+function sane() { S.xp = Math.max(0, Math.min(+S.xp || 0, 99999)); for (const k in S.stars) S.stars[k] = Math.max(0, Math.min(3, S.stars[k] | 0));
+  if (S.mkt && !(Math.abs(S.mkt.cash) < 1e10)) S.mkt.cash = 10000; S.bought = Math.max(0, Math.min(+S.bought || 0, 5e7)); }
+sane();
+let _lastGood = 0;
+function save() { try { if (window.TT_onSave) window.TT_onSave(); } catch (e) {} try { const d = JSON.stringify(S), rec = JSON.stringify({ d, h: seal(d) }); localStorage.setItem(KEY, rec); if (Date.now() - _lastGood > 60000) { localStorage.setItem(KEY + '.bak', rec); _lastGood = Date.now(); } } catch (e) {} }
+/* Clock guard: free daily rewards only count when the device clock hasn't been wound back. */
+function clockOK() { const now = Date.now(); if (!S.seen || now > S.seen) { S.seen = now; return true; } return now > S.seen - 15 * 60000; }
+if (TAMPERED) setTimeout(() => toast('Your saved game was changed outside the app, so it was reset to the last safe copy.'), 1200);
 
 /* ================= helpers ================= */
 const $ = s => document.querySelector(s);
@@ -897,6 +1225,14 @@ function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; le
 function gaussFrom(r) { return () => { let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }; }
 const gauss = gaussFrom(Math.random);
 function shuffle(a, r = Math.random) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+/* ---- question drawing: random set, random order, least-seen first, fresh numbers ---- */
+function realize(it, r = Math.random) { if (it.gen) { const g = it.gen(r); return { ...g, key: it.key }; } return { ...it }; }
+function bankOf(id) { const s = BYID[id]; return (s.quiz || []).concat(s.gens || []); }
+function drawQs(items, n, r = Math.random) { const seen = k => (S.ql[k] || [0])[0];
+  return shuffle(items, r).sort((a, b) => Math.min(seen(a.key), 3) - Math.min(seen(b.key), 3)).slice(0, n).map(it => realize(it, r)); }
+const KEYQ = {}; L.forEach(s => (s.quiz || []).concat(s.gens || []).forEach(q => { if (q.key) KEYQ[q.key] = q; }));
+function logQ(q, ok) { if (!q || !q.key) return; const e = S.ql[q.key] || [0, 0, 1]; e[0]++; if (!ok) e[1]++; e[2] = ok ? 1 : 0; S.ql[q.key] = e;
+  if (KEYQ[q.key] && KEYQ[q.key].gen) S.qg[q.key] = [q.q, q.o[0], q.why]; save(); }
 function sma(a, k) { return a.map((_, i) => i < k - 1 ? null : a.slice(i - k + 1, i + 1).reduce((s, x) => s + x, 0) / k); }
 
 /* ================= canvas core ================= */
@@ -959,7 +1295,7 @@ function drawLine(cv, vals, o = {}) { const g = prep(cv); if (!g) return; const 
 
 /* ================= XP / levels ================= */
 function levelOf(xp) { let i = 0; RANKS.forEach((r, k) => { if (xp >= r[0]) i = k; }); return i; }
-function hud() { const i = levelOf(S.xp), cur = RANKS[i][0], next = RANKS[i + 1] ? RANKS[i + 1][0] : null;
+function hud() { try { renderStreakChip(); } catch (e) {} const i = levelOf(S.xp), cur = RANKS[i][0], next = RANKS[i + 1] ? RANKS[i + 1][0] : null;
   $('#h-lvl').textContent = i + 1; $('#h-rank').textContent = RANKS[i][1];
   $('#h-bar').style.width = next ? ((S.xp - cur) / (next - cur) * 100).toFixed(1) + '%' : '100%';
   $('#h-xp').textContent = next ? `${S.xp} / ${next} XP` : `${S.xp} XP · max level`;
@@ -973,7 +1309,7 @@ function popXP(n, el) { if (!n) return; const p = document.createElement('div');
 function addXP(n, el) { const before = levelOf(S.xp); S.xp += n; save(); popXP(n, el); hud(); const after = levelOf(S.xp);
   if (after > before) setTimeout(() => levelUp(after), 500); }
 function levelUp(i) { $('#lu-n').textContent = i + 1; $('#lu-title').textContent = RANKS[i][1];
-  $('#lu-msg').textContent = UNLOCK_MSG[i + 1] || `You're now level ${i + 1}. Next up: ${RANKS[i + 1] ? RANKS[i + 1][1] : 'nothing, you won Ticker Town'}.`;
+  $('#lu-msg').textContent = UNLOCK_MSG[i + 1] || `You're now level ${i + 1}. Next up: ${RANKS[i + 1] ? RANKS[i + 1][1] : 'nothing, you won Bullsburg'}.`;
   $('#levelup').hidden = false; $('#lu-ok').focus(); confetti(); }
 $('#lu-ok').onclick = () => { $('#levelup').hidden = true; };
 let toastT; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
@@ -1030,38 +1366,39 @@ function drawTrails() { document.querySelectorAll('.path').forEach(p => { const 
 new ResizeObserver(() => drawTrails()).observe($('#worlds'));
 function renderMissions() { $('#missions').innerHTML = MISSIONS.map(m => `<div class="mission ${S.missions[m.id] ? 'got' : ''}"><span class="ck">${S.missions[m.id] ? '✓' : ''}</span><div><b>${m.title}</b><small>${m.d}</small></div><span class="xp">+${m.xp} XP</span></div>`).join(''); }
 function renderRanks() { const me = levelOf(S.xp); $('#ranks').innerHTML = RANKS.map((r, i) => `<div class="rankrow ${i === me ? 'me' : ''}"><span>Lv ${i + 1} · ${r[1]}</span><span class="mono">${r[0]} XP</span></div>`).join(''); }
-function showMap() { $('#stage').hidden = true; $('#map-home').hidden = false; renderMap(); }
+function wireStudyBtn() { const b = document.getElementById('studybtn'); if (b) b.onclick = () => openStudy(); }
+function showMap() { wireStudyBtn(); $('#stage').hidden = true; $('#map-home').hidden = false; renderMap(); }
 
 /* ================= STAGE / QUIZ ================= */
 let Q = null;
 function openStage(id) { const s = BYID[id]; if (paid(id)) return openPaywall(); if (!isUnlocked(id)) return; go('map', true); $('#map-home').hidden = true; const st = $('#stage'); st.hidden = false;
   const wname = WORLDS[s.world - 1].name; const num = L.filter(x => x.world === s.world && !x.boss).findIndex(x => x.id === id) + 1;
-  if (s.boss) { const qs = shuffle(s.pool.flatMap(pid => BYID[pid].quiz.map(q => ({ ...q, from: pid })))).slice(0, s.final ? 12 : 7);
+  if (s.boss) { const qs = drawQs(s.pool.flatMap(pid => bankOf(pid)), s.final ? 12 : 7);
     Q = { id, qs, i: 0, miss: 0, hearts: 3, boss: true };
-    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">${s.final ? 'The final exam: 12 questions from Greek Peaks, Strategy City and Master\u2019s Summit.' : 'Answer 7 mixed questions from this world.'} Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.final ? ' and graduate from Ticker Town' : ' and unlock ' + (WORLDS[s.world] ? WORLDS[s.world].name : 'the next world')}.</p><div class="quiz card" id="quiz"></div></div>`; }
-  else { Q = { id, qs: s.quiz.map(q => ({ ...q })), i: 0, miss: 0, boss: false };
+    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">${s.final ? 'The final exam: 12 questions from Greek Peaks, Strategy City and Master\u2019s Summit.' : 'Answer 7 mixed questions from this world.'} Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.final ? ' and graduate from Bullsburg' : ' and unlock ' + (WORLDS[s.world] ? WORLDS[s.world].name : 'the next world')}.</p><div class="quiz card" id="quiz"></div></div>`; }
+  else { Q = { id, qs: drawQs(bankOf(id), 3), i: 0, miss: 0, boss: false };
     st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Stage ${num}</span></div>
       <h2>${s.title}</h2><div class="lesson-text" id="ltext">${S.mode === 'kid' ? s.kid : s.adult}</div><div class="terms">${s.terms.map(t => `<span>${t}</span>`).join('')}</div>
       <div id="widget"></div><div class="quiz card" id="quiz"></div></div>`;
     if (s.widget) WIDGETS[s.widget.split(':')[0]]($('#widget'), s.widget.split(':')[1]); }
   $('#back').onclick = () => showMap(); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' }); }
 function renderQ() { const box = $('#quiz'); const q = Q.qs[Q.i]; const n = Q.qs.length;
-  if (!q) return finishStage();
+  if (!q) return Q.practice ? finishPractice() : finishStage();
   const order = shuffle(q.o.map((t, k) => ({ t, k })));
-  box.innerHTML = `<div class="qhead"><span class="eyebrow">${Q.boss ? 'Boss question' : 'Checkpoint'} ${Q.i + 1} of ${n}</span>${Q.boss ? `<span class="hearts" aria-label="${Q.hearts} hearts left">${[0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('')}</span>` : '<span class="mono muted" style="font-size:12px">+20 XP if right first try</span>'}</div>
+  box.innerHTML = `<div class="qhead"><span class="eyebrow">${Q.practice ? 'Practice' : Q.boss ? 'Boss question' : 'Checkpoint'} ${Q.i + 1} of ${n}</span>${Q.practice ? '<span class="mono muted" style="font-size:12px">Study mode</span>' : Q.boss ? `<span class="hearts" aria-label="${Q.hearts} hearts left">${[0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('')}</span>` : '<span class="mono muted" style="font-size:12px">+20 XP if right first try</span>'}</div>
     <div class="qprog"><i style="width:${Q.i / n * 100}%"></i></div><div class="qcard"><div class="q">${q.q}</div><div class="opts">${order.map((x, j) => `<button class="opt" data-k="${x.k}"><span class="k">${'ABCD'[j]}</span>${x.t}</button>`).join('')}</div><div id="why"></div></div>`;
   let tried = false;
-  box.querySelectorAll('.opt').forEach(b => b.onclick = () => { const right = +b.dataset.k === 0;
+  box.querySelectorAll('.opt').forEach(b => b.onclick = () => { const right = +b.dataset.k === 0; if (!tried) logQ(q, right);
     if (right) { box.querySelectorAll('.opt').forEach(o => o.disabled = true); b.classList.add('right');
-      if (!tried) addXP(Q.boss ? 15 : 20, b);
+      if (!tried && !Q.practice) addXP(Q.boss ? 15 : 20, b);
       $('#why').innerHTML = `<div class="why ok"><b>${['Nice!', 'You got it!', 'Correct!', 'Boom!'][Math.floor(Math.random() * 4)]}</b>${q.why}</div><div class="row" style="margin-top:12px"><button class="btn" id="nextq">${Q.i + 1 < n ? 'Next question' : 'Finish'}</button></div>`;
       $('#nextq').onclick = () => { Q.i++; renderQ(); }; $('#nextq').focus(); }
     else { b.classList.add('wrong'); b.disabled = true; if (!tried) Q.miss++; tried = true;
       if (Q.boss) { Q.hearts--; box.querySelector('.hearts').innerHTML = [0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('');
-        if (Q.hearts <= 0) { box.querySelectorAll('.opt').forEach(o => o.disabled = true); $('#why').innerHTML = `<div class="why no"><b>Out of hearts!</b>The boss wins this round. The right answer: ${q.o[0]}. Review the stages and try again.</div><div class="row" style="margin-top:12px"><button class="btn sun" id="retry">Try again</button><button class="btn ghost" id="tomap">Back to map</button></div>`;
-          $('#retry').onclick = () => openStage(Q.id); $('#tomap').onclick = () => showMap(); return; } }
+        if (Q.hearts <= 0) { box.querySelectorAll('.opt').forEach(o => o.disabled = true); $('#why').innerHTML = `<div class="why no"><b>Out of hearts!</b>The boss wins this round. The right answer: ${q.o[0]}. Study the questions you missed and try again.</div><div class="row" style="margin-top:12px"><button class="btn sun" id="retry">Try again</button><button class="btn ghost" id="studyb">Study in Study Hall</button><button class="btn ghost" id="tomap">Back to map</button></div>`;
+          $('#studyb').onclick = () => openStudy(); $('#retry').onclick = () => openStage(Q.id); $('#tomap').onclick = () => showMap(); return; } }
       $('#why').innerHTML = `<div class="why no"><b>Not quite.</b>Try another answer.</div>`; } }); }
-function graduation(stars) { $('#quiz').innerHTML = `<div class="grad"><div class="cert"><div class="eyebrow">Ticker Town</div><h3>You graduated!</h3><p>You cleared all 5 worlds and the Grandmaster Exam ${starStr(stars)}</p></div>
+function graduation(stars) { $('#quiz').innerHTML = `<div class="grad"><div class="cert"><div class="eyebrow">Bullsburg</div><h3>You graduated!</h3><p>You cleared all 5 worlds and the Grandmaster Exam ${starStr(stars)}</p></div>
   <h3 style="font-size:24px">Before you invest real money</h3><ul>
   <li><b>Build an emergency fund first</b>, a few months of expenses in savings, so you never have to sell at a bad time.</li>
   <li><b>Under 18?</b> Invest with a grown-up through a custodial account. You must be 18 to open your own account or trade options.</li>
@@ -1069,18 +1406,20 @@ function graduation(stars) { $('#quiz').innerHTML = `<div class="grad"><div clas
   <li><b>Keep paper trading options</b> here for a few months and track your results. Only trade real options once your journal shows a plan that works.</li>
   <li><b>Start small and defined-risk:</b> covered calls, cash-secured puts or spreads, sized so one loss is 1–2% of your account.</li>
   <li><b>Never risk money you need</b>, never use margin as a beginner, and walk away from anyone promising guaranteed returns.</li>
-  <li><b>Keep learning.</b> Markets change. Ticker Town is education, not financial advice.</li></ul>
+  <li><b>Keep learning.</b> Markets change. Bullsburg is education, not financial advice.</li></ul>
   <div class="row" style="justify-content:center;margin-top:18px"><button class="btn sun" id="g-mkt">Keep practicing in the market</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
   $('#g-mkt').onclick = () => go('market'); $('#tomap2').onclick = () => showMap(); }
 function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts : (Q.miss === 0 ? 3 : Q.miss === 1 ? 2 : 1); const prev = S.stars[Q.id] || 0; const first = !prev;
-  S.stars[Q.id] = Math.max(prev, stars); save(); let bonus = 0;
+  S.stars[Q.id] = Math.max(prev, stars); save(); markActive(); let bonus = 0;
   if (first) bonus = Q.boss ? 150 : 50; else if (stars > prev) bonus = 10 * (stars - prev);
   const nextId = STAGES[STAGES.indexOf(Q.id) + 1]; const unlockTxt = first && s.unlock ? `<p><b>Unlocked: ${{ market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock]}!</b></p>` : '';
   $('#quiz').innerHTML = `<div class="win"><div class="big">${starStr(stars).replace('class="stars"', 'class="stars" style="letter-spacing:8px"')}</div><h3>${Q.boss ? (Q.hearts ? 'Boss defeated!' : '') : 'Stage clear!'}</h3><p>${stars === 3 ? 'Perfect run.' : stars === 2 ? 'Great job. Replay for 3 stars.' : 'Cleared! Replay any time for more stars.'}</p>${unlockTxt}
-    <div class="row">${s.unlock && first ? `<button class="btn sun" id="golab">Open the lab</button>` : ''}${nextId && !BYID[nextId] ? '' : nextId ? `<button class="btn" id="nexts">Next stage</button>` : ''}<button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
+    <div class="row">${s.unlock && first ? `<button class="btn sun" id="golab">Open the lab</button>` : ''}${nextId && !BYID[nextId] ? '' : nextId ? `<button class="btn" id="nexts">Next stage</button>` : ''}<button class="btn ghost" id="rev">Review answers</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
+  $('#rev').onclick = () => openStudy(Q.boss ? null : Q.id);
   if (bonus) setTimeout(() => addXP(bonus, $('#quiz .big')), 250);
   if (Q.boss && first) setTimeout(confetti, 300);
   if (s.final) { mission('m15'); graduation(stars); }
+  try { if (window.TT_onStageClear) window.TT_onStageClear(Q.id, !!Q.boss, first); } catch (e) {}
   hud(); const gl = $('#golab'); if (gl) gl.onclick = () => go(s.unlock); const ns = $('#nexts'); if (ns) ns.onclick = () => openStage(nextId); $('#tomap2').onclick = () => showMap(); }
 
 /* ================= lesson widgets ================= */
@@ -1269,12 +1608,13 @@ function strHash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h
 const r2 = v => Math.round(v * 100) / 100;
 
 function newMarket() {
-  const m = { v: 2, day: 0, cash: 10000, hold: {}, opts: [], orders: [], sel: 'EVRY', news: [], log: [], val: [], c: {}, earn: {}, earnPast: {}, exdiv: {}, shock: {}, nid: 1,
+  const base = 10000 + (S.bought || 0);
+  const m = { v: 2, day: 0, cash: base, base, added: 0, hold: {}, opts: [], orders: [], sel: 'EVRY', news: [], log: [], val: [], c: {}, earn: {}, earnPast: {}, exdiv: {}, shock: {}, nid: 1,
     ui: { type: 'candle', vol: true, ma20: true, ma50: false, range: 63, tab: 'stock', side: 'call', exp: null, k: null } };
   STOCKS.forEach(s => { m.c[s.sym] = [{ o: s.p, h: s.p, l: s.p, c: s.p, v: s.vol0 }]; m.earn[s.sym] = s.em ? 3 + Math.floor(Math.random() * 60) : 1e9; m.earnPast[s.sym] = []; m.exdiv[s.sym] = s.div ? 10 + Math.floor(Math.random() * 50) : 1e9; m.shock[s.sym] = 1; });
   for (let i = 0; i < 130; i++) simDay(m, false);
-  m.startDay = m.day; m.val = [10000];
-  m.news = [{ day: m.day, t: 'Welcome to the Practice Market! You have $10,000 of pretend cash. Prices, news and earnings are all simulated.', dir: '' }];
+  m.startDay = m.day; m.val = [base];
+  m.news = [{ day: m.day, t: `Welcome to the Practice Market! You have ${'$' + base.toLocaleString('en-US')} of pretend cash. Prices, news and earnings are all simulated.`, dir: '' }];
   return m;
 }
 function simDay(m, live) {
@@ -1365,8 +1705,8 @@ function fillOrders() { const m = M(); const keep = [];
   m.orders = keep; }
 function nextDay(quiet) { const m = M(); expireOptions(); simDay(m, true); fillOrders();
   m.news = m.news.slice(0, 10); m.val.push(r2(total())); if (m.val.length > 260) m.val.shift();
-  if (m.day - m.startDay >= 20) mission('m3'); if (total() >= 10500) mission('m4');
-  if (!quiet) { save(); renderMarket(); tape(); } }
+  if (m.day - m.startDay >= 20) mission('m3'); if (total() - startCash(m) >= 500) mission('m4');
+  if (!quiet) { markActive(); save(); renderMarket(); tape(); } }
 
 /* ---------- market rendering ---------- */
 function drawStock(cv, all, o) { const g = prep(cv); if (!g) return; const { ctx } = g; const n = Math.min(o.range, all.length), d = all.slice(-n), off = all.length - n;
@@ -1418,9 +1758,9 @@ function renderStockTicket() { const m = M(), u = m.ui; u.sside = u.sside || 'bu
     ` <span class="muted">Free cash ${money(freeCash())}${h ? ` · you own ${h.sh} ${m.sel}${coveredUsed(m.sel) ? ` (${coveredUsed(m.sel)} covering calls)` : ''}` : ''}.</span>`;
   $('#st-go').textContent = `${u.skind === 'market' ? '' : 'Place '}${u.sside === 'buy' ? 'Buy' : 'Sell'} ${q || ''} ${m.sel}${u.skind === 'market' ? '' : ' ' + u.skind + ' order'}`; $('#st-go').className = 'btn ' + (u.sside === 'buy' ? 'up' : 'down'); }
 function placeStock() { const m = M(), u = m.ui, q = Math.floor(+$('#st-qty').value || 0), st = $('#st-status'), sym = m.sel; const say = (t, ok) => { st.textContent = t; st.className = 'status ' + (ok ? 'u' : 'd'); };
-  if (q < 1) return say('Enter how many shares first.');
+  if (q < 1) return say('Enter how many shares first.'); if (+$('#st-qty').value !== q) return say('Use whole shares, like 1, 5 or 10.');
   const h = m.hold[sym], free = h ? h.sh - coveredUsed(sym) : 0;
-  if (u.sside === 'sell' && free < q) return say(free ? `You can sell up to ${free} shares (the rest are covering calls you sold).` : `You don't own any free ${sym} shares. This cash account can't short-sell.`);
+  if (u.sside === 'sell' && free < q) return say(free ? `You can sell up to ${free} shares${coveredUsed(sym) ? ' (the rest are covering calls you sold)' : ''}.` : `You don't own any free ${sym} shares. This cash account can't short-sell.`);
   if (u.skind === 'market') { const p = px(sym);
     if (u.sside === 'buy') { if (freeCash() < q * p) return say(`Not enough free cash. You can afford ${Math.floor(freeCash() / p)} shares.`); m.cash -= q * p; addShares(sym, q, q * p); logT(`Bought ${q} ${sym} at ${money(p)}.`); say(`Bought ${q} shares of ${sym} at ${money(p)}.`, true); mission('m1'); if (Object.keys(m.hold).length >= 3) mission('m2'); }
     else { const basis = removeShares(sym, q); m.cash += q * p; const g = q * p - basis; logT(`Sold ${q} ${sym} at ${money(p)} (${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}).`); say(`Sold ${q} shares at ${money(p)}: ${g >= 0 ? 'profit' : 'loss'} of ${money(Math.abs(g))}.`, g >= 0); } }
@@ -1473,9 +1813,10 @@ function closeOpt(id) { const m = M(), p = m.opts.find(x => x.id === id); if (!p
   if (p.qty > 0) { const v = q.bid * 100 * n - FEE * n; m.cash += v; const g = v - p.avg * 100 * n; logT(`Sold to close ${n} ${contractName(p)} at ${q.bid.toFixed(2)}: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}.`); toast(`Closed: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}`); }
   else { const c = q.ask * 100 * n + FEE * n; if (m.cash < c) return toast('Not enough cash to buy it back.'); m.cash -= c; const g = p.avg * 100 * n - c; logT(`Bought to close ${n} ${contractName(p)} at ${q.ask.toFixed(2)}: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}.`); toast(`Closed: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}`); }
   m.opts = m.opts.filter(x => x.id !== id); m.val[m.val.length - 1] = r2(total()); save(); renderMarket(); }
-function renderPortfolio() { const m = M(), tv = total(), gain = tv - 10000;
-  $('#m-stats').innerHTML = [['Cash', money(m.cash)], ['Set aside (puts)', money(reserved())], ['Stocks', money(stockValue())], ['Options', money(optValue())], ['Total worth', money(tv)], ['Since start', `<span class="${gain >= 0 ? 'u' : 'd'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
-  const pv = m.val.length > 1 ? m.val : [10000, 10000]; const pc = $('#cv-port'); reg(pc, () => drawLine(pc, pv, { base: 10000, xticks: [] }));
+const startCash = m => (m.base || 10000) + (m.added || 0);
+function renderPortfolio() { const m = M(), tv = total(), gain = tv - startCash(m);
+  $('#m-stats').innerHTML = [['Cash', money(m.cash)], ['Set aside (puts)', money(reserved())], ['Stocks', money(stockValue())], ['Options', money(optValue())], ['Total worth', money(tv)], ['Money put in', money(startCash(m))], ['Trading profit', `<span class="${gain >= 0 ? 'u' : 'd'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+  const pv = m.val.length > 1 ? m.val : [startCash(m), startCash(m)]; const pc = $('#cv-port'); reg(pc, () => drawLine(pc, pv, { base: startCash(m), xticks: [] }));
   const rows = Object.entries(m.hold); $('#m-hold').innerHTML = rows.length ? rows.map(([k, v]) => { const pp = px(k), val = v.sh * pp, g = val - v.cost; return `<tr><td>${k}</td><td>${v.sh}</td><td>${money(v.cost / v.sh)}</td><td>${money(pp)}</td><td>${money(val)}</td><td class="${g >= 0 ? 'u' : 'd'}">${g >= 0 ? '+' : ''}${money(g)} (${pct(g / v.cost)})</td></tr>`; }).join('')
     : `<tr><td colspan="6" class="empty">No stocks yet. Pick one and place an order.</td></tr>`;
   $('#m-opts').innerHTML = m.opts.length ? m.opts.map(p => { const q = quote(p.sym, p.type, p.K, p.exp), n = p.qty, pl = (q.mid - p.avg) * 100 * n; return `<tr><td>${contractName(p)}</td><td>${n > 0 ? '+' : ''}${n}</td><td>${p.avg.toFixed(2)}</td><td>${q.mid.toFixed(2)}</td><td class="${pl >= 0 ? 'u' : 'd'}">${pl >= 0 ? '+' : ''}${money(pl)}</td><td>${(q.delta * 100 * n).toFixed(0)}</td><td>${(q.theta * 100 * n).toFixed(2)}</td><td>${calDays(m.day, p.exp)}d</td><td><button class="btn ghost mini" data-close="${p.id}">Close</button></td></tr>`; }).join('')
@@ -1493,7 +1834,7 @@ $('#st-qty').oninput = renderStockTicket; $('#st-px').oninput = renderStockTicke
 $('#m-next').onclick = () => nextDay();
 $('#m-skip').onclick = () => { for (let i = 0; i < 5; i++) nextDay(true); save(); renderMarket(); tape(); };
 let resetArm = false; $('#m-reset').onclick = () => { if (!resetArm) { resetArm = true; $('#m-reset').textContent = 'Tap again to start over'; setTimeout(() => { resetArm = false; $('#m-reset').textContent = 'Start over'; }, 3000); return; }
-  resetArm = false; $('#m-reset').textContent = 'Start over'; S.mkt = newMarket(); MH = null; save(); renderMarket(); tape(); toast('Fresh start: $10,000 of pretend cash.'); };
+  resetArm = false; $('#m-reset').textContent = 'Start over'; S.mkt = newMarket(); MH = null; save(); renderMarket(); tape(); toast(`Fresh start: ${money(S.mkt.cash)} of pretend cash.`); };
 function tape() { const items = STOCKS.map(s => { const a = candles(s.sym), p = a[a.length - 1].c, c = p / a[a.length - 2].c - 1; return `<span>${s.sym} ${money(p)} <span class="${c >= 0 ? 'u' : 'd'}">${c >= 0 ? '▲' : '▼'}${pct(c)}</span></span>`; }).join('');
   $('#tape').innerHTML = items + items + items; }
 
@@ -1559,16 +1900,21 @@ function renderWords() { const q = ($('#w-q').value || '').toLowerCase(); $('#w-
 $('#w-q').oninput = renderWords;
 
 
-/* ================= full game purchase ================= */
-const PRICE = '$9.99';
+/* ================= full game subscription ================= */
+const PLANS = { tt_full_monthly: { price: '$4.99', per: 'month', label: 'Monthly' }, tt_full_yearly: { price: '$44.99', per: 'year', label: 'Yearly', tag: 'Save 25%', note: 'Just $3.75 a month' } };
+const PRICE = PLANS.tt_full_monthly.price + '/month';
+let PLAN = 'tt_full_yearly';
 const BUILD = window.TT_BUILD || 'preview'; // 'preview' (this page), 'web' (free demo site), 'app' (store apps)
 const STORE_LINKS = window.TT_STORE_LINKS || {};
-const priceStr = () => { try { const p = window.TickerStoreBridge && window.TickerStoreBridge.price && window.TickerStoreBridge.price(); if (p) return p; } catch (e) {} return PRICE; };
-window.TT_setOwned = v => { if (v && !S.full) { S.full = true; save(); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); } };
-const PRODUCT_ID = 'tickertown_full_game';
+const planPrice = id => { try { const p = window.TickerStoreBridge && window.TickerStoreBridge.priceOf && window.TickerStoreBridge.priceOf(id); if (p) return p; } catch (e) {} return PLANS[id].price; };
+const priceStr = () => S.sch ? 'school license' : `${planPrice('tt_full_monthly')}/month or ${planPrice('tt_full_yearly')}/year`;
+const refreshAll = () => { hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); };
+/* Called by the store bridge: true while a subscription is active, false once it ends. Progress is always kept. */
+window.TT_setOwned = v => { if (v && !S.full) { S.full = true; save(); refreshAll(); }
+  else if (!v && S.full && BUILD === 'app' && !(S.sch && S.sch.on)) { S.full = false; save(); refreshAll(); toast('Your full game subscription has ended. Your progress is saved. Subscribe again any time to keep going.'); } };
 // In the store apps, the native wrapper sets window.TickerStoreBridge = { buy(id) -> Promise<bool>, restore() -> Promise<bool>, price?(id) -> Promise<string> }.
 const Store = { native: () => !!window.TickerStoreBridge,
-  async buy() { return window.TickerStoreBridge ? !!(await window.TickerStoreBridge.buy(PRODUCT_ID)) : null; },
+  async buy(id) { return window.TickerStoreBridge ? !!(await window.TickerStoreBridge.buy(id)) : null; },
   async restore() { return window.TickerStoreBridge ? !!(await window.TickerStoreBridge.restore()) : null; } };
 const NUMW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'];
 let GATE = null;
@@ -1576,12 +1922,16 @@ function pwShow(html) { $('#pw-box').innerHTML = html; $('#paywall').hidden = fa
 function pwClose() { $('#paywall').hidden = true; }
 $('#paywall').addEventListener('click', e => { if (e.target.id === 'paywall') pwClose(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#paywall').hidden) pwClose(); });
-function openPaywall() { if (S.full) return toast('You already own the full game.');
-  pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Unlock all of Ticker Town</h2>
-    <div class="price" style="margin-top:10px">${priceStr()}<small>one time, no subscription</small></div>
+function openPaywall() { if (S.full) return toast('You already have the full game.');
+  if (S.sch && window.TT_studentPaywall) return window.TT_studentPaywall();
+  const plan = id => `<button class="plan${PLAN === id ? ' on' : ''}" data-plan="${id}" aria-pressed="${PLAN === id}"><span class="pl-name">${PLANS[id].label}${PLANS[id].tag ? `<i>${PLANS[id].tag}</i>` : ''}</span><span class="pl-price">${planPrice(id)}<small>/${PLANS[id].per}</small></span>${PLANS[id].note ? `<span class="pl-note">${PLANS[id].note}</span>` : ''}</button>`;
+  pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Unlock all of Bullsburg</h2>
+    <div class="plans">${plan('tt_full_yearly')}${plan('tt_full_monthly')}</div>
     <ul><li>4 more worlds: Options Island, Greek Peaks, Strategy City and Master\u2019s Summit (38 stages)</li><li>4 boss battles and the Grandmaster Exam</li><li>Real-style options trading in the Practice Market: option chain, Greeks, covered calls, cash-secured puts</li><li>The Options Lab and every level up to Market Master</li></ul>
-    <div class="actions"><button class="btn sun" id="pw-buy">Unlock for ${priceStr()}</button><button class="btn ghost" id="pw-later">Not now</button></div>
-    <p class="fine">Kids: ask a grown-up first. A grown-up will need to answer a question before buying.</p>`);
+    <div class="actions"><button class="btn sun" id="pw-buy">Subscribe for ${planPrice(PLAN)}/${PLANS[PLAN].per}</button><button class="btn ghost" id="pw-later">Not now</button></div>
+    <p class="fine">Kids: ask a grown-up first. A grown-up will need to answer a question before buying.</p>
+    <p class="fine sub-terms">Payment is charged to your ${/iPhone|iPad|iPod|Mac/.test(navigator.userAgent) ? 'Apple Account' : 'Google Play account'} when you confirm. The subscription renews automatically at the same price each ${PLANS[PLAN].per} unless canceled at least 24 hours before the end of the current period. Manage or cancel any time in your account settings. Your progress is kept if you cancel. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Terms of Use</a> · <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p>`);
+  document.querySelectorAll('[data-plan]').forEach(b => b.onclick = () => { PLAN = b.dataset.plan; openPaywall(); });
   $('#pw-buy').onclick = () => gate(doBuy); $('#pw-later').onclick = pwClose; }
 function gate(next) { const a = 6 + Math.floor(Math.random() * 7), b = 3 + Math.floor(Math.random() * 7); GATE = { ans: a * b, next };
   pwShow(`<div class="eyebrow">For grown-ups</div><h2 id="pw-title">Ask a grown-up</h2><p class="muted" style="margin-top:6px">To keep purchases safe, a grown-up needs to answer this.</p>
@@ -1590,29 +1940,199 @@ function gate(next) { const a = 6 + Math.floor(Math.random() * 7), b = 3 + Math.
   const ok = () => { if (+$('#pw-ans').value === GATE.ans) { GATE.next(); } else { $('#pw-err').textContent = 'That answer isn’t right. Ask a grown-up to try again.'; setTimeout(() => gate(next), 1400); } };
   $('#pw-ok').onclick = ok; $('#pw-ans').onkeydown = e => { if (e.key === 'Enter') ok(); }; $('#pw-cancel').onclick = pwClose; }
 async function doBuy() { pwShow(`<h2 id="pw-title">Opening checkout…</h2><p class="muted" style="margin-top:6px">Finish the purchase in the store window.</p>`);
-  let r; try { r = await Store.buy(); } catch (e) { r = false; }
+  let r; try { r = await Store.buy(PLAN); } catch (e) { r = false; }
   if (r === null) return webBuy();
   if (r) grantFull(); else pwShow(`<h2 id="pw-title">Purchase not finished</h2><p class="muted" style="margin-top:6px">Nothing was charged. You can try again any time.</p><div class="actions" style="margin-top:14px"><button class="btn ghost" id="pw-x">Close</button></div>`), $('#pw-x').onclick = pwClose; }
 function webBuy() { if (BUILD === 'web') { const links = [['apple', 'Get it on the App Store'], ['google', 'Get it on Google Play']].filter(([k]) => STORE_LINKS[k]).map(([k, t]) => `<a class="btn sun" style="text-align:center;text-decoration:none" href="${STORE_LINKS[k]}" target="_blank" rel="noopener">${t}</a>`).join('');
-    pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Get the full game in the app</h2><p style="margin-top:8px">The full game is in the Ticker Town app for iPhone, iPad and Android. Your free stages here stay free.</p>
+    pwShow(`<div class="eyebrow">Full game</div><h2 id="pw-title">Get the full game in the app</h2><p style="margin-top:8px">The full game is in the Bullsburg app for iPhone, iPad and Android. Your free stages here stay free.</p>
       <div class="actions" style="margin-top:14px">${links || '<p class="muted">Coming soon to the App Store and Google Play.</p>'}<button class="btn ghost" id="pw-x">Close</button></div>`); $('#pw-x').onclick = pwClose; return; }
   webBuyPreview(); }
 function webBuyPreview() { pwShow(`<div class="eyebrow">Web preview</div><h2 id="pw-title">Get the full game in the app</h2>
-    <p style="margin-top:8px">In the App Store and Google Play versions, this button opens the store checkout for ${priceStr()}. This web page is a preview, so there is no real checkout here.</p>
+    <p style="margin-top:8px">In the App Store and Google Play versions, this button opens the store checkout for the ${PLANS[PLAN].label.toLowerCase()} subscription (${planPrice(PLAN)}/${PLANS[PLAN].per}). This web page is a preview, so there is no real checkout here.</p>
     <div class="actions" style="margin-top:14px"><button class="btn sun" id="pw-test">Pretend purchase (testing only)</button><button class="btn ghost" id="pw-x">Close</button></div>
     <p class="fine">The test button exists so you can try the full game while building it. It is removed from the store versions.</p>`);
   $('#pw-test').onclick = grantFull; $('#pw-x').onclick = pwClose; }
 function grantFull() { S.full = true; save(); pwClose(); confetti(); toast('Full game unlocked. Options Island and beyond are open!'); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); }
 $('#restore').onclick = async () => { let r; try { r = await Store.restore(); } catch (e) { r = false; }
-  if (r === null) return toast('Restore works in the App Store and Google Play versions.'); if (r) grantFull(); else toast('No earlier purchase found on this account.'); };
+  if (r === null) return toast('Restore works in the App Store and Google Play versions.'); if (r) grantFull(); else toast('No active subscription found on this account.'); };
+$('#managesub').onclick = () => { if (window.TickerStoreBridge && window.TickerStoreBridge.manage) window.TickerStoreBridge.manage(); else toast('Manage your subscription in the App Store or Google Play app.'); };
+if (BUILD !== 'app') $('#managesub').hidden = true;
+/* ================= coin shop: add pretend cash ================= */
+const COIN_PACKS = [{ id: 'tt_coins_5000', coins: 5000, price: '$1.99' }, { id: 'tt_coins_10000', coins: 10000, price: '$4.99' }, { id: 'tt_coins_25000', coins: 25000, price: '$9.99', tag: 'Popular' },
+  { id: 'tt_coins_65000', coins: 65000, price: '$24.99' }, { id: 'tt_coins_150000', coins: 150000, price: '$49.99', tag: 'Best value' }];
+const REFILL_BASE = 1500, REFILL_MS = 24 * 3600 * 1000, AD_COINS = 250, AD_MAX = 10;
+const fmtC = n => n.toLocaleString('en-US');
+const REFILL_AMT = () => S.sch && S.sch.on ? 3000 : REFILL_BASE; /* school students get a bigger daily refill instead of video rewards */
+const todayKey = () => new Date().toDateString();
+const adsLeft = () => { if (!S.ads || S.ads.day !== todayKey()) S.ads = { day: todayKey(), n: 0 }; return AD_MAX - S.ads.n; };
+const adsOn = () => !S.sch && (BUILD === 'preview' || !!(window.TickerAds && window.TickerAds.available && window.TickerAds.available()));
+function addCash(n, why, purchased) { if (!S.mkt) S.mkt = newMarket(); const m = S.mkt;
+  m.cash = r2(m.cash + n); m.added = (m.added || 0) + n; if (purchased) S.bought = (S.bought || 0) + n;
+  if (m.val && m.val.length) m.val[m.val.length - 1] = r2(m.val[m.val.length - 1] + n);
+  m.log.unshift({ day: m.day, t: `${why}: added ${money(n)} of pretend cash.` }); save();
+  if (TAB === 'market') renderMarket(); toast(`+${money(n)} added to your Practice Market cash!`); }
+// called by the store bridge when a coin pack purchase completes (tx = store transaction id, so a purchase is never counted twice)
+window.TT_addCoins = (id, tx) => { if (BUILD === 'web' || (BUILD === 'app' && !window.TickerStoreBridge)) return false; const p = COIN_PACKS.find(x => x.id === id); if (!p) return false; S.tx = S.tx || [];
+  if (tx && S.tx.includes(tx)) return true; if (tx) { S.tx.push(tx); if (S.tx.length > 200) S.tx = S.tx.slice(-200); }
+  addCash(p.coins, `Coin pack (${fmtC(p.coins)} coins)`, true); confetti(); return true; };
+const packPrice = p => { try { const v = window.TickerStoreBridge && window.TickerStoreBridge.priceOf && window.TickerStoreBridge.priceOf(p.id); if (v) return v; } catch (e) {} return p.price; };
+function refillLeft() { if ((S.refillAt || 0) > Date.now() + 60000) return REFILL_MS; return Math.max(0, (S.refillAt || 0) + REFILL_MS - Date.now()); }
+function hm(ms) { const t = Math.ceil(ms / 60000), h = Math.floor(t / 60), mi = t % 60; return h ? `${h}h ${mi}m` : `${mi}m`; }
+let shopTimer = null;
+function openShop() { const left = refillLeft(), al = adsLeft();
+  const packs = COIN_PACKS.map(p => `<div class="coin-row${p.tag === 'Best value' ? ' best' : ''}"><span class="ci" aria-hidden="true">💰</span><div class="ct"><b>${fmtC(p.coins)} coins${p.tag ? `<span class="tagb">${p.tag}</span>` : ''}</b><small>+$${fmtC(p.coins)} pretend cash</small></div>
+      <button class="btn${BUILD === 'web' ? ' ghost' : ' sun'}" data-pack="${p.id}">${BUILD === 'web' ? 'In the app' : packPrice(p)}</button></div>`).join('');
+  pwShow(`<div class="eyebrow">Practice Market</div><h2 id="pw-title">Add pretend cash</h2>
+    <p class="muted" style="margin-top:6px">1 coin = $1 of pretend cash, added straight to your Practice Market balance. It's for practice only and has no real-world value.</p>
+    <div class="coinbox">
+      <div class="coin-sec">Free</div>
+      <div class="coin-row"><span class="ci" aria-hidden="true">🎁</span><div class="ct"><b>Daily refill: ${fmtC(REFILL_AMT())} coins</b><small>${left ? `Next refill in ${hm(left)}` : 'Ready to claim!'}</small></div><button class="btn${left ? ' ghost' : ''}" id="cs-refill" ${left ? 'disabled' : ''}>${left ? 'Claimed' : 'Claim'}</button></div>
+      ${adsOn() ? `<div class="coin-row"><span class="ci" aria-hidden="true">🎬</span><div class="ct"><b>Watch a short video: ${AD_COINS} coins</b><small>${al > 0 ? `${al} of ${AD_MAX} left today` : 'Come back tomorrow for more'}</small></div><button class="btn" id="cs-ad" ${al > 0 ? '' : 'disabled'}>Watch</button></div>` : ''}
+      ${S.sch ? '' : `<div class="coin-sec">Coin packs</div>${packs}`}
+    </div>
+    <p class="fine">${S.sch ? 'Your school account includes a bigger daily refill.' : BUILD === 'web' ? 'Coin packs are available in the Bullsburg app.' : 'Kids: ask a grown-up first. A grown-up will need to answer a question before buying.'} Coins you buy stay with you if you press Start over.</p>
+    <div class="actions" style="margin-top:12px"><button class="btn ghost" id="cs-x">Close</button></div>`);
+  $('#cs-x').onclick = pwClose;
+  $('#cs-refill').onclick = () => { if (!clockOK()) return toast('Your device clock looks wrong. Fix the date and time to claim the refill.'); if (refillLeft()) return; S.refillAt = Date.now(); addCash(REFILL_AMT(), 'Daily refill'); openShop(); };
+  const ad = $('#cs-ad'); if (ad) ad.onclick = watchAd;
+  document.querySelectorAll('[data-pack]').forEach(b => b.onclick = () => { const p = COIN_PACKS.find(x => x.id === b.dataset.pack);
+    if (BUILD === 'web') return webBuy(); gate(() => buyPack(p)); });
+  clearInterval(shopTimer); shopTimer = setInterval(() => { if ($('#paywall').hidden) return clearInterval(shopTimer); const r = $('#cs-refill'); if (r && r.disabled && !refillLeft()) openShop(); }, 30000); }
+async function watchAd() { if (!clockOK()) return toast('Your device clock looks wrong. Fix the date and time first.'); if (adsLeft() <= 0) return;
+  const b = $('#cs-ad'); if (b) { b.disabled = true; b.textContent = 'Loading…'; }
+  let ok = false;
+  if (window.TickerAds) { try { ok = await window.TickerAds.show(); } catch (e) { ok = false; } }
+  else if (BUILD === 'preview') ok = confirm('Web preview: pretend you watched a video ad? (In the app a real kid-safe video plays here.)');
+  if (ok) { S.ads.n++; addCash(AD_COINS, 'Video reward'); } else toast('No reward this time. The video has to play to the end.');
+  openShop(); }
+async function buyPack(p) { pwShow(`<h2 id="pw-title">Opening checkout…</h2><p class="muted" style="margin-top:6px">Finish the purchase in the store window.</p>`);
+  if (window.TickerStoreBridge && window.TickerStoreBridge.buyCoins) { let r; try { r = await window.TickerStoreBridge.buyCoins(p.id); } catch (e) { r = false; }
+    if (r) { openShop(); return; }
+    pwShow(`<h2 id="pw-title">Purchase not finished</h2><p class="muted" style="margin-top:6px">Nothing was charged. You can try again any time.</p><div class="actions" style="margin-top:14px"><button class="btn ghost" id="pw-x">Back</button></div>`); $('#pw-x').onclick = openShop; return; }
+  pwShow(`<div class="eyebrow">Web preview</div><h2 id="pw-title">${fmtC(p.coins)} coins</h2><p style="margin-top:8px">In the App Store and Google Play versions this opens the store checkout for ${p.price}. This page is a preview, so there is no real checkout.</p>
+    <div class="actions" style="margin-top:14px"><button class="btn sun" id="pw-test">Pretend purchase (testing only)</button><button class="btn ghost" id="pw-x">Back</button></div>`);
+  $('#pw-test').onclick = () => { window.TT_addCoins(p.id, 'test-' + Date.now()); openShop(); }; $('#pw-x').onclick = openShop; }
+$('#m-addcash').onclick = openShop;
+/* ================= Study Hall: every question you've seen, with the answer and why ================= */
+let STUDY = { f: 'all' };
+function studyItems() { const out = {};
+  for (const k in S.ql) { const it = KEYQ[k]; if (!it) continue; const sid = k.split(':')[0]; let q, a, why;
+    if (it.gen) { const g = S.qg[k]; if (!g) continue; [q, a, why] = g; } else { q = it.q; a = it.o[0]; why = it.why; }
+    (out[sid] = out[sid] || []).push({ k, q, a, why, seen: S.ql[k][0], miss: S.ql[k][1], last: S.ql[k][2] }); }
+  /* stages cleared before the Study Hall existed: show their original questions */
+  STAGES.forEach(id => { const s = BYID[id]; if (s.boss || !S.stars[id] || out[id]) return;
+    out[id] = s.quiz.filter(q => !/:x/.test(q.key)).map(q => ({ k: q.key, q: q.q, a: q.o[0], why: q.why, seen: 1, miss: 0, last: 1 })); });
+  return out; }
+function openStudy(focusId) { go('map', true); $('#map-home').hidden = true; const st = $('#stage'); st.hidden = false;
+  const all = studyItems(), missedN = Object.values(all).flat().filter(x => x.last === 0).length, total = Object.values(all).flat().length;
+  const ids = STAGES.filter(id => all[id]);
+  const body = ids.map(id => { const s = BYID[id]; let qs = all[id]; if (STUDY.f === 'missed') qs = qs.filter(x => x.last === 0); if (!qs.length) return '';
+    const m = qs.filter(x => x.last === 0).length;
+    return `<details class="sh-stage" ${id === focusId || STUDY.f === 'missed' ? 'open' : ''} id="sh-${id}"><summary><span><small class="eyebrow">${WORLDS[s.world - 1].name}</small><b>${s.title}</b></span><span class="sh-count">${qs.length} question${qs.length > 1 ? 's' : ''}${m ? ` · <em>${m} to review</em>` : ''}</span></summary>
+      <div class="sh-list">${qs.map(x => `<div class="sh-q${x.last === 0 ? ' miss' : ''}"><div class="q">${x.q}</div><div class="a"><span>✓</span>${x.a}</div><div class="w">${x.why}</div>${x.miss ? `<div class="tag">${x.last === 0 ? 'Missed last time' : 'Missed before, got it since'}</div>` : ''}</div>`).join('')}</div>
+      <div class="row" style="margin-top:10px"><button class="btn ghost" data-relesson="${id}">Re-read the lesson</button></div></details>`; }).join('');
+  st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">Study Hall</span></div>
+    <h2>Study Hall</h2><p class="lesson-text" style="font-size:16.5px">Every question you’ve answered, with the right answer and why. Go back to any lesson and study before a boss battle.</p>
+    <div class="sh-bar"><div class="modes" role="tablist"><button data-shf="all" aria-pressed="${STUDY.f === 'all'}">All (${total})</button><button data-shf="missed" aria-pressed="${STUDY.f === 'missed'}">To review (${missedN})</button></div>
+    <button class="btn sun" id="sh-practice" ${missedN ? '' : 'disabled'}>${missedN ? `Practice ${Math.min(missedN, 10)} missed question${missedN > 1 ? 's' : ''}` : 'No missed questions'}</button></div>
+    <div class="sh-body">${body || `<div class="card" style="margin-top:14px"><b>${STUDY.f === 'missed' ? 'Nothing to review. Nice work!' : 'No questions yet.'}</b><p class="muted" style="margin-top:6px">${STUDY.f === 'missed' ? 'Questions you miss show up here so you can study them.' : 'Clear your first stage and its questions will show up here.'}</p></div>`}</div></div>`;
+  $('#back').onclick = () => showMap();
+  st.querySelectorAll('[data-shf]').forEach(b => b.onclick = () => { STUDY.f = b.dataset.shf; openStudy(); });
+  st.querySelectorAll('[data-relesson]').forEach(b => b.onclick = () => openStage(b.dataset.relesson));
+  $('#sh-practice').onclick = () => startPractice(Object.values(all).flat().filter(x => x.last === 0).map(x => x.k));
+  if (focusId && $('#sh-' + focusId)) $('#sh-' + focusId).scrollIntoView({ block: 'start' }); else window.scrollTo({ top: 0, behavior: 'auto' }); }
+function startPractice(keys) { const qs = shuffle(keys).slice(0, 10).map(k => realize(KEYQ[k])); if (!qs.length) return;
+  go('map', true); $('#map-home').hidden = true; const st = $('#stage'); st.hidden = false;
+  Q = { id: null, qs, i: 0, miss: 0, boss: false, practice: true };
+  st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Study Hall</button><span class="eyebrow">Study Hall · Practice</span></div><h2>Practice round</h2><p class="lesson-text" style="font-size:16.5px">Questions you missed before, in a new order. Number questions get new numbers. Get one right and it leaves your review list.</p><div class="quiz card" id="quiz"></div></div>`;
+  $('#back').onclick = () => openStudy(); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' }); }
+function finishPractice() { const n = Q.qs.length, ok = n - Q.miss;
+  $('#quiz').innerHTML = `<div class="win"><h3>${ok} of ${n} right on the first try</h3><p>${Q.miss ? 'Keep going. The ones you missed stay in your review list.' : 'All cleared from your review list!'}</p><div class="row"><button class="btn sun" id="p-again">Back to Study Hall</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
+  $('#p-again').onclick = () => openStudy(); $('#tomap2').onclick = () => showMap(); }
+
+/* ================= daily streak, daily quiz, grown-up report, onboarding ================= */
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const dayDiff = (a, b) => Math.round((new Date(b + 'T12:00') - new Date(a + 'T12:00')) / 864e5);
+const STREAK_REWARDS = { 3: 500, 7: 1500, 14: 3000, 30: 5000, 60: 8000, 100: 15000 };
+function stk() { S.streak = Object.assign({ n: 0, best: 0, last: '', fz: 0, days: [] }, S.streak || {}); return S.streak; }
+function streakAlive() { const k = stk(); if (!k.last) return 0; const g = dayDiff(k.last, dayKey()); return g <= 1 + k.fz ? k.n : 0; }
+function markActive() { if (typeof clockOK === 'function' && !clockOK()) return; const k = stk(), t = dayKey(); if (k.last === t) return;
+  let used = 0; if (k.last) { const g = dayDiff(k.last, t); if (g === 1) k.n++; else if (g > 1 && g - 1 <= k.fz) { used = g - 1; k.fz -= used; k.n++; } else k.n = 1; } else k.n = 1;
+  k.last = t; k.best = Math.max(k.best, k.n); k.days = (k.days || []).concat(t).slice(-60);
+  if (k.n % 7 === 0 && k.fz < 2) { k.fz++; setTimeout(() => toast('You earned a streak shield! It protects your streak if you miss a day.'), 2800); }
+  save(); hud(); renderToday();
+  const r = STREAK_REWARDS[k.n]; if (r) { addCash(r, `${k.n}-day streak reward`); confetti(); }
+  else toast(used ? `Streak saved by a shield! ${k.n} days in a row.` : `Daily goal done! ${k.n}-day streak.`); }
+function renderStreakChip() { const n = streakAlive(), done = stk().last === dayKey(); const b = $('#h-streak'); if (!b) return; $('#h-sd').textContent = n; b.classList.toggle('cold', !done); b.title = done ? `${n}-day streak. Today's goal is done.` : `${n}-day streak. Play one stage or one market day today to keep it.`; }
+function weekRow() { const k = stk(), out = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const key = dayKey(d); out.push(`<div>${'SMTWTFS'[d.getDay()]}<i class="${(k.days || []).includes(key) ? 'on' : ''}">${(k.days || []).includes(key) ? '✓' : ''}</i></div>`); } return `<div class="week" aria-label="Last 7 days">${out.join('')}</div>`; }
+function dqReady() { return !S.dq || S.dq.day !== dayKey(); }
+function renderToday() { const c = $('#today-card'); if (!c) return; const done = stk().last === dayKey(), n = streakAlive();
+  c.innerHTML = `<h3>Today</h3><div class="daily" style="margin-top:10px"><div class="goal"><div class="ring" style="--p:${done ? 100 : 0}">${done ? '✓' : '1'}</div><div><b>${done ? 'Daily goal done' : 'Daily goal: play once'}</b><small class="muted">${done ? `${n}-day streak. See you tomorrow!` : 'Clear a stage, play a market day or take the daily quiz.'}</small></div></div>${weekRow()}
+    <button class="btn${dqReady() ? ' sun' : ' ghost'}" id="t-dq">${dqReady() ? 'Daily quiz: up to 300 coins' : `Daily quiz done (${S.dq.score}/3)`}</button><button class="btn ghost" id="t-study">📚 Study Hall: review past questions</button><button class="btn ghost" id="t-rep">Progress report for grown-ups</button></div>`;
+  $('#t-study').onclick = () => openStudy(); $('#t-dq').onclick = openDailyQuiz; $('#t-rep').onclick = openReport; renderStreakChip(); }
+function openDaily() { const k = stk(), n = streakAlive();
+  pwShow(`<div class="eyebrow">Your streak</div><h2 id="pw-title">${n} ${n === 1 ? 'day' : 'days'} in a row</h2><p class="muted" style="margin-top:6px">Play once a day to grow your streak. Best ever: ${k.best} days. Streak shields: ${k.fz} of 2 (you earn one every 7 days).</p>
+    <div style="margin-top:14px">${weekRow()}</div><p class="fine" style="margin-top:12px">Streak rewards: 3 days +500 coins, 7 days +1,500, 14 days +3,000, 30 days +5,000.</p>
+    <div class="actions" style="margin-top:14px"><button class="btn sun" id="d-dq" ${dqReady() ? '' : 'disabled'}>${dqReady() ? 'Take the daily quiz' : 'Daily quiz done for today'}</button><button class="btn ghost" id="d-x">Close</button></div>`);
+  $('#d-dq').onclick = openDailyQuiz; $('#d-x').onclick = pwClose; }
+function dailyPool() { const seen = STAGES.filter(id => S.stars[id] && BYID[id].quiz && !BYID[id].boss); const ids = seen.length ? seen : STAGES.slice(0, 2);
+  /* seeded by this player's own id + today, so each player gets a different quiz (and reopening it doesn't reroll) */
+  const r = mulberry32([...(S.pid + dayKey())].reduce((a, c) => (Math.imul(a, 31) + c.charCodeAt(0)) >>> 0, 7));
+  return drawQs(ids.flatMap(id => bankOf(id)), 3, r); }
+function openDailyQuiz() { if (!clockOK()) return toast('Your device clock looks wrong. Fix the date and time to play the daily quiz.'); if (!dqReady()) return toast('Come back tomorrow for a new daily quiz.'); const qs = dailyPool(); let i = 0, score = 0;
+  const step = () => { const q = qs[i]; const order = shuffle(q.o.map((t, k) => ({ t, k })));
+    pwShow(`<div class="eyebrow">Daily quiz · question ${i + 1} of ${qs.length}</div><h2 id="pw-title" style="font-size:24px">${q.q}</h2><div id="dq-o" style="margin-top:8px">${order.map(o => `<button class="dq-opt" data-k="${o.k}">${o.t}</button>`).join('')}</div><div id="dq-why" class="fine" style="margin-top:10px"></div>`);
+    document.querySelectorAll('.dq-opt').forEach(b => b.onclick = () => { const ok = +b.dataset.k === 0; if (ok) score++; logQ(q, ok);
+      document.querySelectorAll('.dq-opt').forEach(x => { x.disabled = true; if (+x.dataset.k === 0) x.classList.add('ok'); }); if (!ok) b.classList.add('no');
+      $('#dq-why').innerHTML = `${ok ? 'Correct! ' : 'Not quite. '}${q.why}<div class="actions" style="margin-top:12px"><button class="btn" id="dq-n">${i + 1 < qs.length ? 'Next question' : 'See results'}</button></div>`;
+      $('#dq-n').onclick = () => { i++; if (i < qs.length) step(); else finish(); }; }); };
+  const finish = () => { S.dq = { day: dayKey(), score }; save(); const coins = Math.max(50, score * 100);
+    pwShow(`<div class="eyebrow">Daily quiz</div><h2 id="pw-title">${score} of ${qs.length} right</h2><p style="margin-top:8px">${score === 3 ? 'Perfect! ' : ''}You earned ${fmtC(coins)} coins and ${10 * score + 10} XP. A new quiz unlocks tomorrow.</p><div class="actions" style="margin-top:14px"><button class="btn" id="dq-x">Done</button></div>`);
+    $('#dq-x').onclick = pwClose; addCash(coins, 'Daily quiz'); addXP(10 * score + 10); markActive(); renderToday(); };
+  step(); }
+function reportData() { const total = STAGES.length, cleared = STAGES.filter(id => S.stars[id]).length, stars = Object.values(S.stars).reduce((a, b) => a + b, 0);
+  const worlds = WORLDS.filter(w => STAGES.filter(id => BYID[id].world === w.n).every(id => S.stars[id])).map(w => w.name);
+  const m = S.mkt, profit = m ? total_() - startCash(m) : 0; return { total, cleared, stars, worlds, profit, lvl: levelOf(S.xp) + 1, rank: RANKS[levelOf(S.xp)][1], missions: Object.keys(S.missions).length }; }
+function total_() { try { return total(); } catch (e) { return 0; } }
+function openReport() { const d = reportData(), k = stk();
+  pwShow(`<div class="eyebrow">For grown-ups</div><h2 id="pw-title">Progress report</h2><p class="muted" style="margin-top:6px">A quick look at what your player has learned. Everything stays on this device.</p>
+    <div class="rep"><div><span>Level ${d.lvl}</span><b style="font-size:17px">${d.rank}</b></div><div><span>Stages cleared</span><b>${d.cleared} of ${d.total}</b></div><div><span>Stars</span><b>★ ${d.stars}</b></div><div><span>Streak (best)</span><b>${streakAlive()} (${k.best}) days</b></div>
+    <div><span>Missions done</span><b>${d.missions} of ${MISSIONS.length}</b></div><div><span>Practice trading profit</span><b class="${d.profit >= 0 ? 'u' : 'd'}">${d.profit >= 0 ? '+' : ''}${money(d.profit)}</b></div></div>
+    <p style="margin-top:12px"><b>Worlds completed:</b> ${d.worlds.length ? d.worlds.join(', ') : 'none yet'}.</p>
+    <div class="actions" style="margin-top:14px"><button class="btn sun" id="r-share">Share a progress card</button><button class="btn ghost" id="r-x">Close</button></div>`);
+  $('#r-share').onclick = shareCard; $('#r-x').onclick = pwClose; }
+async function shareCard() { const d = reportData(), W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#123a30'); g.addColorStop(1, '#071712'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  const gold = c.createLinearGradient(0, 0, W, 0); gold.addColorStop(0, '#F8E7B0'); gold.addColorStop(.5, '#E3C179'); gold.addColorStop(1, '#B8893B');
+  c.strokeStyle = gold; c.lineWidth = 6; c.strokeRect(40, 40, W - 80, H - 80); c.lineWidth = 2; c.strokeRect(62, 62, W - 124, H - 124);
+  c.textAlign = 'center'; c.fillStyle = gold; c.font = '700 54px Fraunces, Georgia, serif'; c.fillText('Bullsburg', W / 2, 190);
+  c.fillStyle = '#A9BCB2'; c.font = '400 34px "Atkinson Hyperlegible", sans-serif'; c.fillText('Certificate of progress', W / 2, 250);
+  c.beginPath(); c.arc(W / 2, 470, 140, 0, 7); const cg = c.createRadialGradient(W / 2 - 40, 430, 20, W / 2, 470, 150); cg.addColorStop(0, '#FFF4CF'); cg.addColorStop(.5, '#E3C179'); cg.addColorStop(1, '#8C6527'); c.fillStyle = cg; c.fill();
+  c.fillStyle = '#2A1D05'; c.font = '800 130px Fraunces, Georgia, serif'; c.fillText(String(d.lvl), W / 2, 515);
+  c.fillStyle = '#F4EFE2'; c.font = '700 64px Fraunces, Georgia, serif'; c.fillText(d.rank, W / 2, 720);
+  c.font = '400 38px "Atkinson Hyperlegible", sans-serif'; c.fillStyle = '#D9CFB8';
+  [`${d.cleared} of ${d.total} stages cleared`, `★ ${d.stars} stars earned`, `${stk().best}-day best streak`, d.worlds.length ? `Completed: ${d.worlds.slice(-2).join(' & ')}` : 'Learning the stock market'].forEach((t, i) => c.fillText(t, W / 2, 830 + i * 70));
+  c.fillStyle = gold; c.font = '700 36px "Atkinson Hyperlegible", sans-serif'; c.fillText('Learn investing as a game', W / 2, H - 150);
+  c.fillStyle = '#A9BCB2'; c.font = '400 26px "Atkinson Hyperlegible", sans-serif'; c.fillText('Pretend money · for learning only', W / 2, H - 105);
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png')); const file = new File([blob], 'bullsburg-progress.png', { type: 'image/png' });
+  try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'My Bullsburg progress', text: `I'm level ${d.lvl} (${d.rank}) in Bullsburg!` }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'bullsburg-progress.png'; document.body.appendChild(a); a.click(); a.remove(); toast('Progress card saved.'); }
+function onboard() { if (S.onboarded) return; if (S.xp > 0 || Object.keys(S.stars).length) { S.onboarded = true; save(); return; }
+  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">Learn the stock market by playing</h2><p style="margin-top:8px">Clear stages, beat bosses and trade with pretend money. How should we explain things?</p>
+    <div class="actions" style="margin-top:14px"><button class="btn sun" id="ob-kid">Kids</button><button class="btn" id="ob-adult">I'm a beginner adult</button></div>
+    <p class="fine" style="margin-top:12px">You can switch any time at the top of the screen. Tip: play once a day to build a streak and earn bonus coins.</p>${window.TT_SB && window.TT_SB.url ? '<p style="margin-top:10px"><button class="btn ghost" id="ob-student" style="font-size:13px">🎓 My school gave me Bullsburg</button></p>' : ''}`);
+  const pick = m => { S.mode = m; S.onboarded = true; save(); hud(); pwClose(); toast('Tap stage 1 to begin!'); };
+  const obs = $('#ob-student'); if (obs) obs.onclick = () => { S.mode = 'kid'; S.onboarded = true; save(); hud(); pwClose(); if (window.TT_openStudent) window.TT_openStudent(); };
+  $('#ob-kid').onclick = () => pick('kid'); $('#ob-adult').onclick = () => pick('adult'); }
+$('#h-streak').onclick = openDaily;
 /* ================= global controls ================= */
 document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { S.mode = b.dataset.mode; save(); hud(); const lt = $('#ltext'); if (lt && Q && !Q.boss) lt.innerHTML = S.mode === 'kid' ? BYID[Q.id].kid : BYID[Q.id].adult; });
 $('#teacher').checked = !!S.teacher; $('#teacher').onchange = e => { S.teacher = e.target.checked; save(); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); };
 let raArm = false; $('#resetall').onclick = () => { if (!raArm) { raArm = true; $('#resetall').textContent = 'Tap again to erase all progress'; setTimeout(() => { raArm = false; $('#resetall').textContent = 'Reset progress'; }, 3000); return; }
   Object.assign(S, { xp: 0, stars: {}, missions: {}, best: 0, mkt: newMarket() }); /* purchase (S.full) is kept */ save(); raArm = false; $('#resetall').textContent = 'Reset progress'; hud(); tape(); go('map'); toast('Progress reset. Welcome back, rookie.'); };
 
-hud(); tape(); renderWords();
+hud(); tape(); renderWords(); renderToday(); setTimeout(onboard, 400);
 const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'options', 'words'].includes(start) ? start : 'map');
 </script>
 
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>
+<script src="cloud.js"></script><script src="school.js"></script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>
