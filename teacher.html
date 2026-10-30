@@ -23,11 +23,16 @@ header .btn.ghost{color:#fff;border-color:#ffffff40}
 .classes{display:flex;gap:8px;flex-wrap:wrap}.cls{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font:inherit;text-align:left}.cls[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
 .cls small{display:block;color:var(--muted);font-size:12px}
 .code{font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:3px;background:#FFF5D6;border-radius:8px;padding:4px 10px;font-size:20px}
-.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--muted);font-weight:700;cursor:pointer;white-space:nowrap}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:1000px;font-size:14px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--muted);font-weight:700;cursor:pointer;white-space:nowrap}
 td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
 .bar{height:6px;background:var(--line);border-radius:3px;margin-top:4px;min-width:80px}.bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
 .tag{display:inline-block;font-size:12px;border-radius:999px;padding:1px 8px;background:#FBE3DC;color:var(--bad)}.ok{background:#DDF1E7;color:var(--accent)}
 .empty{padding:20px;text-align:center;color:var(--muted)}[hidden]{display:none!important}
+tfoot td{font-weight:700;background:var(--bg)}.up{color:var(--accent);font-weight:700}.dn{color:var(--bad);font-weight:700}
+.tp{display:grid;grid-template-columns:minmax(150px,1fr) 2fr 48px;gap:8px;align-items:center;font-size:14px;padding:4px 0}.tp .bar{margin:0}.tp.weak .bar i{background:var(--bad)}
+.sponsor{margin-top:8px;font-size:14px;color:var(--muted)}.sw{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:400;margin:0}.sw input{width:auto}
+.lgt{min-width:0}.lgt tr.me td{font-weight:700;color:var(--accent)}
+@media print{header,#s-email,#s-code,#s-no,.noprint,.cls-card,#c-league,th:last-child,td:last-child{display:none!important}body{background:#fff}.card{border:0;padding:0;margin-bottom:14px}main{padding:0}table{min-width:0;font-size:11px}.tw{overflow:visible}.printhead{display:block!important}}
 </style></head><body>
 <header><div class="w"><div class="brand"><h1><b>Bullsburg</b> Teacher Dashboard</h1></div><div class="row"><span id="who" class="muted" style="color:#cfe"></span><button class="btn ghost sm" id="out" hidden>Sign out</button></div></div></header>
 <main class="w">
@@ -57,23 +62,36 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
 
 <section id="s-dash" hidden style="display:grid;gap:18px">
   <div class="card"><div class="row" style="justify-content:space-between"><h2 id="sc-name">School</h2><span class="muted" id="sc-lic"></span></div>
-    <div class="stats" style="margin-top:12px"><div class="stat"><span>Students signed in</span><b id="st-used">0</b></div><div class="stat"><span>Student spots</span><b id="st-seats">0</b></div><div class="stat"><span>License works through</span><b id="st-ends">-</b></div><div class="stat"><span>Your classes</span><b id="st-cls">0</b></div></div></div>
+    <div class="stats" style="margin-top:12px"><div class="stat"><span>Students signed in</span><b id="st-used">0</b></div><div class="stat"><span>Student spots</span><b id="st-seats">0</b></div><div class="stat"><span>License works through</span><b id="st-ends">-</b></div><div class="stat"><span>Your classes</span><b id="st-cls">0</b></div></div><div class="sponsor" id="sc-sp" hidden></div></div>
 
-  <div class="card"><div class="row" style="justify-content:space-between"><h2>Your classes</h2>
+  <div class="card cls-card"><div class="row" style="justify-content:space-between"><h2>Your classes</h2>
       <div class="row"><input id="new-name" placeholder="New class name, e.g. Period 3 EPF" maxlength="60" style="width:260px"><button class="btn" id="new-go">Create class</button></div></div>
     <div class="err" id="new-err" aria-live="polite"></div>
     <div class="classes" id="cls-list"></div>
     <p class="muted" id="cls-help" style="margin:10px 0 0">Students join a class in the app: <b>I'm a student</b> → type the class code and their name. Each student gets a private student key (shown below) for signing in on another device.</p></div>
 
+  <div class="card" id="c-report" hidden>
+    <div class="printhead" style="display:none"><b>Bullsburg class report</b> · <span id="pr-date"></span></div>
+    <div class="row" style="justify-content:space-between"><h2>Class summary: <span id="rp-name"></span></h2>
+      <div class="row noprint"><label class="sw"><input type="checkbox" id="lg-on"> Class league on</label><button class="btn ghost sm" id="print">Print report</button></div></div>
+    <div class="stats" style="margin-top:12px"><div class="stat"><span>Average W!SE readiness</span><b id="rp-ready">-</b></div><div class="stat"><span>Ready to pass (70%+)</span><b id="rp-pass">-</b></div>
+      <div class="stat"><span>Start-of-course check</span><b id="rp-pre">-</b></div><div class="stat"><span>End-of-course check</span><b id="rp-post">-</b></div><div class="stat"><span>Average growth</span><b id="rp-grow">-</b></div></div>
+    <h3 style="margin:16px 0 6px;font-size:16px">W!SE topics: class average</h3><div id="rp-topics"></div>
+    <p class="muted" style="font-size:13px;margin-bottom:0">Readiness blends each student's last 20 answers in every W!SE topic. Red topics are below the 70% passing line and are good candidates for a whole-class review.</p>
+  </div>
+
   <div class="card" id="c-students" hidden>
     <div class="row" style="justify-content:space-between"><div><h2 id="cl-name">Class</h2><p class="muted" style="margin:2px 0 0">Class code <span class="code" id="cl-code"></span></p></div>
-      <div class="row"><button class="btn ghost sm" id="refresh">Refresh</button><button class="btn ghost sm" id="csv">Download CSV</button></div></div>
+      <div class="row noprint"><button class="btn ghost sm" id="refresh">Refresh</button><button class="btn ghost sm" id="csv">Download CSV</button></div></div>
     <div class="tw" style="margin-top:12px"><table><thead><tr>
       <th data-k="name">Student</th><th data-k="cleared">Stages cleared</th><th class="n" data-k="stars">Stars</th><th class="n" data-k="level">Level</th>
-      <th class="n" data-k="accuracy">Quiz accuracy</th><th class="n" data-k="to_review">To review</th><th class="n" data-k="streak">Streak</th><th data-k="next_stage">Working on</th><th data-k="last">Last active</th><th></th></tr></thead>
-      <tbody id="rows"></tbody></table></div>
-    <p class="muted" style="font-size:13px">Quiz accuracy is the share of all quiz answers the student got right. "To review" counts questions the student most recently got wrong; they can practice those in Study Hall.</p>
+      <th class="n" data-k="ready">W!SE ready</th><th class="n" data-k="pre">Start check</th><th class="n" data-k="post">End check</th><th class="n" data-k="grow">Growth</th><th class="n" data-k="accuracy">Quiz accuracy</th><th class="n" data-k="to_review">To review</th><th class="n" data-k="streak">Streak</th><th data-k="next_stage">Working on</th><th data-k="last">Last active</th><th></th></tr></thead>
+      <tbody id="rows"></tbody><tfoot id="foot"></tfoot></table></div>
+    <p class="muted" style="font-size:13px">W!SE ready is the student's readiness for the W!SE Financial Literacy Certification (70% passes). Start and end checks are 21-question skills checks students take in the app's W!SE Prep. Quiz accuracy is the share of all quiz answers the student got right. "To review" counts questions the student most recently got wrong; they can practice those in Study Hall.</p>
   </div>
+  <div class="card" id="c-league">
+    <div class="row" style="justify-content:space-between"><h2>School league</h2><button class="btn ghost sm" id="lg-load">Show standings</button></div>
+    <div id="lg-body"><p class="muted" style="margin:6px 0 0">Compare every class at your school, and see your division tournament when one is running.</p></div></div>
 </section>
 </main>
 <script>window.TT_SB = {"url": "https://nvjlgiohvctocgbpegvi.supabase.co", "key": "sb_publishable_uY-81hCWhNXbnreZKwT7Tg_USO1Wljj"};</script>
@@ -108,6 +126,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
       $('#sc-name').textContent = t.school; $('#st-used').textContent = t.students_used; $('#st-seats').textContent = t.seats; $('#st-ends').textContent = t.ends_on;
       var left = Math.round((new Date(t.ends_on) - new Date()) / 864e5); $('#sc-lic').innerHTML = left < 0 ? '<span class="tag">License ended</span>' : left < 31 ? '<span class="tag">Renews soon</span>' : '<span class="tag ok">Active</span>';
       $('#st-cls').textContent = t.classes.length; paintClasses(); show('#s-dash');
+      var sp = t.sponsor; $('#sc-sp').hidden = !(sp && sp.name); if (sp && sp.name) $('#sc-sp').innerHTML = 'Your Bullsburg license is sponsored by <b>' + esc(sp.name) + '</b>' + (sp.note ? ' · ' + esc(sp.note) : '') + '. Students see this in the app.';
       if (!CUR && t.classes.length) pick(t.classes[t.classes.length - 1].id); else if (CUR) pick(CUR);
     }).catch(function (e) { if (e.status === 401) signOut(); else alert(friendly(e)); }); }
   function paintClasses() { var box = $('#cls-list'); box.innerHTML = ME.classes.length ? '' : '<p class="muted">No classes yet. Create one above to get a class code.</p>';
@@ -119,23 +138,51 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
       .catch(function (e) { $('#new-err').textContent = friendly(e); }).then(function () { b.disabled = false; }); };
 
   function pick(id) { CUR = id; var c = ME.classes.find(function (x) { return x.id === id; }); if (!c) return; paintClasses();
-    $('#c-students').hidden = false; $('#cl-name').textContent = c.name; $('#cl-code').textContent = c.code; $('#rows').innerHTML = '<tr><td colspan="10" class="empty">Loading…</td></tr>';
+    $('#c-students').hidden = false; $('#c-report').hidden = false; $('#cl-name').textContent = c.name; $('#rp-name').textContent = c.name; $('#lg-on').checked = c.league !== false;
+    $('#cl-code').textContent = c.code; $('#rows').innerHTML = '<tr><td colspan="14" class="empty">Loading…</td></tr>';
     C.rpc('class_students', { p_class: id }, true).then(function (list) { ROWS = (list || []).map(function (s) { var m = s.summary || {}; return { id: s.id, name: s.name, key: s.key, cleared: m.cleared || 0, total: m.total || 0, stars: m.stars || 0, level: m.level || 1, rank: m.rank || '',
-        accuracy: m.accuracy == null ? -1 : m.accuracy, to_review: m.to_review || 0, streak: m.streak || 0, next_stage: m.next_stage || '', last: s.updated_at || '', worlds: m.worlds || [] }; }); paint(); })
-      .catch(function (e) { $('#rows').innerHTML = '<tr><td colspan="10" class="empty">' + esc(friendly(e)) + '</td></tr>'; }); }
+        accuracy: m.accuracy == null ? -1 : m.accuracy, to_review: m.to_review || 0, streak: m.streak || 0, next_stage: m.next_stage || '', last: s.updated_at || '', worlds: m.worlds || [],
+        ready: num(m.ready), pre: num(m.pre), post: num(m.post), grow: num(m.pre) >= 0 && num(m.post) >= 0 ? m.post - m.pre : -999, topics: m.topics || {} }; }); paint(); report(); })
+      .catch(function (e) { $('#rows').innerHTML = '<tr><td colspan="14" class="empty">' + esc(friendly(e)) + '</td></tr>'; }); }
+  var num = function (v) { return typeof v === 'number' && isFinite(v) ? v : -1; };
+  var TOPICS = [['income', 'Income, careers and taxes'], ['money', 'Money management and budgeting'], ['banking', 'Banking'], ['credit', 'Credit and debt'], ['investing', 'Saving and investing'], ['insurance', 'Insurance and protecting yourself'], ['future', 'College, housing and big purchases']];
+  var avg = function (a) { a = a.filter(function (x) { return x >= 0; }); return a.length ? Math.round(a.reduce(function (s, x) { return s + x; }, 0) / a.length) : null; };
+  var pc = function (v) { return v == null || v < 0 ? '-' : v + '%'; };
+  var gr = function (v) { return v === -999 || v == null ? '-' : '<i style="font-style:normal" class="' + (v >= 0 ? 'up' : 'dn') + '">' + (v >= 0 ? '+' : '') + v + '</i>'; };
+  function report() {
+    var r = avg(ROWS.map(function (s) { return s.ready; })), pre = avg(ROWS.map(function (s) { return s.pre; })), post = avg(ROWS.map(function (s) { return s.post; }));
+    var both = ROWS.filter(function (s) { return s.grow !== -999; }), g = both.length ? Math.round(both.reduce(function (a, s) { return a + s.grow; }, 0) / both.length) : null;
+    $('#rp-ready').textContent = pc(r); $('#rp-pass').textContent = ROWS.length ? ROWS.filter(function (s) { return s.ready >= 70; }).length + ' of ' + ROWS.length : '-';
+    $('#rp-pre').textContent = pc(pre); $('#rp-post').textContent = pc(post); $('#rp-grow').innerHTML = g == null ? '-' : gr(g) + ' points <small class="muted" style="font-size:12px;font-weight:400">(' + both.length + ' students)</small>';
+    $('#rp-topics').innerHTML = TOPICS.map(function (tp) { var a = avg(ROWS.map(function (s) { var v = s.topics[tp[0]]; return typeof v === 'number' ? v : -1; }));
+      return '<div class="tp' + (a != null && a < 70 ? ' weak' : '') + '"><span>' + tp[1] + '</span><div class="bar"><i style="width:' + (a || 0) + '%"></i></div><b>' + pc(a) + '</b></div>'; }).join('');
+    $('#foot').innerHTML = ROWS.length ? '<tr><td>Class average</td><td>' + (avg(ROWS.map(function (s) { return s.cleared; })) || 0) + '</td><td class="n">' + (avg(ROWS.map(function (s) { return s.stars; })) || 0) + '</td><td class="n">' + (avg(ROWS.map(function (s) { return s.level; })) || 1) + '</td>' +
+      '<td class="n">' + pc(r) + '</td><td class="n">' + pc(pre) + '</td><td class="n">' + pc(post) + '</td><td class="n">' + (g == null ? '-' : gr(g)) + '</td><td class="n">' + pc(avg(ROWS.map(function (s) { return s.accuracy; }))) + '</td><td colspan="5"></td></tr>' : '';
+  }
+  $('#print').onclick = function () { $('#pr-date').textContent = new Date().toLocaleDateString(); window.print(); };
+  $('#lg-on').onchange = function () { var on = this.checked; C.rpc('set_league', { p_class: CUR, p_on: on }, true).then(function () { var c = ME.classes.find(function (x) { return x.id === CUR; }); if (c) c.league = on; }).catch(function (e) { alert(friendly(e)); }); };
+  function lgTable(rows, cols, heads) { return '<div class="tw"><table class="lgt"><thead><tr><th>#</th>' + heads.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' + rows.map(function (r, i) { return '<tr' + (r.me || r.mine ? ' class="me"' : '') + '><td>' + (i + 1) + '</td>' + cols.map(function (c) { return '<td>' + c(r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>'; }
+  $('#lg-load').onclick = function () { var b = this; b.disabled = true; C.rpc('teacher_league', {}, true).then(function (d) { if (!d) return;
+      var h = '<h3 style="font-size:16px;margin:12px 0 4px">Classes at ' + esc(ME.school) + '</h3>' + lgTable(d.classes, [function (r) { return esc(r.name) + (r.mine ? ' (yours)' : ''); }, function (r) { return r.students; }, function (r) { return pc(r.ready); }, function (r) { return r.cleared == null ? '-' : r.cleared; }, function (r) { return pc(r.pre) + ' → ' + pc(r.post); }],
+        ['Class', 'Students', 'Avg W!SE ready', 'Avg stages', 'Start → end check']);
+      var t = d.tournament;
+      h += t ? '<h3 style="font-size:16px;margin:16px 0 4px">🏆 ' + esc(t.name) + ' <small class="muted">' + esc(t.starts_on) + ' to ' + esc(t.ends_on) + '</small></h3><p class="muted" style="margin:0 0 6px;font-size:13px">Schools in your division, ranked by average W!SE readiness of students active since the tournament started (3+ players to appear).</p>' +
+        (t.rows.length ? lgTable(t.rows, [function (r) { return esc(r.school) + (r.me ? ' (you)' : ''); }, function (r) { return r.students; }, function (r) { return pc(r.ready); }], ['School', 'Players', 'Avg W!SE ready']) : '<p class="muted">No schools have 3 players yet.</p>')
+        : '<p class="muted" style="margin-top:12px;font-size:13px">No division tournament is running. Want one for your division? Email <a href="mailto:jordan.carlock@bullsburg.com">jordan.carlock@bullsburg.com</a>.</p>';
+      $('#lg-body').innerHTML = h; }).catch(function (e) { $('#lg-body').innerHTML = '<p class="err">' + esc(friendly(e)) + '</p>'; }).then(function () { b.disabled = false; }); };
   function ago(t) { if (!t) return '-'; var d = (Date.now() - new Date(t)) / 6e4; return d < 2 ? 'Just now' : d < 60 ? Math.round(d) + ' min ago' : d < 1440 ? Math.round(d / 60) + ' h ago' : Math.round(d / 1440) + ' days ago'; }
   function paint() { var r = ROWS.slice().sort(function (a, b) { var x = a[SORT], y = b[SORT]; return (typeof x === 'string' ? x.localeCompare(y) : x - y) * DIR; });
     $('#rows').innerHTML = r.length ? r.map(function (s) { var pct = s.total ? Math.round(100 * s.cleared / s.total) : 0;
       return '<tr><td><b>' + esc(s.name) + '</b><br><small class="muted">Key ' + esc(fk(s.key)) + '</small></td><td>' + s.cleared + ' of ' + s.total + '<div class="bar"><i style="width:' + pct + '%"></i></div></td><td class="n">' + s.stars + '</td><td class="n">' + s.level + '<br><small class="muted">' + esc(s.rank) + '</small></td>' +
-        '<td class="n">' + (s.accuracy < 0 ? '-' : s.accuracy + '%') + '</td><td class="n">' + (s.to_review ? '<span class="tag">' + s.to_review + '</span>' : '0') + '</td><td class="n">' + s.streak + ' days</td><td>' + esc(s.next_stage) + '</td><td>' + ago(s.last) + '</td>' +
-        '<td><button class="btn link sm" data-rm="' + esc(s.id) + '" data-nm="' + esc(s.name) + '">Remove</button></td></tr>'; }).join('') : '<tr><td colspan="10" class="empty">No students yet. Share the class code <b>' + esc($('#cl-code').textContent) + '</b> with your students.</td></tr>';
+        '<td class="n">' + pc(s.ready) + '</td><td class="n">' + pc(s.pre) + '</td><td class="n">' + pc(s.post) + '</td><td class="n">' + gr(s.grow) + '</td><td class="n">' + (s.accuracy < 0 ? '-' : s.accuracy + '%') + '</td><td class="n">' + (s.to_review ? '<span class="tag">' + s.to_review + '</span>' : '0') + '</td><td class="n">' + s.streak + (s.streak === 1 ? ' day' : ' days') + '</td><td>' + esc(s.next_stage) + '</td><td>' + ago(s.last) + '</td>' +
+        '<td><button class="btn link sm" data-rm="' + esc(s.id) + '" data-nm="' + esc(s.name) + '">Remove</button></td></tr>'; }).join('') : '<tr><td colspan="14" class="empty">No students yet. Share the class code <b>' + esc($('#cl-code').textContent) + '</b> with your students.</td></tr>';
     document.querySelectorAll('[data-rm]').forEach(function (b) { b.onclick = function () { if (!confirm('Remove ' + b.dataset.nm + ' from this class? Their progress is kept.')) return;
       C.rpc('remove_from_class', { p_class: CUR, p_student: b.dataset.rm }, true).then(function () { start(); }); }; }); }
   document.querySelectorAll('th[data-k]').forEach(function (th) { th.onclick = function () { var k = th.dataset.k; DIR = SORT === k ? -DIR : (k === 'name' || k === 'next_stage' ? 1 : -1); SORT = k; paint(); }; });
   $('#refresh').onclick = function () { start(); };
   $('#csv').onclick = function () { var q = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
-    var lines = [['Student', 'Student key', 'Stages cleared', 'Total stages', 'Stars', 'Level', 'Quiz accuracy %', 'To review', 'Streak (days)', 'Working on', 'Last active']]
-      .concat(ROWS.map(function (s) { return [s.name, fk(s.key), s.cleared, s.total, s.stars, s.level, s.accuracy < 0 ? '' : s.accuracy, s.to_review, s.streak, s.next_stage, s.last]; }));
+    var lines = [['Student', 'Student key', 'Stages cleared', 'Total stages', 'Stars', 'Level', 'W!SE readiness %', 'Start check %', 'End check %', 'Growth', 'Quiz accuracy %', 'To review', 'Streak (days)', 'Working on', 'Last active']]
+      .concat(ROWS.map(function (s) { var b = function (v) { return v < 0 ? '' : v; }; return [s.name, fk(s.key), s.cleared, s.total, s.stars, s.level, b(s.ready), b(s.pre), b(s.post), s.grow === -999 ? '' : s.grow, s.accuracy < 0 ? '' : s.accuracy, s.to_review, s.streak, s.next_stage, s.last]; }));
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([lines.map(function (l) { return l.map(q).join(','); }).join('\n')], { type: 'text/csv' }));
     a.download = 'bullsburg-' + $('#cl-name').textContent.replace(/\W+/g, '-').toLowerCase() + '.csv'; a.click(); };
   if (C.signedIn()) start(); else show('#s-email');

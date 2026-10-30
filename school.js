@@ -18,7 +18,8 @@
   function setSchool(st) { // st = a student record from the database
     if (!st || !st.found) return;
     var had = S.sch || null;
-    S.sch = { key: st.key, on: !!st.active, school: st.school, ends: st.ends_on, cls: st.class || '', name: st.name || '', reason: st.reason || '', gave: had ? had.gave : !S.full, checked: today() };
+    S.sch = { key: st.key, on: !!st.active, school: st.school, ends: st.ends_on, cls: st.class || '', name: st.name || '', reason: st.reason || '', gave: had ? had.gave : !S.full, checked: today(),
+      sponsor: st.sponsor || null, league: !!st.league };
     if (S.sch.on && !S.full) { S.full = true; S.sch.gave = true; }
     if (!S.sch.on && S.full && S.sch.gave) S.full = false;
     save(); refreshAll(); paintButton();
@@ -39,7 +40,7 @@
   }
 
   /* ---------------- progress sync ---------------- */
-  var FIELDS = ['xp', 'stars', 'missions', 'mkt', 'best', 'streak', 'dq', 'ql', 'qg', 'mode', 'onboarded'];
+  var FIELDS = ['xp', 'stars', 'missions', 'mkt', 'best', 'streak', 'dq', 'ql', 'qg', 'mode', 'onboarded', 'wq', 'pre', 'post', 'wt', 'cl', 'trk'];
   function snapshot() { var o = {}; FIELDS.forEach(function (k) { o[k] = S[k]; }); return JSON.stringify(o); }
   function summary() {
     var d = {}; try { d = reportData(); } catch (e) {}
@@ -47,10 +48,14 @@
     var next = STAGES.find(function (id) { return !S.stars[id]; });
     var worlds = WORLDS.map(function (w) { var ids = STAGES.filter(function (id) { return BYID[id].world === w.n; }); return { n: w.n, name: w.name, done: ids.filter(function (id) { return S.stars[id]; }).length, of: ids.length }; });
     var str = 0; try { str = streakAlive(); } catch (e) {}
+    var w = {}; try { w = window.TT_wiseSummary ? window.TT_wiseSummary() : {}; } catch (e) {}
+    var trk = function (k) { return (typeof TRACK !== 'undefined' ? TRACK[k] : []).filter(function (id) { return S.stars[id]; }).length; };
     return { cleared: d.cleared || 0, total: d.total || STAGES.length, stars: d.stars || 0, level: d.lvl || 1, rank: d.rank || '', xp: S.xp || 0,
       answered: seen, missed: miss, accuracy: seen ? Math.round(100 * (seen - miss) / seen) : null, to_review: wrong,
       streak: str, best_streak: (S.streak && S.streak.best) || 0, daily_quiz: S.dq && S.dq.day ? S.dq.score : null,
-      next_stage: next ? BYID[next].title || next : 'All done', worlds: worlds, on: new Date().toISOString() };
+      next_stage: next ? BYID[next].title || next : 'All done', worlds: worlds, on: new Date().toISOString(),
+      ready: w.ready == null ? null : w.ready, pre: w.pre == null ? null : w.pre, post: w.post == null ? null : w.post, test: w.test == null ? null : w.test,
+      tests: w.tests || 0, topics: w.topics || {}, invest_cleared: trk('invest'), money_cleared: trk('money') };
   }
   var pushT = null, pushing = false;
   function push(now) {
@@ -72,6 +77,10 @@
     if (o.streak && (!S.streak || (o.streak.best || 0) > (S.streak.best || 0))) S.streak = o.streak;
     if (o.mkt && (!S.mkt || !localMore)) S.mkt = o.mkt;
     if (o.onboarded) S.onboarded = true;
+    if (o.pre && !S.pre) S.pre = o.pre; if (o.post && (!S.post || o.post.at > S.post.at)) S.post = o.post;
+    if (o.wt && (!S.wt || o.wt.length > S.wt.length)) S.wt = o.wt;
+    for (var tq in (o.wq || {})) { S.wq = S.wq || {}; if (!S.wq[tq] || o.wq[tq].length > S.wq[tq].length) S.wq[tq] = o.wq[tq]; }
+    for (var c in (o.cl || {})) { S.cl = S.cl || {}; if (!S.cl[c]) S.cl[c] = o.cl[c]; }
     try { sane(); } catch (e) {} save();
   }
 
@@ -137,12 +146,31 @@
     pwShow('<div class="eyebrow">Bullsburg for Schools</div><h2 id="pw-title">' + esc(s.school || 'Your school') + '</h2>' +
       '<p style="margin-top:8px">Signed in as <b>' + esc(s.name) + '</b>' + (s.cls ? '<br>Class: <b>' + esc(s.cls) + '</b>' : '') + '</p>' +
       (s.on ? '<p class="muted" style="margin-top:6px">Whole game unlocked through ' + esc(s.ends) + '. Your progress saves automatically.</p>' : '<p class="err" style="margin-top:6px">' + whyOff() + '</p>') +
+      (s.sponsor && s.sponsor.name ? '<p class="sponsor-chip">Sponsored by <b>' + esc(s.sponsor.name) + '</b>' + (s.sponsor.note ? ' · ' + esc(s.sponsor.note) : '') + '</p>' : '') +
       '<p style="margin-top:10px">Student key: <b id="sc-k">•••••-•••••</b> <button class="btn ghost" id="sc-show" style="font-size:12px;padding:4px 9px">Show</button></p>' +
-      '<div class="actions" style="margin-top:14px"><button class="btn" id="sc-class">Change class</button><button class="btn ghost" id="sc-out">Sign out</button><button class="btn ghost" id="pw-x">Close</button></div>');
-    $('#pw-x').onclick = pwClose; $('#sc-class').onclick = classScreen;
+      '<div class="actions" style="margin-top:14px"><button class="btn sun" id="sc-league">🏆 Leagues</button><button class="btn" id="sc-class">Change class</button><button class="btn ghost" id="sc-out">Sign out</button><button class="btn ghost" id="pw-x">Close</button></div>');
+    $('#pw-x').onclick = pwClose; $('#sc-class').onclick = classScreen; $('#sc-league').onclick = league;
     $('#sc-show').onclick = function () { $('#sc-k').textContent = fmtKey(s.key); this.hidden = true; };
     var arm = false; $('#sc-out').onclick = function () { if (!arm) { arm = true; this.textContent = 'Sure? You’ll need your key to sign back in'; return; } push(true); setTimeout(function () { leaveSchool(false); pwClose(); }, 400); };
   }
+  /* ---------------- class league and division tournament ---------------- */
+  function board(rows, cols) { return '<table class="lg"><tbody>' + rows.map(function (r, i) { return '<tr' + (r.me ? ' class="me"' : '') + '><td>' + (i + 1) + '</td>' + cols.map(function (c) { return '<td>' + c(r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>'; }
+  function league() {
+    pwShow('<div class="eyebrow">Leagues</div><h2 id="pw-title">How you stack up</h2><div id="lg-body"><p class="muted">Loading…</p></div><div class="actions" style="margin-top:14px"><button class="btn ghost" id="lg-back">Back</button></div>');
+    $('#lg-back').onclick = panel; push(true);
+    C.rpc('class_board', { p_key: S.sch.key }).then(function (b) {
+      var el = $('#lg-body'); if (!el || !b || !b.found) return; var h = '';
+      if (b.league && b.rows.length) { var me = b.rows.findIndex(function (r) { return r.me; }), top = b.rows.slice(0, 10);
+        if (me >= 10) top = top.concat(b.rows[me]);
+        h += '<h3 style="margin-top:10px">' + esc(b.class || 'Your class') + '</h3>' + board(top, [function (r) { return esc(r.name) + (r.me ? ' (you)' : ''); }, function (r) { return r.xp.toLocaleString('en-US') + ' XP'; }, function (r) { return r.cleared + ' stages'; }]); }
+      else h += '<p style="margin-top:10px">Your teacher has the class league turned off.</p>';
+      var t = b.tournament;
+      if (t) h += '<h3 style="margin-top:14px">🏆 ' + esc(t.name) + '</h3><p class="muted" style="margin:0 0 6px">Schools in your division, ranked by average W!SE readiness. Ends ' + esc(t.ends_on) + '.</p>' +
+        (t.rows.length ? board(t.rows, [function (r) { return esc(r.school) + (r.me ? ' (your school)' : ''); }, function (r) { return (r.ready == null ? '–' : r.ready + '%') + ' ready'; }, function (r) { return r.students + ' players'; }]) : '<p class="muted">Scores show once each school has 3 players.</p>');
+      el.innerHTML = h || '<p>No leagues yet.</p>';
+    }).catch(function (e) { var el = $('#lg-body'); if (el) el.innerHTML = '<p class="err">' + friendly(e) + '</p>'; });
+  }
+
   window.TT_openStudent = openStudent;
   window.TT_studentPaywall = function () {
     if (!S.sch || S.sch.on) return;

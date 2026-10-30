@@ -428,6 +428,28 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline-color: #F2D
 .rep div { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: rgba(0,0,0,.18); } .rep span { display: block; color: var(--muted); font-size: 13px; } .rep b { font-family: var(--f-display); font-size: 20px; }
 .toast { background: #0F2A23; color: var(--ink); border: 1px solid rgba(227,193,121,.45); box-shadow: 0 16px 40px -12px rgba(0,0,0,.9); }
 .coin-row .ct b { font-size: 17px; }
+
+.world.w6 { --wc: #7FD4A8; } .world.w7 { --wc: #8FB2FF; } .world.w8 { --wc: #6CC9E0; } .world.w9 { --wc: #F28B82; } .world.w10 { --wc: #C3A6FF; } .world.w11 { --wc: #F2D488; }
+.world.w6, .world.w7, .world.w8, .world.w9, .world.w10, .world.w11 { background: radial-gradient(700px 260px at 0% 0%, color-mix(in srgb, var(--wc) 16%, transparent), transparent 70%), linear-gradient(180deg, rgba(255,236,190,.03), transparent 50%), var(--surface); }
+.tracks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.tracks button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 14px; padding: 10px 8px; text-align: center; cursor: pointer; font: inherit; }
+.tracks button b { display: block; font-size: 15px; } .tracks button small { color: var(--muted); font-size: 12px; }
+.tracks button[aria-selected="true"] { border-color: var(--sun); box-shadow: 0 0 0 2px color-mix(in srgb, var(--sun) 45%, transparent); }
+.tracks button[data-trk="wise"] { border-style: dashed; }
+.ready { position: relative; height: 18px; border-radius: 99px; background: var(--surface2); overflow: hidden; margin: 10px 0 4px; }
+.ready i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--accent), var(--sun)); border-radius: 99px; }
+.ready em { position: absolute; top: -3px; bottom: -3px; left: 70%; width: 3px; background: var(--ink); opacity: .8; }
+.wtopic { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.wtopic .bar { grid-column: 1 / -1; height: 7px; border-radius: 9px; background: var(--surface2); overflow: hidden; } .wtopic .bar i { display: block; height: 100%; background: var(--accent); }
+.wtopic.weak .bar i { background: var(--down); }
+.wgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 12px; }
+.wgrid .card { padding: 14px; } .wgrid .card h3 { font-size: 17px; margin: 0 0 4px; } .wgrid .card p { font-size: 14px; color: var(--muted); margin: 0 0 10px; }
+.miss { border-top: 1px solid var(--line); padding: 12px 0; } .miss .a { color: var(--up); font-weight: 700; } .miss .y { color: var(--down); }
+.miss details { margin-top: 6px; } .miss summary { cursor: pointer; color: var(--sun); font-weight: 700; }
+.opt.picked { border-color: var(--sun); }
+table.lg { width: 100%; border-collapse: collapse; font-size: 14px; } table.lg td { padding: 6px 4px; border-top: 1px solid var(--line); } table.lg tr.me td { color: var(--sun); font-weight: 700; }
+.sponsor-chip { display: inline-block; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; margin-top: 8px; }
+@media print { .tracks, header, nav, .tabs { display: none !important; } }
 </style>
 
 <header class="hud">
@@ -640,6 +662,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline-color: #F2D
   <div class="box"><div class="lv" id="lu-n">2</div><div class="eyebrow">Level up</div><h2 id="lu-title">Coin Collector</h2><p id="lu-msg"></p><button class="btn sun" id="lu-ok">Keep going</button></div>
 </div>
 
+<script src="money.js"></script>
 <script>
 /* ================= data ================= */
 const RANKS = [
@@ -918,8 +941,12 @@ const L = [
           { q: 'Before trading real options, a sensible step is…', o: ['Paper trading for months and tracking your results', 'Using your whole savings', 'Borrowing on margin'], why: 'Practice and data before real money.' }] },
  { id: 'bf', world: 5, boss: true, final: true, title: 'Final boss: The Grandmaster Exam', pool: ['g1','g2','g3','g4','g5','g6','g7','g8','g9','t1','t2','t3','t4','t5','t6','t7','t8','t9','m1','m2','m3','m4','m11','m12','m13','m5','m6','m14','m7','m8','m9','m10'] },
 ];
+if (typeof MONEY_L !== 'undefined') L.push(...MONEY_L);
 const STAGES = L.map(x => x.id);
 const BYID = Object.fromEntries(L.map(x => [x.id, x]));
+/* Two tracks: Investing (worlds 1-5) and Money Skills (worlds 6-11). Each unlocks in its own order. */
+const trackOf = id => BYID[id].world >= 6 ? 'money' : 'invest';
+const TRACK = { invest: STAGES.filter(id => trackOf(id) === 'invest'), money: STAGES.filter(id => trackOf(id) === 'money') };
 /* ================= QUESTION BANK =================
    Extra questions per stage. Each play draws a random set in a random order, and the
    number questions (GEN) make fresh numbers every time, so two players sitting next to
@@ -1115,6 +1142,7 @@ const GEN = {
  m5: [r => { const A = pk(r, [10000, 20000, 25000, 50000, 100000]), f = pk(r, [0.03, 0.1, 0.5, 1]);
    return mk(`On ${$$(A)}, what does a ${f}% expense ratio cost per year?`, $$(A * f / 100), [$$(A * f / 10), $$(A * f / 1000), $$(A * f)], `${f}% of ${$$(A)} = ${$$(A * f / 100)}.`); }]
 };
+if (typeof MONEY_QB !== 'undefined') { Object.assign(QB, MONEY_QB); Object.assign(GEN, MONEY_GEN); }
 /* Every question gets a stable key so the Study Hall can remember it. */
 L.forEach(s => { if (s.boss) return; s.quiz.forEach((q, i) => q.key = s.id + ':' + i);
   (QB[s.id] || []).forEach((a, j) => s.quiz.push({ q: a[0], o: [a[1], ...a[2]], why: a[3], key: s.id + ':x' + j }));
@@ -1122,6 +1150,7 @@ L.forEach(s => { if (s.boss) return; s.quiz.forEach((q, i) => q.key = s.id + ':'
 
 const WORLDS = [{ n: 1, name: 'Stock Street', sub: 'World 1 · Stocks' }, { n: 2, name: 'Options Island', sub: 'World 2 · Options basics' }, { n: 3, name: 'Greek Peaks', sub: 'World 3 · Pricing and the Greeks' },
   { n: 4, name: 'Strategy City', sub: 'World 4 · Options strategies' }, { n: 5, name: 'Master\u2019s Summit', sub: 'World 5 · Becoming a real trader' }];
+WORLDS.forEach(w => w.track = 'invest'); if (typeof MONEY_WORLDS !== 'undefined') WORLDS.push(...MONEY_WORLDS);
 const LAB_GATE = { market: 's3', charts: 's4', options: 'o2' };
 
 const MISSIONS = [
@@ -1186,6 +1215,7 @@ const WORDS = [
  ['Long-term capital gain', 'Taxes', 'Profit on an investment held more than one year, usually taxed at a lower rate.'], ['Margin', 'Accounts', 'Borrowing money from a broker to invest. Magnifies gains and losses.'],
  ['Revenge trading', 'Psychology', 'Trading bigger or more often to win back a loss. A common way to blow up an account.'], ['Pump and dump', 'Safety', 'Hyping a stock so insiders can sell at an inflated price.'],
 ];
+if (typeof MONEY_WORDS !== 'undefined') WORDS.push(...MONEY_WORDS);
 
 /* ================= state ================= */
 const KEY = 'tickertown.v1';
@@ -1320,10 +1350,11 @@ function confetti() { if (reduce) return; const cv = $('#confetti'); const dpr =
     if (++f < 110) requestAnimationFrame(tick); else ctx.clearRect(0, 0, innerWidth, innerHeight); })(); }
 
 /* ================= routing ================= */
-const PAID = new Set(L.filter(x => x.world >= 2 || x.id === 'b1').map(x => x.id));
+const paidWorld = n => (n >= 2 && n <= 5) || n >= 7;
+const PAID = new Set(L.filter(x => paidWorld(x.world) || x.id === 'b1').map(x => x.id));
 const paid = id => PAID.has(id) && !S.full;
 function isOpen(tab) { if (tab === 'options' && !S.full) return false; const g = LAB_GATE[tab]; return !g || S.teacher || !!S.stars[g]; }
-function isUnlocked(id) { if (S.teacher) return true; const i = STAGES.indexOf(id); return i === 0 || !!S.stars[STAGES[i - 1]]; }
+function isUnlocked(id) { if (S.teacher) return true; const tl = TRACK[trackOf(id)], i = tl.indexOf(id); return i === 0 || !!S.stars[tl[i - 1]]; }
 let TAB = 'map';
 function go(tab, keepStage) { TAB = tab; document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.tab === tab));
   document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== 'v-' + tab);
@@ -1343,9 +1374,14 @@ function unlockScreen(tab) { const v = $('#v-' + tab); const ls = v.querySelecto
 
 /* ================= MAP ================= */
 function starStr(n) { return '<span class="stars">' + [0, 1, 2].map(i => i < n ? '★' : '<span class="off">★</span>').join('') + '</span>'; }
-function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const nextId = STAGES.find(id => !S.stars[id] && isUnlocked(id) && !paid(id));
+function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const TK = S.trk === 'money' ? 'money' : 'invest'; const nextId = TRACK[TK].find(id => !S.stars[id] && isUnlocked(id) && !paid(id));
+  const tabs = document.createElement('div'); tabs.className = 'tracks'; tabs.setAttribute('role', 'tablist');
+  const cnt = k => TRACK[k].filter(id => S.stars[id]).length + ' / ' + TRACK[k].length;
+  tabs.innerHTML = `<button role="tab" data-trk="invest" aria-selected="${TK === 'invest'}"><b>📈 Investing</b><small>${cnt('invest')}</small></button><button role="tab" data-trk="money" aria-selected="${TK === 'money'}"><b>💵 Money Skills</b><small>${cnt('money')}</small></button><button data-trk="wise"><b>🎓 W!SE Prep</b><small>${window.TT_wiseReady ? window.TT_wiseReady() + '% ready' : 'Test prep'}</small></button>`;
+  tabs.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.trk === 'wise') return window.TT_openWise && window.TT_openWise(); S.trk = b.dataset.trk; save(); renderMap(); });
+  box.appendChild(tabs); const sp = S.sch && S.sch.sponsor; if (sp && sp.name) { const c = document.createElement('div'); c.className = 'sponsor-chip'; c.style.margin = '-6px 0 14px'; c.textContent = 'Your school license is sponsored by ' + sp.name + (sp.note ? ' · ' + sp.note : ''); box.appendChild(c); }
   const xs = ['4%', '30%', '52%', '30%'];
-  WORLDS.forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
+  WORLDS.filter(w => w.track === TK).forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
     const el = document.createElement('div'); el.className = 'world w' + w.n;
     el.innerHTML = `<div class="world-top"><div><div class="eyebrow">${w.sub}</div><h2>${w.name}</h2></div><div class="mono muted" style="font-size:13px">★ ${got} / ${stages.length * 3}</div></div><div class="path"><svg class="trail" aria-hidden="true"></svg></div>`;
     const path = el.querySelector('.path'); let num = 0;
@@ -1354,8 +1390,8 @@ function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const nextI
       b.innerHTML = `<span class="disc">${pw ? '🔑' : s.boss ? 'BOSS' : (un ? num : '🔒')}</span><span class="lbl"><b>${s.title}${pw ? '<span class="fullchip">Full game</span>' : ''}</b><small>${s.boss ? 'Mixed questions · 3 hearts' : 'Stage ' + num}${s.unlock ? ' · unlocks ' + { market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock] : ''}</small><br>${starStr(st)}</span>`;
       b.disabled = !un && !pw; b.onclick = () => pw ? openPaywall() : openStage(s.id); path.appendChild(b); });
     const firstId = stages[0].id, prevBoss = L.find(x => x.world === w.n - 1 && x.boss);
-    if (w.n >= 2 && !S.full) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔑<br>${w.name} is part of the full game.${w.n === 2 ? ' Options Island, Greek Peaks, Strategy City and Master\u2019s Summit: 38 more stages, 4 boss battles and real options trading.' : ''}<br><button class="btn sun" style="margin-top:12px">Unlock for ${priceStr()}</button></div>`; lk.querySelector('button').onclick = openPaywall; el.appendChild(lk); }
-    else if (w.n >= 2 && !isUnlocked(firstId)) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔒<br>Beat ${prevBoss.title.replace(/^.*?: /, '')} to reach ${w.name}.</div>`; el.appendChild(lk); }
+    if (paidWorld(w.n) && !S.full) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔑<br>${w.name} is part of the full game.${w.n === 2 ? ' Options Island, Greek Peaks, Strategy City and Master\u2019s Summit: 38 more stages, 4 boss battles and real options trading.' : w.n === 7 ? ' Budget Boulevard, Bank Bay, Credit Canyon, Safety Shores and Future Falls: 24 more stages, 5 boss battles and full W!SE test prep.' : ''}<br><button class="btn sun" style="margin-top:12px">Unlock for ${priceStr()}</button></div>`; lk.querySelector('button').onclick = openPaywall; el.appendChild(lk); }
+    else if (w.n >= 2 && w.n !== 6 && !isUnlocked(firstId)) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔒<br>Beat ${prevBoss.title.replace(/^.*?: /, '')} to reach ${w.name}.</div>`; el.appendChild(lk); }
     box.appendChild(el); });
   requestAnimationFrame(drawTrails); renderMissions(); renderRanks();
   const needBuy = !nextId && !S.full; $('#continue').textContent = nextId ? 'Play next stage' : needBuy ? 'Unlock the full game' : 'All stages cleared!'; $('#continue').disabled = !nextId && !needBuy;
@@ -1375,7 +1411,7 @@ function openStage(id) { const s = BYID[id]; if (paid(id)) return openPaywall();
   const wname = WORLDS[s.world - 1].name; const num = L.filter(x => x.world === s.world && !x.boss).findIndex(x => x.id === id) + 1;
   if (s.boss) { const qs = drawQs(s.pool.flatMap(pid => bankOf(pid)), s.final ? 12 : 7);
     Q = { id, qs, i: 0, miss: 0, hearts: 3, boss: true };
-    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">${s.final ? 'The final exam: 12 questions from Greek Peaks, Strategy City and Master\u2019s Summit.' : 'Answer 7 mixed questions from this world.'} Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.final ? ' and graduate from Bullsburg' : ' and unlock ' + (WORLDS[s.world] ? WORLDS[s.world].name : 'the next world')}.</p><div class="quiz card" id="quiz"></div></div>`; }
+    st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Boss level</span></div><h2>${s.title}</h2><p class="lesson-text" style="font-size:17px">${s.final ? 'The final exam: 12 questions from Greek Peaks, Strategy City and Master\u2019s Summit.' : 'Answer 7 mixed questions from this world.'} Every wrong answer costs a heart. Lose all 3 and you'll need to try again. Win to earn 150 XP${s.final ? ' and graduate from Bullsburg' : (WORLDS[s.world] && WORLDS[s.world].track === WORLDS[s.world - 1].track ? ' and unlock ' + WORLDS[s.world].name : ' and finish Money Skills')}.</p><div class="quiz card" id="quiz"></div></div>`; }
   else { Q = { id, qs: drawQs(bankOf(id), 3), i: 0, miss: 0, boss: false };
     st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">${wname} · Stage ${num}</span></div>
       <h2>${s.title}</h2><div class="lesson-text" id="ltext">${S.mode === 'kid' ? s.kid : s.adult}</div><div class="terms">${s.terms.map(t => `<span>${t}</span>`).join('')}</div>
@@ -1412,7 +1448,7 @@ function graduation(stars) { $('#quiz').innerHTML = `<div class="grad"><div clas
 function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts : (Q.miss === 0 ? 3 : Q.miss === 1 ? 2 : 1); const prev = S.stars[Q.id] || 0; const first = !prev;
   S.stars[Q.id] = Math.max(prev, stars); save(); markActive(); let bonus = 0;
   if (first) bonus = Q.boss ? 150 : 50; else if (stars > prev) bonus = 10 * (stars - prev);
-  const nextId = STAGES[STAGES.indexOf(Q.id) + 1]; const unlockTxt = first && s.unlock ? `<p><b>Unlocked: ${{ market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock]}!</b></p>` : '';
+  const tl = TRACK[trackOf(Q.id)], nextId = tl[tl.indexOf(Q.id) + 1]; S.cl = S.cl || {}; S.cl[Q.id] = Date.now(); const unlockTxt = first && s.unlock ? `<p><b>Unlocked: ${{ market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock]}!</b></p>` : '';
   $('#quiz').innerHTML = `<div class="win"><div class="big">${starStr(stars).replace('class="stars"', 'class="stars" style="letter-spacing:8px"')}</div><h3>${Q.boss ? (Q.hearts ? 'Boss defeated!' : '') : 'Stage clear!'}</h3><p>${stars === 3 ? 'Perfect run.' : stars === 2 ? 'Great job. Replay for 3 stars.' : 'Cleared! Replay any time for more stars.'}</p>${unlockTxt}
     <div class="row">${s.unlock && first ? `<button class="btn sun" id="golab">Open the lab</button>` : ''}${nextId && !BYID[nextId] ? '' : nextId ? `<button class="btn" id="nexts">Next stage</button>` : ''}<button class="btn ghost" id="rev">Review answers</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
   $('#rev').onclick = () => openStudy(Q.boss ? null : Q.id);
@@ -2099,8 +2135,8 @@ function openReport() { const d = reportData(), k = stk();
     <div class="rep"><div><span>Level ${d.lvl}</span><b style="font-size:17px">${d.rank}</b></div><div><span>Stages cleared</span><b>${d.cleared} of ${d.total}</b></div><div><span>Stars</span><b>★ ${d.stars}</b></div><div><span>Streak (best)</span><b>${streakAlive()} (${k.best}) days</b></div>
     <div><span>Missions done</span><b>${d.missions} of ${MISSIONS.length}</b></div><div><span>Practice trading profit</span><b class="${d.profit >= 0 ? 'u' : 'd'}">${d.profit >= 0 ? '+' : ''}${money(d.profit)}</b></div></div>
     <p style="margin-top:12px"><b>Worlds completed:</b> ${d.worlds.length ? d.worlds.join(', ') : 'none yet'}.</p>
-    <div class="actions" style="margin-top:14px"><button class="btn sun" id="r-share">Share a progress card</button><button class="btn ghost" id="r-x">Close</button></div>`);
-  $('#r-share').onclick = shareCard; $('#r-x').onclick = pwClose; }
+    <div class="actions" style="margin-top:14px"><button class="btn sun" id="r-share">Share a progress card</button><button class="btn" id="r-note">Send a note home</button><button class="btn ghost" id="r-x">Close</button></div>`);
+  $('#r-share').onclick = shareCard; $('#r-x').onclick = pwClose; $('#r-note').onclick = () => window.TT_parentNote && window.TT_parentNote(); }
 async function shareCard() { const d = reportData(), W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
   const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#123a30'); g.addColorStop(1, '#071712'); c.fillStyle = g; c.fillRect(0, 0, W, H);
   const gold = c.createLinearGradient(0, 0, W, 0); gold.addColorStop(0, '#F8E7B0'); gold.addColorStop(.5, '#E3C179'); gold.addColorStop(1, '#B8893B');
@@ -2134,5 +2170,6 @@ let raArm = false; $('#resetall').onclick = () => { if (!raArm) { raArm = true; 
 hud(); tape(); renderWords(); renderToday(); setTimeout(onboard, 400);
 const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'options', 'words'].includes(start) ? start : 'map');
 </script>
+<script src="wise.js"></script>
 
 <script src="cloud.js"></script><script src="school.js"></script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>
