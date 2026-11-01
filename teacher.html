@@ -28,11 +28,16 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
 .bar{height:6px;background:var(--line);border-radius:3px;margin-top:4px;min-width:80px}.bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
 .tag{display:inline-block;font-size:12px;border-radius:999px;padding:1px 8px;background:#FBE3DC;color:var(--bad)}.ok{background:#DDF1E7;color:var(--accent)}
 .empty{padding:20px;text-align:center;color:var(--muted)}[hidden]{display:none!important}
+#s-dash>*,main>*{min-width:0}
 tfoot td{font-weight:700;background:var(--bg)}.up{color:var(--accent);font-weight:700}.dn{color:var(--bad);font-weight:700}
-.tp{display:grid;grid-template-columns:minmax(150px,1fr) 2fr 48px;gap:8px;align-items:center;font-size:14px;padding:4px 0}.tp .bar{margin:0}.tp.weak .bar i{background:var(--bad)}
+.tp{display:grid;grid-template-columns:minmax(0,1fr) 2fr 48px;gap:8px;align-items:center;font-size:14px;padding:4px 0}.tp .bar{margin:0}.tp.weak .bar i{background:var(--bad)}
 .sponsor{margin-top:8px;font-size:14px;color:var(--muted)}.sw{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:400;margin:0}.sw input{width:auto}
 .lgt{min-width:0}.lgt tr.me td{font-weight:700;color:var(--accent)}
 @media print{header,#s-email,#s-code,#s-no,.noprint,.cls-card,#c-league,th:last-child,td:last-child{display:none!important}body{background:#fff}.card{border:0;padding:0;margin-bottom:14px}main{padding:0}table{min-width:0;font-size:11px}.tw{overflow:visible}.printhead{display:block!important}}
+
+/* phone safety net: nothing may push the page wider than the screen */
+html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pre{white-space:pre-wrap}
+@media(max-width:600px){.tp{grid-template-columns:minmax(0,1fr) 70px 44px}.stats{grid-template-columns:1fr 1fr}}
 </style></head><body>
 <header><div class="w"><div class="brand"><h1><b>Bullsburg</b> Teacher Dashboard</h1></div><div class="row"><span id="who" class="muted" style="color:#cfe"></span><button class="btn ghost sm" id="out" hidden>Sign out</button></div></div></header>
 <main class="w">
@@ -117,8 +122,17 @@ tfoot td{font-weight:700;background:var(--bg)}.up{color:var(--accent);font-weigh
     C.signUp(em, pw).catch(function (e) { if (/already|registered|exists/i.test(e.message)) return C.signIn(em, pw); if (e.message === 'confirm') throw new Error('Account sign-up needs one more setting in Supabase (turn off Confirm email).'); throw e; })
       .then(function () { return claim(code, err); }).catch(function (e) { err.textContent = /Supabase/.test(e.message) ? e.message : friendly(e); }).then(function () { b.disabled = false; b.textContent = 'Create account'; }); };
   $('#cd3-go').onclick = function () { var b = this; b.disabled = true; claim($('#cd3').value.trim(), $('#cd3-err')).catch(function (e) { $('#cd3-err').textContent = friendly(e); }).then(function () { b.disabled = false; }); };
-  function signOut() { C.signOut(); ME = null; CUR = null; $('#who').textContent = ''; show('#s-email'); }
-  $('#out').onclick = signOut; $('#no-out').onclick = signOut;
+  function signOut(why) { C.signOut(); try { localStorage.removeItem('bullsburg.tlast'); if (why) sessionStorage.setItem('bullsburg.tout', why); } catch (e) {} location.reload(); }
+  /* Shared computers: sign out on its own after 30 minutes with no activity, so students never see the class list. */
+  var T_IDLE = 30 * 60000, tl = Date.now();
+  function tTouch() { tl = Date.now(); try { localStorage.setItem('bullsburg.tlast', String(tl)); } catch (e) {} }
+  ['pointerdown', 'keydown', 'scroll'].forEach(function (ev) { document.addEventListener(ev, function () { if (Date.now() - tl > 15000) tTouch(); }, { capture: true, passive: true }); });
+  setInterval(function () { if (C.signedIn() && Date.now() - tl > T_IDLE) signOut('idle'); }, 30000);
+  (function () { var last = 0; try { last = +localStorage.getItem('bullsburg.tlast') || 0; } catch (e) {}
+    if (C.signedIn() && last && Date.now() - last > T_IDLE) { C.signOut(); try { localStorage.removeItem('bullsburg.tlast'); sessionStorage.setItem('bullsburg.tout', 'idle'); } catch (e) {} } else tTouch();
+    var why = null; try { why = sessionStorage.getItem('bullsburg.tout'); sessionStorage.removeItem('bullsburg.tout'); } catch (e) {}
+    if (why) setTimeout(function () { var e = $('#em-err'); if (e && !e.textContent) e.textContent = why === 'idle' ? 'You were signed out after 30 minutes without activity. Sign in again to keep going.' : 'You’re signed out.'; }, 50); })();
+  $('#out').onclick = function () { signOut('manual'); }; $('#no-out').onclick = function () { signOut('manual'); };
 
   function start() { return C.rpc('teacher_me', {}, true).then(function (t) {
       ME = t; $('#who').textContent = t.email || C.email() || '';

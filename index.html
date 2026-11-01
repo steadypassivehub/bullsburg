@@ -330,6 +330,7 @@ table.chain tr.sel td { background: var(--accent-soft); box-shadow: inset 0 2px 
 .ticket .stat b { font-size: 15px; }
 .btn.mini { padding: 5px 10px; font-size: 13px; }
 .subh { font-size: 17px; margin: 16px 0 0; }
+.avg-note { font-size: 13px; margin: 6px 0 0; }
 td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !important; white-space: normal; }
 .orders { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
 .orders li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--surface2); }
@@ -450,6 +451,13 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline-color: #F2D
 table.lg { width: 100%; border-collapse: collapse; font-size: 14px; } table.lg td { padding: 6px 4px; border-top: 1px solid var(--line); } table.lg tr.me td { color: var(--sun); font-weight: 700; }
 .sponsor-chip { display: inline-block; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; margin-top: 8px; }
 @media print { .tracks, header, nav, .tabs { display: none !important; } }
+
+/* phone safety net: nothing may push the page wider than the screen */
+html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pre{white-space:pre-wrap}
+
+#sch-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); font-size: 14px; }
+#sch-bar[hidden] { display: none; } #sch-bar .btn { font-size: 13px; padding: 6px 12px; }
+.keybig { font: 700 24px/1.2 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 3px; text-align: center; padding: 12px; border: 2px dashed var(--sun); border-radius: 14px; margin: 10px 0; }
 </style>
 
 <header class="hud">
@@ -481,6 +489,7 @@ table.lg { width: 100%; border-collapse: collapse; font-size: 14px; } table.lg t
   <div class="tape" aria-hidden="true"><div class="tape-in" id="tape"></div></div>
 </header>
 
+<div class="wrap" id="sch-bar" hidden></div>
 <main class="wrap">
   <!-- MAP -->
   <section class="view" id="v-map">
@@ -595,9 +604,10 @@ table.lg { width: 100%; border-collapse: collapse; font-size: 14px; } table.lg t
           <div class="stats" id="m-stats"></div>
           <canvas id="cv-port" style="height:160px;margin-top:12px" aria-label="Portfolio value over time"></canvas>
           <h4 class="subh">Stocks</h4>
-          <div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Price</th><th>Value</th><th>Gain / loss</th></tr></thead><tbody id="m-hold"></tbody></table></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost / share</th><th>Price</th><th>Value</th><th>Gain / loss</th></tr></thead><tbody id="m-hold"></tbody></table></div>
+          <p class="muted avg-note">Average cost = everything you paid ÷ shares you own. Buy more at a different price and it updates. Selling doesn’t change it.</p>
           <h4 class="subh">Option positions</h4>
-          <div class="tbl-wrap"><table><thead><tr><th>Contract</th><th>Qty</th><th>Avg</th><th>Mark</th><th>P/L</th><th>Delta</th><th>Theta/day</th><th>Left</th><th></th></tr></thead><tbody id="m-opts"></tbody></table></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Contract</th><th>Qty</th><th>Avg cost</th><th>Mark</th><th>P/L</th><th>Delta</th><th>Theta/day</th><th>Left</th><th></th></tr></thead><tbody id="m-opts"></tbody></table></div>
           <h4 class="subh">Open orders</h4>
           <ul class="orders" id="m-orders"></ul>
         </div>
@@ -1220,6 +1230,7 @@ if (typeof MONEY_WORDS !== 'undefined') WORDS.push(...MONEY_WORDS);
 /* ================= state ================= */
 const KEY = 'tickertown.v1';
 const S = { mode: 'kid', xp: 0, stars: {}, missions: {}, mkt: null, best: 0, teacher: false, full: false, bought: 0, refillAt: 0, ads: { day: '', n: 0 }, tx: [], streak: { n: 0, best: 0, last: '', fz: 0, days: [] }, dq: { day: '', score: -1 }, onboarded: false, ql: {}, qg: {}, pid: '' };
+const S_FRESH = JSON.stringify(S); /* a brand-new game, used when a student signs out on a shared computer */
 /* Save protection: every save is sealed with a checksum, so editing the saved data by hand (to add coins, XP or stars) is detected and rejected. */
 const _k = [84, 84, 45, 118, 97, 117, 108, 116, 45, 55, 51, 49].map(c => String.fromCharCode(c)).join('') + location.host.length;
 function seal(str) { let h1 = 0xdeadbeef ^ str.length, h2 = 0x41c6ce57 ^ str.length; const t = _k + str + _k;
@@ -1711,6 +1722,7 @@ function stockValue() { return Object.entries(M().hold).reduce((a, [k, v]) => a 
 function optValue() { return M().opts.reduce((a, p) => a + optMark(p) * 100 * p.qty, 0); }
 function total() { return M().cash + stockValue() + optValue(); }
 function logT(t) { M().log.unshift({ day: M().day, t }); M().log = M().log.slice(0, 40); }
+function avgLine(sym) { const h = M().hold[sym]; return h ? `You now own ${h.sh} ${sym} at an average cost of ${money(h.cost / h.sh)} a share.` : ''; }
 function addShares(sym, q, cost) { const h = M().hold[sym] || { sh: 0, cost: 0 }; h.sh += q; h.cost += cost; M().hold[sym] = h; }
 function removeShares(sym, q) { const h = M().hold[sym]; const basis = h.cost * q / h.sh; h.cost -= basis; h.sh -= q; if (h.sh <= 0) delete M().hold[sym]; return basis; }
 
@@ -1736,7 +1748,7 @@ function fillOrders() { const m = M(); const keep = [];
       m.cash -= fill * o.qty; addShares(o.sym, o.qty, fill * o.qty); }
     else { const h = m.hold[o.sym], avail = h ? h.sh - coveredUsed(o.sym) : 0; if (avail < o.qty) { logT(`Canceled: your ${o.kind} order to sell ${o.qty} ${o.sym} triggered, but you no longer had those shares free.`); return; }
       const basis = removeShares(o.sym, o.qty); m.cash += fill * o.qty; const g = fill * o.qty - basis; logT(`${o.kind === 'stop' ? 'Stop' : 'Limit'} order filled: sold ${o.qty} ${o.sym} at ${money(fill)} (${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}).${o.kind === 'stop' && fill < o.px ? ' The stock gapped below your stop, so it filled lower.' : ''}`); }
-    if (o.side === 'buy') logT(`${o.kind === 'stop' ? 'Stop' : 'Limit'} order filled: bought ${o.qty} ${o.sym} at ${money(fill)}.`);
+    if (o.side === 'buy') logT(`${o.kind === 'stop' ? 'Stop' : 'Limit'} order filled: bought ${o.qty} ${o.sym} at ${money(fill)}. ${avgLine(o.sym)}`);
     mission(o.kind === 'stop' ? 'm13' : 'm12'); });
   m.orders = keep; }
 function nextDay(quiet) { const m = M(); expireOptions(); simDay(m, true); fillOrders();
@@ -1791,14 +1803,15 @@ function renderStockTicket() { const m = M(), u = m.ui; u.sside = u.sside || 'bu
   $('#st-est').textContent = money(q * p);
   $('#st-help').innerHTML = { market: 'Fills right now at the current price.', limit: u.sside === 'buy' ? 'Buys only at your price or lower. Checked against each new day’s prices; stays open until it fills or you cancel.' : 'Sells only at your price or higher. Stays open until it fills or you cancel.',
     stop: u.sside === 'sell' ? 'A stop-loss: if the price falls to your stop, it sells at the next available price. If the stock gaps down overnight, it fills below your stop.' : 'Buys once the price rises to your stop, often used for breakouts.' }[u.skind] +
-    ` <span class="muted">Free cash ${money(freeCash())}${h ? ` · you own ${h.sh} ${m.sel}${coveredUsed(m.sel) ? ` (${coveredUsed(m.sel)} covering calls)` : ''}` : ''}.</span>`;
+    ` <span class="muted">Free cash ${money(freeCash())}${h ? ` · you own ${h.sh} ${m.sel}${coveredUsed(m.sel) ? ` (${coveredUsed(m.sel)} covering calls)` : ''} at an average cost of <b>${money(h.cost / h.sh)}</b>` : ''}.</span>` +
+    (h && u.sside === 'buy' && q > 0 && p > 0 ? `<br><span class="muted">After this buy: ${h.sh + q} shares at an average cost of <b>${money((h.cost + q * p) / (h.sh + q))}</b>.</span>` : '');
   $('#st-go').textContent = `${u.skind === 'market' ? '' : 'Place '}${u.sside === 'buy' ? 'Buy' : 'Sell'} ${q || ''} ${m.sel}${u.skind === 'market' ? '' : ' ' + u.skind + ' order'}`; $('#st-go').className = 'btn ' + (u.sside === 'buy' ? 'up' : 'down'); }
 function placeStock() { const m = M(), u = m.ui, q = Math.floor(+$('#st-qty').value || 0), st = $('#st-status'), sym = m.sel; const say = (t, ok) => { st.textContent = t; st.className = 'status ' + (ok ? 'u' : 'd'); };
   if (q < 1) return say('Enter how many shares first.'); if (+$('#st-qty').value !== q) return say('Use whole shares, like 1, 5 or 10.');
   const h = m.hold[sym], free = h ? h.sh - coveredUsed(sym) : 0;
   if (u.sside === 'sell' && free < q) return say(free ? `You can sell up to ${free} shares${coveredUsed(sym) ? ' (the rest are covering calls you sold)' : ''}.` : `You don't own any free ${sym} shares. This cash account can't short-sell.`);
   if (u.skind === 'market') { const p = px(sym);
-    if (u.sside === 'buy') { if (freeCash() < q * p) return say(`Not enough free cash. You can afford ${Math.floor(freeCash() / p)} shares.`); m.cash -= q * p; addShares(sym, q, q * p); logT(`Bought ${q} ${sym} at ${money(p)}.`); say(`Bought ${q} shares of ${sym} at ${money(p)}.`, true); mission('m1'); if (Object.keys(m.hold).length >= 3) mission('m2'); }
+    if (u.sside === 'buy') { if (freeCash() < q * p) return say(`Not enough free cash. You can afford ${Math.floor(freeCash() / p)} shares.`); m.cash -= q * p; const more = !!m.hold[sym]; addShares(sym, q, q * p); logT(`Bought ${q} ${sym} at ${money(p)}. ${avgLine(sym)}`); say(`Bought ${q} shares of ${sym} at ${money(p)}.${more ? ' ' + avgLine(sym) : ''}`, true); mission('m1'); if (Object.keys(m.hold).length >= 3) mission('m2'); }
     else { const basis = removeShares(sym, q); m.cash += q * p; const g = q * p - basis; logT(`Sold ${q} ${sym} at ${money(p)} (${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}).`); say(`Sold ${q} shares at ${money(p)}: ${g >= 0 ? 'profit' : 'loss'} of ${money(Math.abs(g))}.`, g >= 0); } }
   else { const p = +$('#st-px').value; if (!(p > 0)) return say('Enter a price for your order.');
     if (u.skind === 'stop' && u.sside === 'sell' && p >= px(sym)) return say(`A sell stop must be below the current price (${money(px(sym))}). It's meant to protect you if the price falls.`);
@@ -1829,21 +1842,24 @@ function renderTicket() { const m = M(), u = m.ui, sym = m.sel, K = u.k, q = quo
     <div class="trade"><div class="field"><label for="ot-qty">Contracts</label><input type="number" id="ot-qty" min="1" step="1" value="1"></div>
       <button class="btn up" id="ot-bto">Buy to open · pay ${money(q.ask * 100)} each</button>
       <button class="btn ghost" id="ot-sto" ${canSell ? '' : 'disabled'}>Sell to open · collect ${money(q.bid * 100)} each</button></div>
+    ${(() => { const hp = m.opts.find(p => p.sym === sym && p.type === u.side && p.K === u.k && p.exp === u.exp); return hp ? `<p style="font-size:14px;margin-top:8px">You ${hp.qty > 0 ? 'hold' : 'sold'} <b>${Math.abs(hp.qty)}</b> of this contract at an average ${hp.qty > 0 ? 'cost' : 'price'} of <b>${hp.avg.toFixed(2)}</b> (${money(hp.avg * 100)} a contract). ${hp.qty > 0 ? 'Buying more updates the average.' : 'Selling more updates the average.'}</p>` : ''; })()}
     <p class="muted" style="font-size:13px;margin-top:8px">${u.side === 'call' ? `Selling a call here is a <b>covered call</b>: it needs 100 free ${sym} shares per contract (you have ${Math.max(0, shFree)}).` : `Selling a put here is a <b>cash-secured put</b>: it sets aside ${money(K * 100)} per contract (free cash ${money(freeCash())}).`} Each contract costs a ${money(FEE)} fee. Buying pays the ask; selling gets the bid.</p>
     <div class="status" id="ot-status" aria-live="polite"></div></div>`;
-  $('#ot-bto').onclick = () => tradeOpt('bto'); $('#ot-sto').onclick = () => tradeOpt('sto'); }
+  $('#ot-bto').onclick = () => tradeOpt('bto'); $('#ot-sto').onclick = () => tradeOpt('sto');
+  if (OT_MSG) { const st = $('#ot-status'); st.textContent = OT_MSG.t; st.className = 'status ' + (OT_MSG.ok ? 'u' : 'd'); OT_MSG = null; } }
+let OT_MSG = null; /* keeps the trade message on screen after the ticket redraws */
 function tradeOpt(act) { const m = M(), u = m.ui, sym = m.sel, K = u.k, exp = u.exp, n = Math.floor(+$('#ot-qty').value || 0), q = quote(sym, u.side, K, exp), st = $('#ot-status');
-  const say = (t, ok) => { st.textContent = t; st.className = 'status ' + (ok ? 'u' : 'd'); };
+  const say = (t, ok) => { st.textContent = t; st.className = 'status ' + (ok ? 'u' : 'd'); if (ok) OT_MSG = { t, ok }; };
   if (n < 1) return say('Enter how many contracts.');
   const find = sgn => m.opts.find(p => p.sym === sym && p.type === u.side && p.K === K && p.exp === exp && Math.sign(p.qty) === sgn);
   if (act === 'bto') { const cost = q.ask * 100 * n + FEE * n; if (freeCash() < cost) return say(`Not enough free cash: this costs ${money(cost)}.`);
     m.cash -= cost; const p = find(1); if (p) { p.avg = (p.avg * p.qty + q.ask * n) / (p.qty + n); p.qty += n; } else m.opts.push({ id: m.nid++, sym, type: u.side, K, exp, qty: n, avg: q.ask, open: m.day });
-    logT(`Bought to open ${n} ${contractName({ sym, type: u.side, K, exp })} at ${q.ask.toFixed(2)} (${money(cost)} incl. fees).`); mission('m10'); say(`Filled at ${q.ask.toFixed(2)}. See it under Option positions.`, true); }
+    logT(`Bought to open ${n} ${contractName({ sym, type: u.side, K, exp })} at ${q.ask.toFixed(2)} (${money(cost)} incl. fees).`); mission('m10'); const pp = find(1); say(`Filled at ${q.ask.toFixed(2)}. ${pp.qty > n ? `You now hold ${pp.qty} at an average cost of ${pp.avg.toFixed(2)} (${money(pp.avg * 100)} a contract).` : 'See it under Option positions.'}`, true); }
   else { if (q.bid <= 0) return say('There are no buyers at this strike (bid is 0). Pick a different contract.');
     if (u.side === 'call') { const free = (m.hold[sym] ? m.hold[sym].sh : 0) - coveredUsed(sym); if (free < 100 * n) return say(`Covered calls need ${100 * n} free shares; you have ${Math.max(0, free)}.`); }
     else if (freeCash() < K * 100 * n) return say(`Cash-secured puts need ${money(K * 100 * n)} set aside; you have ${money(freeCash())} free.`);
-    const cr = q.bid * 100 * n - FEE * n; m.cash += cr; const p = find(-1); if (p) { p.avg = (p.avg * -p.qty + q.bid * n) / (-p.qty + n); p.qty -= n; } else m.opts.push({ id: m.nid++, sym, type: u.side, K, exp, qty: -n, avg: q.bid, open: m.day });
-    logT(`Sold to open ${n} ${contractName({ sym, type: u.side, K, exp })} at ${q.bid.toFixed(2)} (collected ${money(cr)} after fees).`); say(`Filled at ${q.bid.toFixed(2)}. You collected ${money(cr)}.`, true); }
+    const cr = q.bid * 100 * n - FEE * n; m.cash += cr; const p = find(-1); if (p) { p.avg = (p.avg * -p.qty + q.bid * n) / (-p.qty + n); p.qty -= n; } else m.opts.push({ id: m.nid++, sym, type: u.side, K, exp, qty: -n, avg: q.bid, open: m.day }); const ps = find(-1);
+    logT(`Sold to open ${n} ${contractName({ sym, type: u.side, K, exp })} at ${q.bid.toFixed(2)} (collected ${money(cr)} after fees).`); say(`Filled at ${q.bid.toFixed(2)}. You collected ${money(cr)}.${-ps.qty > n ? ` You’ve now sold ${-ps.qty} at an average price of ${ps.avg.toFixed(2)}.` : ''}`, true); }
   m.val[m.val.length - 1] = r2(total()); save(); renderMarket(); }
 function closeOpt(id) { const m = M(), p = m.opts.find(x => x.id === id); if (!p) return; const q = quote(p.sym, p.type, p.K, p.exp), n = Math.abs(p.qty);
   if (p.qty > 0) { const v = q.bid * 100 * n - FEE * n; m.cash += v; const g = v - p.avg * 100 * n; logT(`Sold to close ${n} ${contractName(p)} at ${q.bid.toFixed(2)}: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}.`); toast(`Closed: ${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}`); }
@@ -1853,9 +1869,9 @@ const startCash = m => (m.base || 10000) + (m.added || 0);
 function renderPortfolio() { const m = M(), tv = total(), gain = tv - startCash(m);
   $('#m-stats').innerHTML = [['Cash', money(m.cash)], ['Set aside (puts)', money(reserved())], ['Stocks', money(stockValue())], ['Options', money(optValue())], ['Total worth', money(tv)], ['Money put in', money(startCash(m))], ['Trading profit', `<span class="${gain >= 0 ? 'u' : 'd'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`]].map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
   const pv = m.val.length > 1 ? m.val : [startCash(m), startCash(m)]; const pc = $('#cv-port'); reg(pc, () => drawLine(pc, pv, { base: startCash(m), xticks: [] }));
-  const rows = Object.entries(m.hold); $('#m-hold').innerHTML = rows.length ? rows.map(([k, v]) => { const pp = px(k), val = v.sh * pp, g = val - v.cost; return `<tr><td>${k}</td><td>${v.sh}</td><td>${money(v.cost / v.sh)}</td><td>${money(pp)}</td><td>${money(val)}</td><td class="${g >= 0 ? 'u' : 'd'}">${g >= 0 ? '+' : ''}${money(g)} (${pct(g / v.cost)})</td></tr>`; }).join('')
+  const rows = Object.entries(m.hold); $('#m-hold').innerHTML = rows.length ? rows.map(([k, v]) => { const pp = px(k), val = v.sh * pp, g = val - v.cost; return `<tr><td>${k}</td><td>${v.sh}</td><td><b>${money(v.cost / v.sh)}</b><br><small class="muted">paid ${money(v.cost)}</small></td><td>${money(pp)}</td><td>${money(val)}</td><td class="${g >= 0 ? 'u' : 'd'}">${g >= 0 ? '+' : ''}${money(g)} (${pct(g / v.cost)})</td></tr>`; }).join('')
     : `<tr><td colspan="6" class="empty">No stocks yet. Pick one and place an order.</td></tr>`;
-  $('#m-opts').innerHTML = m.opts.length ? m.opts.map(p => { const q = quote(p.sym, p.type, p.K, p.exp), n = p.qty, pl = (q.mid - p.avg) * 100 * n; return `<tr><td>${contractName(p)}</td><td>${n > 0 ? '+' : ''}${n}</td><td>${p.avg.toFixed(2)}</td><td>${q.mid.toFixed(2)}</td><td class="${pl >= 0 ? 'u' : 'd'}">${pl >= 0 ? '+' : ''}${money(pl)}</td><td>${(q.delta * 100 * n).toFixed(0)}</td><td>${(q.theta * 100 * n).toFixed(2)}</td><td>${calDays(m.day, p.exp)}d</td><td><button class="btn ghost mini" data-close="${p.id}">Close</button></td></tr>`; }).join('')
+  $('#m-opts').innerHTML = m.opts.length ? m.opts.map(p => { const q = quote(p.sym, p.type, p.K, p.exp), n = p.qty, pl = (q.mid - p.avg) * 100 * n; return `<tr><td>${contractName(p)}</td><td>${n > 0 ? '+' : ''}${n}</td><td><b>${p.avg.toFixed(2)}</b><br><small class="muted">${money(p.avg * 100)} each</small></td><td>${q.mid.toFixed(2)}</td><td class="${pl >= 0 ? 'u' : 'd'}">${pl >= 0 ? '+' : ''}${money(pl)}</td><td>${(q.delta * 100 * n).toFixed(0)}</td><td>${(q.theta * 100 * n).toFixed(2)}</td><td>${calDays(m.day, p.exp)}d</td><td><button class="btn ghost mini" data-close="${p.id}">Close</button></td></tr>`; }).join('')
     : `<tr><td colspan="9" class="empty">${optionsOpen() ? 'No option positions. Open the Option chain tab to trade.' : 'Options trading unlocks on Options Island.'}</td></tr>`;
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => closeOpt(+b.dataset.close));
   $('#m-orders').innerHTML = m.orders.length ? m.orders.map(o => `<li><span><b>${o.side === 'buy' ? 'Buy' : 'Sell'} ${o.qty} ${o.sym}</b> · ${o.kind} at ${money(o.px)} · good until canceled</span><button class="btn ghost mini" data-cancel="${o.id}">Cancel</button></li>`).join('') : '<li class="muted">No open orders.</li>';

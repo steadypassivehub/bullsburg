@@ -24,9 +24,59 @@
     if (!S.sch.on && S.full && S.sch.gave) S.full = false;
     save(); refreshAll(); paintButton();
   }
+  /* ---------------- shared computers ---------------- */
+  // Signing out saves the student's progress to their school account, then clears it from the device,
+  // so the next student on a school computer starts fresh. Once a device has been signed out of, it is "shared":
+  // it opens on the sign-in screen, and it asks "Are you ___?" after a while with no one playing.
+  var SHARED = 'bullsburg.shared', LAST = 'bullsburg.last', AGAIN = 'bullsburg.signin';
+  var IDLE = (typeof BUILD !== 'undefined' && BUILD === 'app' ? 12 * 60 : 30) * 60000;
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+  function saveNow() { // true once the school copy is up to date
+    if (!ON || !S.sch || !S.sch.key) return Promise.resolve(false); clearTimeout(pushT);
+    return C.rpc('save_progress', { p_key: S.sch.key, p_progress: snapshot(), p_summary: summary() }).then(function () { return true; }, function () { return false; });
+  }
+  function freshStart() { // wipe this student's game from the device and reopen on the sign-in screen
+    var bought = S.full && !(S.sch && S.sch.gave); // a game bought on this device stays unlocked
+    Object.keys(S).forEach(function (k) { delete S[k]; }); Object.assign(S, JSON.parse(S_FRESH));
+    S.onboarded = true; S.full = bought;
+    try { S.pid = [].map.call(crypto.getRandomValues(new Uint32Array(2)), function (x) { return x.toString(36); }).join(''); } catch (e) { S.pid = Math.random().toString(36).slice(2); }
+    lsSet(SHARED, '1'); lsSet(LAST, null); save();
+    try { localStorage.setItem(KEY + '.bak', localStorage.getItem(KEY)); sessionStorage.setItem(AGAIN, '1'); } catch (e) {}
+    location.reload();
+  }
+  function signOutScreen(fromIdle) {
+    var s = S.sch; if (!s) return;
+    pwShow('<div class="eyebrow">' + (fromIdle ? 'Still playing?' : 'Sign out') + '</div><h2 id="pw-title">' + (fromIdle ? 'Are you ' + esc(s.name || 'this student') + '?' : 'Sign out, ' + esc(s.name || 'student') + '?') + '</h2>' +
+      (fromIdle ? '<p style="margin-top:8px">This computer is signed in to <b>' + esc(s.name) + '</b>’s school account.</p>' : '') +
+      '<p style="margin-top:8px">Your progress saves to your school account, then it’s cleared from this device so the next student starts fresh.</p>' +
+      '<p style="margin-top:10px"><b>Your student key</b> (you need it to sign back in):</p><div class="keybig">' + esc(fmtKey(s.key)) + '</div>' +
+      '<div class="err" id="so-err" aria-live="polite"></div>' +
+      '<div class="actions"><button class="btn sun" id="so-go">' + (fromIdle ? 'No, sign ' + esc(s.name || 'them') + ' out' : 'Save and sign out') + '</button>' +
+      '<button class="btn ghost" id="so-x">' + (fromIdle ? 'Yes, that’s me' : 'Cancel') + '</button></div>');
+    $('#so-x').onclick = function () { lsSet(LAST, String(Date.now())); pwClose(); };
+    var force = false;
+    $('#so-go').onclick = function () { var b = this; if (force) return freshStart(); busy(b, 'Saving…');
+      saveNow().then(function (ok) { if (ok) return freshStart();
+        force = true; b.disabled = false; b.textContent = 'Sign out anyway';
+        $('#so-err').textContent = 'We couldn’t save. Check the internet and try again. If you sign out anyway, progress from the last few minutes on this device is lost.';
+        var x = $('#so-x'); x.textContent = 'Try again'; x.onclick = function () { signOutScreen(fromIdle); }; }); };
+  }
+  function paintBar() {
+    var bar = $('#sch-bar'); if (!bar) return;
+    if (!S.sch) { bar.hidden = true; bar.innerHTML = ''; return; }
+    bar.hidden = false;
+    bar.innerHTML = '<span>🎓 Signed in as <b>' + esc(S.sch.name || 'student') + '</b>' + (S.sch.cls ? ' · ' + esc(S.sch.cls) : '') + '</span>' +
+      '<span class="row" style="gap:8px"><button class="btn ghost" id="sb-acct">My class</button><button class="btn" id="sb-out">Sign out</button></span>';
+    $('#sb-acct').onclick = panel; $('#sb-out').onclick = function () { signOutScreen(false); };
+  }
+  var lastTouch = Date.now();
+  function touched() { lastTouch = Date.now(); if (S.sch) lsSet(LAST, String(lastTouch)); }
+  ['pointerdown', 'keydown'].forEach(function (ev) { document.addEventListener(ev, function () { if (Date.now() - lastTouch > 20000) touched(); else lastTouch = Date.now(); }, true); });
+  setInterval(function () { if (S.sch && Date.now() - lastTouch > IDLE && !$('#so-go')) { push(true); signOutScreen(true); } }, 60000);
+
   function leaveSchool(silent) {
     if (!S.sch) return; var gave = S.sch.gave; S.sch = null; if (gave) S.full = false; save(); refreshAll(); paintButton();
-    if (!silent) toast('Signed out of your school account. Your progress on this device is kept.');
   }
   function check() { // on launch: refresh the license; offline, trust it until its end date
     if (!S.sch) return;
@@ -64,7 +114,7 @@
       C.rpc('save_progress', { p_key: S.sch.key, p_progress: snapshot(), p_summary: summary() }).catch(function () {}).then(function () { pushing = false; });
     }, now ? 0 : 15000);
   }
-  window.TT_onSave = function () { push(false); };
+  window.TT_onSave = function () { push(false); if (S.sch) lsSet(LAST, String(Date.now())); };
   document.addEventListener('visibilitychange', function () { if (document.hidden) push(true); });
   function merge(txt) { // keeps the best of this device and the saved school copy
     var o; try { o = JSON.parse(txt); } catch (e) { return; } if (!o) return;
@@ -93,8 +143,9 @@
       '<p style="margin-top:8px">If your teacher gave you a class code, type it here. Your school’s license unlocks the whole game, and your teacher can see your progress.</p>' +
       codeInput('sc-cls', 'Class code from your teacher', 8) +
       '<div class="field"><label for="sc-name">Your first name and last initial</label><input id="sc-name" autocomplete="off" maxlength="40" placeholder="Jamal W."></div>' +
-      '<div class="err" id="sc-err" aria-live="polite"></div><div class="actions"><button class="btn sun" id="sc-join">Join class</button><button class="btn ghost" id="pw-x">Cancel</button></div>' +
-      '<p class="fine">Used Bullsburg at school on another device? <button class="btn ghost" id="sc-have" style="font-size:12px;padding:5px 10px">I have a student key</button></p>' +
+      '<div class="err" id="sc-err" aria-live="polite"></div><div class="actions"><button class="btn sun" id="sc-join">Join class</button><button class="btn ghost" id="pw-x">' + (lsGet(SHARED) ? 'Just play (no sign-in)' : 'Cancel') + '</button></div>' +
+      '<p class="fine"><b>Already joined your class?</b> <button class="btn ghost" id="sc-have" style="font-size:12px;padding:5px 10px">Sign in with my student key</button></p>' +
+      (lsGet(SHARED) ? '<p class="fine">On a shared computer? Tap <b>Sign out</b> at the top when you’re done.</p>' : '') +
       '<p class="fine">We don’t ask for your email. We only save the name you type and your game progress for your teacher. <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a></p>');
     $('#pw-x').onclick = pwClose; $('#sc-have').onclick = keyScreen;
     var go = function () { var b = $('#sc-join'), code = $('#sc-cls').value.trim(), nm = $('#sc-name').value.trim();
@@ -151,7 +202,7 @@
       '<div class="actions" style="margin-top:14px"><button class="btn sun" id="sc-league">🏆 Leagues</button><button class="btn" id="sc-class">Change class</button><button class="btn ghost" id="sc-out">Sign out</button><button class="btn ghost" id="pw-x">Close</button></div>');
     $('#pw-x').onclick = pwClose; $('#sc-class').onclick = classScreen; $('#sc-league').onclick = league;
     $('#sc-show').onclick = function () { $('#sc-k').textContent = fmtKey(s.key); this.hidden = true; };
-    var arm = false; $('#sc-out').onclick = function () { if (!arm) { arm = true; this.textContent = 'Sure? You’ll need your key to sign back in'; return; } push(true); setTimeout(function () { leaveSchool(false); pwClose(); }, 400); };
+    $('#sc-out').onclick = function () { signOutScreen(false); };
   }
   /* ---------------- class league and division tournament ---------------- */
   function board(rows, cols) { return '<table class="lg"><tbody>' + rows.map(function (r, i) { return '<tr' + (r.me ? ' class="me"' : '') + '><td>' + (i + 1) + '</td>' + cols.map(function (c) { return '<td>' + c(r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>'; }
@@ -177,7 +228,7 @@
     pwShow('<div class="eyebrow">Bullsburg for Schools</div><h2 id="pw-title">Ask your teacher</h2><p style="margin-top:8px">The rest of the game comes with your school’s Bullsburg license. ' + whyOff() + '</p><div class="actions" style="margin-top:14px"><button class="btn ghost" id="sc-acct">My school account</button><button class="btn ghost" id="pw-x">Close</button></div>');
     $('#pw-x').onclick = pwClose; $('#sc-acct').onclick = panel;
   };
-  function paintButton() { var b = $('#student-btn'); if (!b) return; b.textContent = S.sch ? '🎓 ' + (S.sch.school || 'My school') : '🎓 I’m a student'; }
+  function paintButton() { paintBar(); var b = $('#student-btn'); if (!b) return; b.textContent = S.sch ? '🎓 ' + (S.sch.school || 'My school') : '🎓 I’m a student'; }
   var sb = $('#student-btn'); if (sb) sb.onclick = openStudent;
   /* ---------------- invite a friend ---------------- */
   var INV_COINS = 1000, INV_MAX = 10;
@@ -232,5 +283,8 @@
   /* ---------------- start ---------------- */
   var tl = $('#teacher-link'), pl = $('#parents-link'); if (BUILD === 'preview') { if (tl) tl.hidden = true; if (pl) pl.hidden = true; }
   if (!ON && sb) sb.hidden = BUILD === 'preview';
+  var reopen = false; try { reopen = sessionStorage.getItem(AGAIN) === '1'; sessionStorage.removeItem(AGAIN); } catch (e) {}
+  if (ON && !S.sch && (reopen || lsGet(SHARED))) { S.onboarded = true; setTimeout(function () { openStudent(); if (reopen) toast('Signed out. Your progress is saved to your school account.'); }, 500); }
+  if (S.sch) { var lt = +lsGet(LAST) || 0; if (lt && Date.now() - lt > IDLE) setTimeout(function () { signOutScreen(true); }, 600); else touched(); }
   paintButton(); check(); if (ON && inv().code) setTimeout(function () { claim(true); }, 4000);
 })();
