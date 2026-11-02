@@ -373,7 +373,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 700; letter-spacing
 .tab { background: transparent; border-color: var(--line); color: var(--ink); font-weight: 700; }
 .tab:hover { border-color: rgba(227,193,121,.5); }
 .tab[aria-selected="true"] { background: var(--gold); border-color: transparent; color: #1B1404; box-shadow: 0 6px 16px -8px rgba(227,193,121,.7); }
-.tab.locked { color: var(--lock); }
+.tab.locked { color: #8AA398; }
 .tape { background: #071712; border-bottom: 1px solid var(--line); }
 .tape-in { color: #D9CFB8; }
 /* surfaces */
@@ -435,7 +435,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline-color: #F2D
 .tracks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
 .tracks button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 14px; padding: 10px 8px; text-align: center; cursor: pointer; font: inherit; }
 .tracks button b { display: block; font-size: 15px; } .tracks button small { color: var(--muted); font-size: 12px; }
-.tracks button[aria-selected="true"] { border-color: var(--sun); box-shadow: 0 0 0 2px color-mix(in srgb, var(--sun) 45%, transparent); }
+.tracks button[aria-pressed="true"] { border-color: var(--sun); box-shadow: 0 0 0 2px color-mix(in srgb, var(--sun) 45%, transparent); }
 .tracks button[data-trk="wise"] { border-style: dashed; }
 .ready { position: relative; height: 18px; border-radius: 99px; background: var(--surface2); overflow: hidden; margin: 10px 0 4px; }
 .ready i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--accent), var(--sun)); border-radius: 99px; }
@@ -604,10 +604,10 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
           <div class="stats" id="m-stats"></div>
           <canvas id="cv-port" style="height:160px;margin-top:12px" aria-label="Portfolio value over time"></canvas>
           <h4 class="subh">Stocks</h4>
-          <div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost / share</th><th>Price</th><th>Value</th><th>Gain / loss</th></tr></thead><tbody id="m-hold"></tbody></table></div>
+          <div class="tbl-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways)"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost / share</th><th>Price</th><th>Value</th><th>Gain / loss</th></tr></thead><tbody id="m-hold"></tbody></table></div>
           <p class="muted avg-note">Average cost = everything you paid ÷ shares you own. Buy more at a different price and it updates. Selling doesn’t change it.</p>
           <h4 class="subh">Option positions</h4>
-          <div class="tbl-wrap"><table><thead><tr><th>Contract</th><th>Qty</th><th>Avg cost</th><th>Mark</th><th>P/L</th><th>Delta</th><th>Theta/day</th><th>Left</th><th></th></tr></thead><tbody id="m-opts"></tbody></table></div>
+          <div class="tbl-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways)"><table><thead><tr><th>Contract</th><th>Qty</th><th>Avg cost</th><th>Mark</th><th>P/L</th><th>Delta</th><th>Theta/day</th><th>Left</th><th></th></tr></thead><tbody id="m-opts"></tbody></table></div>
           <h4 class="subh">Open orders</h4>
           <ul class="orders" id="m-orders"></ul>
         </div>
@@ -1386,9 +1386,9 @@ function unlockScreen(tab) { const v = $('#v-' + tab); const ls = v.querySelecto
 /* ================= MAP ================= */
 function starStr(n) { return '<span class="stars">' + [0, 1, 2].map(i => i < n ? '★' : '<span class="off">★</span>').join('') + '</span>'; }
 function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const TK = S.trk === 'money' ? 'money' : 'invest'; const nextId = TRACK[TK].find(id => !S.stars[id] && isUnlocked(id) && !paid(id));
-  const tabs = document.createElement('div'); tabs.className = 'tracks'; tabs.setAttribute('role', 'tablist');
+  const tabs = document.createElement('div'); tabs.className = 'tracks'; tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Choose a track');
   const cnt = k => TRACK[k].filter(id => S.stars[id]).length + ' / ' + TRACK[k].length;
-  tabs.innerHTML = `<button role="tab" data-trk="invest" aria-selected="${TK === 'invest'}"><b>📈 Investing</b><small>${cnt('invest')}</small></button><button role="tab" data-trk="money" aria-selected="${TK === 'money'}"><b>💵 Money Skills</b><small>${cnt('money')}</small></button><button data-trk="wise"><b>🎓 W!SE Prep</b><small>${window.TT_wiseReady ? window.TT_wiseReady() + '% ready' : 'Test prep'}</small></button>`;
+  tabs.innerHTML = `<button data-trk="invest" aria-pressed="${TK === 'invest'}"><b>📈 Investing</b><small>${cnt('invest')}</small></button><button data-trk="money" aria-pressed="${TK === 'money'}"><b>💵 Money Skills</b><small>${cnt('money')}</small></button><button data-trk="wise"><b>🎓 W!SE Prep</b><small>${window.TT_wiseReady ? window.TT_wiseReady() + '% ready' : 'Test prep'}</small></button>`;
   tabs.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.trk === 'wise') return window.TT_openWise && window.TT_openWise(); S.trk = b.dataset.trk; save(); renderMap(); });
   box.appendChild(tabs); const sp = S.sch && S.sch.sponsor; if (sp && sp.name) { const c = document.createElement('div'); c.className = 'sponsor-chip'; c.style.margin = '-6px 0 14px'; c.textContent = 'Your school license is sponsored by ' + sp.name + (sp.note ? ' · ' + sp.note : ''); box.appendChild(c); }
   const xs = ['4%', '30%', '52%', '30%'];
@@ -1825,7 +1825,7 @@ function renderChain() { const m = M(), u = m.ui, box = $('#mk-chain');
   box.innerHTML = `<div class="row" style="justify-content:space-between"><div class="exps">${exps.map(e => `<button class="chip ${e === u.exp ? 'on' : ''}" data-exp="${e}">${fmtD(e)}<small>${calDays(m.day, e)}d</small></button>`).join('')}</div>
     <div class="seg" role="group" aria-label="Calls or puts"><button data-oside="call" aria-pressed="${u.side === 'call'}">Calls</button><button data-oside="put" aria-pressed="${u.side === 'put'}">Puts</button></div></div>
     <p class="muted" style="font-size:13px;margin:8px 0 0">${sym} at ${money(S0)} · expires ${fmtD(u.exp, true)} · ${m.earn[sym] > m.day && m.earn[sym] <= u.exp ? '<b>earnings before this expiration: IV is inflated</b>' : 'no earnings before this expiration'}. Shaded rows are in the money. Tap a row to trade.</p>
-    <div class="tbl-wrap"><table class="chain"><thead><tr><th>Strike</th><th>Bid</th><th>Ask</th><th>Volume</th><th>Open int.</th><th>IV</th><th>Delta</th><th>Theta</th></tr></thead><tbody>
+    <div class="tbl-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways)"><table class="chain"><thead><tr><th>Strike</th><th>Bid</th><th>Ask</th><th>Volume</th><th>Open int.</th><th>IV</th><th>Delta</th><th>Theta</th></tr></thead><tbody>
     ${ks.map(k => { const q = quote(sym, u.side, k, u.exp); return `<tr class="${q.intr > 0 ? 'itm' : ''} ${u.k === k ? 'sel' : ''}" data-k="${k}" tabindex="0"><td><b>${money(k)}</b></td><td>${q.bid.toFixed(2)}</td><td>${q.ask.toFixed(2)}</td><td>${q.vol.toLocaleString()}</td><td>${q.oi.toLocaleString()}</td><td>${(q.iv * 100).toFixed(1)}%</td><td>${q.delta.toFixed(2)}</td><td>${q.theta.toFixed(3)}</td></tr>`; }).join('')}
     </tbody></table></div><div id="mk-ticket"></div>`;
   box.querySelectorAll('[data-exp]').forEach(b => b.onclick = () => { u.exp = +b.dataset.exp; u.k = null; renderChain(); });
@@ -1970,8 +1970,15 @@ const Store = { native: () => !!window.TickerStoreBridge,
   async restore() { return window.TickerStoreBridge ? !!(await window.TickerStoreBridge.restore()) : null; } };
 const NUMW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'];
 let GATE = null;
-function pwShow(html) { $('#pw-box').innerHTML = html; $('#paywall').hidden = false; const f = $('#pw-box').querySelector('input, .btn'); if (f) f.focus(); }
-function pwClose() { $('#paywall').hidden = true; }
+let pwBack = null;
+function pwShow(html) { if ($('#paywall').hidden) pwBack = document.activeElement; $('#pw-box').innerHTML = html; $('#paywall').hidden = false; const f = $('#pw-box').querySelector('input, .btn'); if (f) f.focus(); }
+function pwClose() { $('#paywall').hidden = true; if (pwBack && pwBack.isConnected && pwBack.focus) try { pwBack.focus(); } catch (e) {} pwBack = null; }
+/* Keyboard: Tab stays inside an open pop-up window until it closes. */
+document.addEventListener('keydown', e => { if (e.key !== 'Tab') return;
+  const d = [...document.querySelectorAll('[aria-modal="true"]')].find(x => !x.hidden && x.getClientRects().length); if (!d) return;
+  const els = [...d.querySelectorAll('button, input, select, textarea, a[href], summary, [tabindex]:not([tabindex="-1"])')].filter(x => !x.disabled && x.getClientRects().length); if (!els.length) return;
+  const first = els[0], last = els[els.length - 1], a = document.activeElement;
+  if (!d.contains(a)) { e.preventDefault(); first.focus(); } else if (e.shiftKey && a === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); } });
 $('#paywall').addEventListener('click', e => { if (e.target.id === 'paywall') pwClose(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#paywall').hidden) pwClose(); });
 function openPaywall() { if (S.full) return toast('You already have the full game.');
@@ -2085,7 +2092,7 @@ function openStudy(focusId) { go('map', true); $('#map-home').hidden = true; con
       <div class="row" style="margin-top:10px"><button class="btn ghost" data-relesson="${id}">Re-read the lesson</button></div></details>`; }).join('');
   st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Map</button><span class="eyebrow">Study Hall</span></div>
     <h2>Study Hall</h2><p class="lesson-text" style="font-size:16.5px">Every question you’ve answered, with the right answer and why. Go back to any lesson and study before a boss battle.</p>
-    <div class="sh-bar"><div class="modes" role="tablist"><button data-shf="all" aria-pressed="${STUDY.f === 'all'}">All (${total})</button><button data-shf="missed" aria-pressed="${STUDY.f === 'missed'}">To review (${missedN})</button></div>
+    <div class="sh-bar"><div class="modes" role="group" aria-label="Which questions"><button data-shf="all" aria-pressed="${STUDY.f === 'all'}">All (${total})</button><button data-shf="missed" aria-pressed="${STUDY.f === 'missed'}">To review (${missedN})</button></div>
     <button class="btn sun" id="sh-practice" ${missedN ? '' : 'disabled'}>${missedN ? `Practice ${Math.min(missedN, 10)} missed question${missedN > 1 ? 's' : ''}` : 'No missed questions'}</button></div>
     <div class="sh-body">${body || `<div class="card" style="margin-top:14px"><b>${STUDY.f === 'missed' ? 'Nothing to review. Nice work!' : 'No questions yet.'}</b><p class="muted" style="margin-top:6px">${STUDY.f === 'missed' ? 'Questions you miss show up here so you can study them.' : 'Clear your first stage and its questions will show up here.'}</p></div>`}</div></div>`;
   $('#back').onclick = () => showMap();

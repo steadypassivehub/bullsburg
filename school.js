@@ -228,7 +228,7 @@
     pwShow('<div class="eyebrow">Bullsburg for Schools</div><h2 id="pw-title">Ask your teacher</h2><p style="margin-top:8px">The rest of the game comes with your school’s Bullsburg license. ' + whyOff() + '</p><div class="actions" style="margin-top:14px"><button class="btn ghost" id="sc-acct">My school account</button><button class="btn ghost" id="pw-x">Close</button></div>');
     $('#pw-x').onclick = pwClose; $('#sc-acct').onclick = panel;
   };
-  function paintButton() { paintBar(); var b = $('#student-btn'); if (!b) return; b.textContent = S.sch ? '🎓 ' + (S.sch.school || 'My school') : '🎓 I’m a student'; }
+  function paintButton() { paintBar(); var iv = $('#invite-btn'); if (iv) iv.hidden = !ON || !!S.sch; var b = $('#student-btn'); if (!b) return; b.textContent = S.sch ? '🎓 ' + (S.sch.school || 'My school') : '🎓 I’m a student'; }
   var sb = $('#student-btn'); if (sb) sb.onclick = openStudent;
   /* ---------------- invite a friend ---------------- */
   var INV_COINS = 1000, INV_MAX = 10;
@@ -266,7 +266,7 @@
         $('#iv-err').textContent = r === 'own_code' ? 'That’s your own code. Share it with a friend instead!' : r === 'used' ? 'You’ve already used an invite code.' : 'We couldn’t find that code. Check it and try again.';
         rb.disabled = false; rb.textContent = 'Use code'; }).catch(function (e) { $('#iv-err').textContent = friendly(e); rb.disabled = false; rb.textContent = 'Use code'; }); };
   }
-  var ib = $('#invite-btn'); if (ib) { if (!ON) ib.hidden = true; ib.onclick = openInvite; }
+  var ib = $('#invite-btn'); if (ib) { if (!ON || S.sch) ib.hidden = true; ib.onclick = openInvite; } // no invites for school students
 
   /* ---------------- rating prompt (store apps) ---------------- */
   // Uses the official in-app review sheet, which Apple and Google require. It is asked after a boss win, never during play,

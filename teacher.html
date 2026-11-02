@@ -26,7 +26,7 @@ header .btn.ghost{color:#fff;border-color:#ffffff40}
 .tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:1000px;font-size:14px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--muted);font-weight:700;cursor:pointer;white-space:nowrap}
 td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
 .bar{height:6px;background:var(--line);border-radius:3px;margin-top:4px;min-width:80px}.bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
-.tag{display:inline-block;font-size:12px;border-radius:999px;padding:1px 8px;background:#FBE3DC;color:var(--bad)}.ok{background:#DDF1E7;color:var(--accent)}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:1px 8px;background:#FBE3DC;color:var(--bad)}.ok{background:#DDF1E7;color:#17664A}
 .empty{padding:20px;text-align:center;color:var(--muted)}[hidden]{display:none!important}
 #s-dash>*,main>*{min-width:0}
 tfoot td{font-weight:700;background:var(--bg)}.up{color:var(--accent);font-weight:700}.dn{color:var(--bad);font-weight:700}
@@ -189,9 +189,11 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
     $('#rows').innerHTML = r.length ? r.map(function (s) { var pct = s.total ? Math.round(100 * s.cleared / s.total) : 0;
       return '<tr><td><b>' + esc(s.name) + '</b><br><small class="muted">Key ' + esc(fk(s.key)) + '</small></td><td>' + s.cleared + ' of ' + s.total + '<div class="bar"><i style="width:' + pct + '%"></i></div></td><td class="n">' + s.stars + '</td><td class="n">' + s.level + '<br><small class="muted">' + esc(s.rank) + '</small></td>' +
         '<td class="n">' + pc(s.ready) + '</td><td class="n">' + pc(s.pre) + '</td><td class="n">' + pc(s.post) + '</td><td class="n">' + gr(s.grow) + '</td><td class="n">' + (s.accuracy < 0 ? '-' : s.accuracy + '%') + '</td><td class="n">' + (s.to_review ? '<span class="tag">' + s.to_review + '</span>' : '0') + '</td><td class="n">' + s.streak + (s.streak === 1 ? ' day' : ' days') + '</td><td>' + esc(s.next_stage) + '</td><td>' + ago(s.last) + '</td>' +
-        '<td><button class="btn link sm" data-rm="' + esc(s.id) + '" data-nm="' + esc(s.name) + '">Remove</button></td></tr>'; }).join('') : '<tr><td colspan="14" class="empty">No students yet. Share the class code <b>' + esc($('#cl-code').textContent) + '</b> with your students.</td></tr>';
+        '<td style="white-space:nowrap"><button class="btn link sm" data-rm="' + esc(s.id) + '" data-nm="' + esc(s.name) + '" aria-label="Remove ' + esc(s.name) + ' from this class">Remove</button> <button class="btn link sm dn" data-del="' + esc(s.id) + '" data-nm="' + esc(s.name) + '" aria-label="Permanently delete ' + esc(s.name) + '">Delete</button></td></tr>'; }).join('') : '<tr><td colspan="14" class="empty">No students yet. Share the class code <b>' + esc($('#cl-code').textContent) + '</b> with your students.</td></tr>';
     document.querySelectorAll('[data-rm]').forEach(function (b) { b.onclick = function () { if (!confirm('Remove ' + b.dataset.nm + ' from this class? Their progress is kept.')) return;
-      C.rpc('remove_from_class', { p_class: CUR, p_student: b.dataset.rm }, true).then(function () { start(); }); }; }); }
+      C.rpc('remove_from_class', { p_class: CUR, p_student: b.dataset.rm }, true).then(function () { start(); }); }; });
+    document.querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { if (!confirm('Permanently delete ' + b.dataset.nm + '? Their name, student key and all progress are erased. This can\u2019t be undone.')) return;
+      C.rpc('delete_student', { p_class: CUR, p_student: b.dataset.del }, true).then(function (ok) { if (!ok) alert('That student couldn\u2019t be deleted. Refresh and try again.'); start(); }).catch(function (e) { alert(friendly(e)); }); }; }); }
   document.querySelectorAll('th[data-k]').forEach(function (th) { th.onclick = function () { var k = th.dataset.k; DIR = SORT === k ? -DIR : (k === 'name' || k === 'next_stage' ? 1 : -1); SORT = k; paint(); }; });
   $('#refresh').onclick = function () { start(); };
   $('#csv').onclick = function () { var q = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
