@@ -199,10 +199,25 @@
       (s.on ? '<p class="muted" style="margin-top:6px">Whole game unlocked through ' + esc(s.ends) + '. Your progress saves automatically.</p>' : '<p class="err" style="margin-top:6px">' + whyOff() + '</p>') +
       (s.sponsor && s.sponsor.name ? '<p class="sponsor-chip">Sponsored by <b>' + esc(s.sponsor.name) + '</b>' + (s.sponsor.note ? ' · ' + esc(s.sponsor.note) : '') + '</p>' : '') +
       '<p style="margin-top:10px">Student key: <b id="sc-k">•••••-•••••</b> <button class="btn ghost" id="sc-show" style="font-size:12px;padding:4px 9px">Show</button></p>' +
-      '<div class="actions" style="margin-top:14px"><button class="btn sun" id="sc-league">🏆 Leagues</button><button class="btn" id="sc-class">Change class</button><button class="btn ghost" id="sc-out">Sign out</button><button class="btn ghost" id="pw-x">Close</button></div>');
+      '<div class="actions" style="margin-top:14px"><button class="btn sun" id="sc-league">🏆 Leagues</button><button class="btn" id="sc-class">Change class</button><button class="btn ghost" id="sc-out">Sign out</button><button class="btn ghost" id="pw-x">Close</button></div>' +
+      '<p style="margin-top:14px;font-size:13px"><a href="#" id="sc-del">Delete my account</a></p>');
     $('#pw-x').onclick = pwClose; $('#sc-class').onclick = classScreen; $('#sc-league').onclick = league;
     $('#sc-show').onclick = function () { $('#sc-k').textContent = fmtKey(s.key); this.hidden = true; };
     $('#sc-out').onclick = function () { signOutScreen(false); };
+    $('#sc-del').onclick = function (e) { e.preventDefault(); deleteScreen(); };
+  }
+  function deleteScreen() { // Apple 5.1.1(v): a student can delete their own school account from inside the app
+    var s = S.sch; if (!s) return;
+    pwShow('<div class="eyebrow">Delete account</div><h2 id="pw-title">Delete ' + esc(s.name || 'your') + '’s school account?</h2>' +
+      '<p style="margin-top:8px">This permanently deletes your name, your progress and your scores from ' + esc(s.school || 'your school') + '’s Bullsburg account, and your teacher will no longer see you in their class. It can’t be undone.</p>' +
+      '<p style="margin-top:8px">The game on this device starts over. You can always join a class again later as a new student.</p>' +
+      '<div class="err" id="dl-err" aria-live="polite"></div>' +
+      '<div class="actions"><button class="btn" id="dl-go" style="background:#B3261E;color:#fff">Delete my account</button><button class="btn ghost" id="dl-x">Cancel</button></div>');
+    $('#dl-x').onclick = panel;
+    $('#dl-go').onclick = function () { var b = this; busy(b, 'Deleting…');
+      C.rpc('delete_my_account', { p_key: s.key }).then(function (r) { if (r === false) throw new Error('not found'); freshStart(); }, function () {
+        b.disabled = false; b.textContent = 'Try again';
+        $('#dl-err').textContent = 'We couldn’t reach the school account. Check the internet and try again, or ask your teacher to delete it.'; }); };
   }
   /* ---------------- class league and division tournament ---------------- */
   function board(rows, cols) { return '<table class="lg"><tbody>' + rows.map(function (r, i) { return '<tr' + (r.me ? ' class="me"' : '') + '><td>' + (i + 1) + '</td>' + cols.map(function (c) { return '<td>' + c(r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>'; }

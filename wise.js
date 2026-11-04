@@ -7,7 +7,7 @@
   var esc = function (x) { return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var byId = function (id) { return TOP.find(function (t) { return t.id === id; }); };
   var FREE = { income: true };   // without the full game, Paycheck Plaza topics are open
-  var open = function (tid) { return S.full || S.teacher || FREE[tid]; };
+  var open = function (tid) { return S.full || FREE[tid]; }; // teacher mode only skips stage order; it never unlocks paid content
 
   /* ---------- mastery and readiness ---------- */
   function wq() { if (!S.wq || typeof S.wq !== 'object') S.wq = {}; return S.wq; }
@@ -51,13 +51,13 @@
       '<div class="ready" role="img" aria-label="Readiness ' + r + ' percent; passing is ' + PASS + ' percent"><i style="width:' + r + '%"></i><em title="Passing score"></em></div><small class="muted">The line marks the ' + PASS + '% passing score. ' + readyMsg(r) + '</small>' +
       (bt >= 0 ? '<p style="margin:8px 0 0">Best practice test: <b>' + bt + '%</b>' + (bt >= PASS ? ' ✓ passing' : '') + '</p>' : '') + '</div>' +
       '<div class="wgrid"><div class="card"><h3>Smart practice</h3><p>' + SMART_N + ' questions aimed at your weakest topics, with an explanation for every miss.</p><button class="btn sun" id="w-smart">Start</button></div>' +
-      '<div class="card"><h3>Full practice test</h3><p>' + (FULL_N * TOP.length) + ' questions across every topic, like the real test. No hints until the end.</p><button class="btn" id="w-full">' + (S.full || S.teacher ? 'Take the test' : '🔑 Full game') + '</button></div>' +
+      '<div class="card"><h3>Full practice test</h3><p>' + (FULL_N * TOP.length) + ' questions across every topic, like the real test. No hints until the end.</p><button class="btn" id="w-full">' + (S.full ? 'Take the test' : '🔑 Full game') + '</button></div>' +
       '<div class="card">' + check + '</div></div>' +
       '<div class="card" style="margin-top:12px"><h3>Topics</h3>' + topics + '</div>' +
       '<p class="fine" style="margin-top:14px">W!SE is a trademark of Working in Support of Education. Bullsburg is not affiliated with or endorsed by W!SE, and these are original practice questions, not real test items.</p></div>';
     $('#back').onclick = function () { showMap(); };
     $('#w-smart').onclick = function () { run('smart', drawSmart(SMART_N)); };
-    $('#w-full').onclick = function () { if (!(S.full || S.teacher)) return openPaywall(); run('full', drawMixed(FULL_N)); };
+    $('#w-full').onclick = function () { if (!S.full) return openPaywall(); run('full', drawMixed(FULL_N)); };
     var pre = $('#w-pre'), post = $('#w-post');
     if (pre) pre.onclick = function () { run('pre', drawMixed(CHECK_N)); };
     if (post) post.onclick = function () { run('post', drawMixed(CHECK_N)); };
