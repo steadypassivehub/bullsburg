@@ -1228,7 +1228,9 @@ const WORDS = [
 if (typeof MONEY_WORDS !== 'undefined') WORDS.push(...MONEY_WORDS);
 
 /* ================= state ================= */
-const KEY = 'tickertown.v1';
+const KEY = 'bullsburg.v1';
+/* saves from before the rename (Nov 2026) move to the new name once, so nobody loses progress */
+try { ['', '.bak'].forEach(x => { const o = localStorage.getItem('tickertown.v1' + x); if (o !== null) { if (localStorage.getItem(KEY + x) === null) localStorage.setItem(KEY + x, o); localStorage.removeItem('tickertown.v1' + x); } }); } catch (e) {}
 const S = { mode: 'kid', xp: 0, stars: {}, missions: {}, mkt: null, best: 0, teacher: false, full: false, bought: 0, refillAt: 0, ads: { day: '', n: 0 }, tx: [], streak: { n: 0, best: 0, last: '', fz: 0, days: [] }, dq: { day: '', score: -1 }, onboarded: false, ql: {}, qg: {}, pid: '' };
 const S_FRESH = JSON.stringify(S); /* a brand-new game, used when a student signs out on a shared computer */
 /* Save protection: every save is sealed with a checksum, so editing the saved data by hand (to add coins, XP or stars) is detected and rejected. */
