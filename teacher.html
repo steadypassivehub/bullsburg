@@ -47,7 +47,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
   <label for="em">Email</label><input id="em" type="email" autocomplete="username" placeholder="you@yourschool.org">
   <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
   <div class="err" id="em-err" aria-live="polite"></div><button class="btn" id="em-go">Sign in</button>
-  <p class="muted" style="margin-top:16px">First time here? <button class="btn link" id="to-setup">Set up your account</button> with the setup code from Bullsburg.<br>Forgot your password? Email <a href="mailto:jordan.carlock@bullsburg.com">jordan.carlock@bullsburg.com</a>.</p>
+  <p class="muted" style="margin-top:16px">First time here? <button class="btn link" id="to-setup">Set up your account</button> with the setup code from Bullsburg.<br>Forgot your password? Email <a href="mailto:support@bullsburg.com">support@bullsburg.com</a>.</p>
 </section>
 
 <section class="card narrow" id="s-code" hidden>
@@ -62,7 +62,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
   <h2>Link your account to your school</h2><p>You're signed in as <b id="no-em"></b>, but this account isn't linked to a school yet. Enter the setup code from Bullsburg.</p>
   <label for="cd3">Setup code</label><input id="cd3" autocomplete="off" autocapitalize="characters" maxlength="12" style="font-size:20px;letter-spacing:4px;text-transform:uppercase">
   <div class="err" id="cd3-err" aria-live="polite"></div><div class="row"><button class="btn" id="cd3-go">Link account</button><button class="btn ghost" id="no-out">Sign out</button></div>
-  <p class="muted">Don't have a code? To set up your school or start a free pilot, email <a href="mailto:jordan.carlock@bullsburg.com">jordan.carlock@bullsburg.com</a>.</p>
+  <p class="muted">Don't have a code? To set up your school or start a free pilot, email <a href="mailto:support@bullsburg.com">support@bullsburg.com</a>.</p>
 </section>
 
 <section id="s-dash" hidden style="display:grid;gap:18px">
@@ -115,7 +115,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
   $('#pw').onkeydown = function (e) { if (e.key === 'Enter') $('#em-go').click(); };
   $('#to-setup').onclick = function () { show('#s-code'); $('#cd').focus(); };
   $('#cd-back').onclick = function () { show('#s-email'); };
-  function claim(code, errEl) { return C.rpc('claim_teacher', { p_code: code }, true).then(function (r) { if (r && r.ok) return start(); errEl.textContent = 'That setup code didn\u2019t work. It may already be used. Email jordan.carlock@bullsburg.com for a new one.'; show(errEl.id === 'cd3-err' ? '#s-no' : '#s-code'); }); }
+  function claim(code, errEl) { return C.rpc('claim_teacher', { p_code: code }, true).then(function (r) { if (r && r.ok) return start(); errEl.textContent = 'That setup code didn\u2019t work. It may already be used. Email support@bullsburg.com for a new one.'; show(errEl.id === 'cd3-err' ? '#s-no' : '#s-code'); }); }
   $('#cd-go').onclick = function () { var code = $('#cd').value.trim(), em = $('#em2').value.trim(), pw = $('#pw2').value, b = this, err = $('#cd-err');
     if (code.replace(/\W/g, '').length < 8) { err.textContent = 'Type the 8-character setup code.'; return; } if (!okEmail(em)) { err.textContent = 'Type your school email.'; return; } if (pw.length < 8) { err.textContent = 'Use at least 8 characters for your password.'; return; }
     b.disabled = true; b.textContent = 'Creating\u2026';
@@ -182,7 +182,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
       var t = d.tournament;
       h += t ? '<h3 style="font-size:16px;margin:16px 0 4px">🏆 ' + esc(t.name) + ' <small class="muted">' + esc(t.starts_on) + ' to ' + esc(t.ends_on) + '</small></h3><p class="muted" style="margin:0 0 6px;font-size:13px">Schools in your division, ranked by average W!SE readiness of students active since the tournament started (3+ players to appear).</p>' +
         (t.rows.length ? lgTable(t.rows, [function (r) { return esc(r.school) + (r.me ? ' (you)' : ''); }, function (r) { return r.students; }, function (r) { return pc(r.ready); }], ['School', 'Players', 'Avg W!SE ready']) : '<p class="muted">No schools have 3 players yet.</p>')
-        : '<p class="muted" style="margin-top:12px;font-size:13px">No division tournament is running. Want one for your division? Email <a href="mailto:jordan.carlock@bullsburg.com">jordan.carlock@bullsburg.com</a>.</p>';
+        : '<p class="muted" style="margin-top:12px;font-size:13px">No division tournament is running. Want one for your division? Email <a href="mailto:support@bullsburg.com">support@bullsburg.com</a>.</p>';
       $('#lg-body').innerHTML = h; }).catch(function (e) { $('#lg-body').innerHTML = '<p class="err">' + esc(friendly(e)) + '</p>'; }).then(function () { b.disabled = false; }); };
   function ago(t) { if (!t) return '-'; var d = (Date.now() - new Date(t)) / 6e4; return d < 2 ? 'Just now' : d < 60 ? Math.round(d) + ' min ago' : d < 1440 ? Math.round(d / 60) + ' h ago' : Math.round(d / 1440) + ' days ago'; }
   function paint() { var r = ROWS.slice().sort(function (a, b) { var x = a[SORT], y = b[SORT]; return (typeof x === 'string' ? x.localeCompare(y) : x - y) * DIR; });
