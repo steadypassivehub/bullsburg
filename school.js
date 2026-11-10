@@ -90,7 +90,7 @@
   }
 
   /* ---------------- progress sync ---------------- */
-  var FIELDS = ['xp', 'stars', 'missions', 'mkt', 'best', 'streak', 'dq', 'ql', 'qg', 'mode', 'onboarded', 'wq', 'pre', 'post', 'wt', 'cl', 'trk'];
+  var FIELDS = ['xp', 'stars', 'missions', 'mkt', 'best', 'streak', 'dq', 'ql', 'qg', 'mode', 'onboarded', 'wq', 'pre', 'post', 'wt', 'cl', 'trk', 'life', 'lang'];
   function snapshot() { var o = {}; FIELDS.forEach(function (k) { o[k] = S[k]; }); return JSON.stringify(o); }
   function summary() {
     var d = {}; try { d = reportData(); } catch (e) {}
@@ -104,8 +104,8 @@
       answered: seen, missed: miss, accuracy: seen ? Math.round(100 * (seen - miss) / seen) : null, to_review: wrong,
       streak: str, best_streak: (S.streak && S.streak.best) || 0, daily_quiz: S.dq && S.dq.day ? S.dq.score : null,
       next_stage: next ? BYID[next].title || next : 'All done', worlds: worlds, on: new Date().toISOString(),
-      ready: w.ready == null ? null : w.ready, pre: w.pre == null ? null : w.pre, post: w.post == null ? null : w.post, test: w.test == null ? null : w.test,
-      tests: w.tests || 0, topics: w.topics || {}, invest_cleared: trk('invest'), money_cleared: trk('money') };
+      ready: w.ready == null ? null : w.ready, pass: w.pass == null ? null : w.pass, pre: w.pre == null ? null : w.pre, post: w.post == null ? null : w.post, test: w.test == null ? null : w.test,
+      tests: w.tests || 0, topics: w.topics || {}, life: S.life && S.life.best ? S.life.best.grade : null, invest_cleared: trk('invest'), money_cleared: trk('money') };
   }
   var pushT = null, pushing = false;
   function push(now) {
@@ -131,6 +131,7 @@
     if (o.wt && (!S.wt || o.wt.length > S.wt.length)) S.wt = o.wt;
     for (var tq in (o.wq || {})) { S.wq = S.wq || {}; if (!S.wq[tq] || o.wq[tq].length > S.wq[tq].length) S.wq[tq] = o.wq[tq]; }
     for (var c in (o.cl || {})) { S.cl = S.cl || {}; if (!S.cl[c]) S.cl[c] = o.cl[c]; }
+    if (o.life && o.life.best && typeof o.life.best.nw === 'number' && (!S.life || !S.life.best || o.life.best.nw > S.life.best.nw)) S.life = o.life;
     try { sane(); } catch (e) {} save();
   }
 
@@ -302,4 +303,17 @@
   if (ON && !S.sch && (reopen || lsGet(SHARED))) { S.onboarded = true; setTimeout(function () { openStudent(); if (reopen) toast('Signed out. Your progress is saved to your school account.'); }, 500); }
   if (S.sch) { var lt = +lsGet(LAST) || 0; if (lt && Date.now() - lt > IDLE) setTimeout(function () { signOutScreen(true); }, 600); else touched(); }
   paintButton(); check(); if (ON && inv().code) setTimeout(function () { claim(true); }, 4000);
+
+  /* ---------- links teachers share (Google Classroom, LMS, email) ----------
+     ?join=CODE  opens "Join your class" with the code filled in
+     ?stage=ID   opens that lesson (or ?go=wise | life)  */
+  try {
+    var LQ = new URLSearchParams(location.search), jc = (LQ.get('join') || '').replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8), dest = LQ.get('stage'), to = LQ.get('go');
+    var open = function () { if (dest && typeof BYID !== 'undefined' && BYID[dest]) { try { if (!S.full && paid(dest)) return; if (isUnlocked(dest) || S.teacher) return openStage(dest); } catch (e) {} if (BYID[dest].world >= 6) { S.trk = 'money'; save(); try { renderMap(); } catch (e) {} } }
+      if (to === 'wise' && window.TT_openWise) return window.TT_openWise(); if (to === 'life' && window.TT_openLife) return window.TT_openLife(); };
+    if (jc && ON && (!S.sch || (S.sch.code && S.sch.code !== jc))) { S.onboarded = true; save();
+      setTimeout(function () { if (S.sch) return; openStudent(); var f = $('#sc-cls'); if (f) { f.value = jc; var n = $('#sc-name'); if (n) n.focus(); } }, 500); }
+    else if (dest || to) { S.onboarded = true; save(); setTimeout(open, 400); }
+    if (jc || dest || to) history.replaceState(null, '', location.pathname + location.hash);
+  } catch (e) {}
 })();

@@ -432,11 +432,12 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline-color: #F2D
 
 .world.w6 { --wc: #7FD4A8; } .world.w7 { --wc: #8FB2FF; } .world.w8 { --wc: #6CC9E0; } .world.w9 { --wc: #F28B82; } .world.w10 { --wc: #C3A6FF; } .world.w11 { --wc: #F2D488; }
 .world.w6, .world.w7, .world.w8, .world.w9, .world.w10, .world.w11 { background: radial-gradient(700px 260px at 0% 0%, color-mix(in srgb, var(--wc) 16%, transparent), transparent 70%), linear-gradient(180deg, rgba(255,236,190,.03), transparent 50%), var(--surface); }
-.tracks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.tracks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
 .tracks button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 14px; padding: 10px 8px; text-align: center; cursor: pointer; font: inherit; }
 .tracks button b { display: block; font-size: 15px; } .tracks button small { color: var(--muted); font-size: 12px; }
 .tracks button[aria-pressed="true"] { border-color: var(--sun); box-shadow: 0 0 0 2px color-mix(in srgb, var(--sun) 45%, transparent); }
-.tracks button[data-trk="wise"] { border-style: dashed; }
+.tracks button[data-trk="wise"], .tracks button[data-trk="life"] { border-style: dashed; }
+@media (max-width: 560px) { .tracks { grid-template-columns: repeat(2, 1fr); } }
 .ready { position: relative; height: 18px; border-radius: 99px; background: var(--surface2); overflow: hidden; margin: 10px 0 4px; }
 .ready i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--accent), var(--sun)); border-radius: 99px; }
 .ready em { position: absolute; top: -3px; bottom: -3px; left: 70%; width: 3px; background: var(--ink); opacity: .8; }
@@ -1390,8 +1391,8 @@ function starStr(n) { return '<span class="stars">' + [0, 1, 2].map(i => i < n ?
 function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const TK = S.trk === 'money' ? 'money' : 'invest'; const nextId = TRACK[TK].find(id => !S.stars[id] && isUnlocked(id) && !paid(id));
   const tabs = document.createElement('div'); tabs.className = 'tracks'; tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Choose a track');
   const cnt = k => TRACK[k].filter(id => S.stars[id]).length + ' / ' + TRACK[k].length;
-  tabs.innerHTML = `<button data-trk="invest" aria-pressed="${TK === 'invest'}"><b>📈 Investing</b><small>${cnt('invest')}</small></button><button data-trk="money" aria-pressed="${TK === 'money'}"><b>💵 Money Skills</b><small>${cnt('money')}</small></button><button data-trk="wise"><b>🎓 W!SE Prep</b><small>${window.TT_wiseReady ? window.TT_wiseReady() + '% ready' : 'Test prep'}</small></button>`;
-  tabs.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.trk === 'wise') return window.TT_openWise && window.TT_openWise(); S.trk = b.dataset.trk; save(); renderMap(); });
+  tabs.innerHTML = `<button data-trk="invest" aria-pressed="${TK === 'invest'}"><b>📈 Investing</b><small>${cnt('invest')}</small></button><button data-trk="money" aria-pressed="${TK === 'money'}"><b>💵 Money Skills</b><small>${cnt('money')}</small></button><button data-trk="wise"><b>🎓 W!SE Prep</b><small>${window.TT_wiseReady ? window.TT_wiseReady() + '% ready' : 'Test prep'}</small></button><button data-trk="life"><b>🏠 Real Life</b><small>${S.life && S.life.best ? 'Best: ' + S.life.best.grade : 'After 18'}</small></button>`;
+  tabs.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.trk === 'wise') return window.TT_openWise && window.TT_openWise(); if (b.dataset.trk === 'life') return window.TT_openLife && window.TT_openLife(); S.trk = b.dataset.trk; save(); renderMap(); });
   box.appendChild(tabs); const sp = S.sch && S.sch.sponsor; if (sp && sp.name) { const c = document.createElement('div'); c.className = 'sponsor-chip'; c.style.margin = '-6px 0 14px'; c.textContent = 'Your school license is sponsored by ' + sp.name + (sp.note ? ' · ' + sp.note : ''); box.appendChild(c); }
   const xs = ['4%', '30%', '52%', '30%'];
   WORLDS.filter(w => w.track === TK).forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
@@ -2195,6 +2196,9 @@ let raArm = false; $('#resetall').onclick = () => { if (!raArm) { raArm = true; 
 hud(); tape(); renderWords(); renderToday(); setTimeout(onboard, 400);
 const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'options', 'words'].includes(start) ? start : 'map');
 </script>
+<script src="es.js"></script>
+<script src="lang.js"></script>
 <script src="wise.js"></script>
+<script src="life.js"></script>
 
-<script src="cloud.js"></script><script src="school.js"></script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>
+<script src="cloud.js"></script><script src="school.js"></script><script src="live.js"></script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>

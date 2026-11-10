@@ -17,9 +17,47 @@
   function readiness() { if (!TOP.length) return 0; var s = 0;
     TOP.forEach(function (t) { var m = mastery(t.id), n = (wq()[t.id] || []).length; if (m != null) s += m * Math.min(1, n / 8); }); return Math.round(s / TOP.length); }
   function bestTest() { return (S.wt || []).reduce(function (b, x) { return Math.max(b, x.pct); }, -1); }
+  // Pass predictor: an honest estimate from practice results. More practice and full tests make it more certain.
+  function predict() {
+    var answered = TOP.reduce(function (s, t) { return s + (wq()[t.id] || []).length; }, 0); if (answered < 20) return { need: 20 - answered };
+    var r = readiness(), tests = (S.wt || []).slice(-3).map(function (x) { return x.pct; }), cov = TOP.filter(function (t) { return (wq()[t.id] || []).length >= 8; }).length / (TOP.length || 1);
+    var pred, sd; if (tests.length) { pred = .6 * tests.reduce(function (s, x) { return s + x; }, 0) / tests.length + .4 * r; sd = tests.length > 1 ? 7 : 9; }
+    else { pred = r; sd = 15 - 6 * cov; }
+    var z = (pred - PASS + .5) / sd, t = 1 / (1 + .3275911 * Math.abs(z) / Math.SQRT2), e = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - .284496736) * t + .254829592) * t * Math.exp(-z * z / 2);
+    var p = Math.round(100 * (z >= 0 ? .5 * (1 + e) : .5 * (1 - e))); p = Math.max(3, Math.min(97, p));
+    return { pct: p, score: Math.round(pred), sure: tests.length >= 2 && cov >= .75, label: p >= 85 ? 'Very likely to pass' : p >= 65 ? 'Likely to pass' : p >= 40 ? 'Could go either way' : 'Not ready yet' };
+  }
+  function predictCard() { var P = predict();
+    if (P.need) return '<div class="card" style="margin-top:12px"><h3 style="margin:0">Pass predictor</h3><p class="muted" style="margin:6px 0 0">Answer ' + P.need + ' more W!SE practice question' + (P.need === 1 ? '' : 's') + ' to see your chance of passing.</p></div>';
+    var col = P.pct >= 65 ? 'var(--up)' : P.pct >= 40 ? 'var(--sun)' : 'var(--down)';
+    return '<div class="card" style="margin-top:12px" id="w-pred"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Pass predictor</h3><b style="font-size:20px;color:' + col + '">' + P.label + '</b></div>' +
+      '<p style="margin:8px 0 0">If you took the real test today, we estimate about ' + (/^(8|11|18)/.test(String(P.pct)) ? 'an' : 'a') + ' <b>' + P.pct + '% chance</b> of passing, with a likely score near <b>' + P.score + '%</b>.</p>' +
+      '<small class="muted">' + (P.sure ? 'Based on your recent full practice tests and every topic.' : 'This gets more accurate as you practice every topic and take full practice tests.') + ' It’s an estimate from practice, not a guarantee.</small></div>'; }
+  function certCard() { var bt = bestTest(); if (bt < PASS) return '';
+    return '<div class="card cert-card" style="margin-top:12px;border-color:var(--accent)"><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div style="font-size:34px" aria-hidden="true">🏅</div><div style="flex:1;min-width:200px"><h3 style="margin:0">You earned a certificate!</h3><p style="margin:4px 0 0">You scored ' + bt + '% on a full practice test. Print it, share it with your teacher or family, or add it to a college or job application.</p></div><button class="btn sun" id="w-cert">Get my certificate</button></div></div>'; }
+  function certLink(name) { var best = (S.wt || []).reduce(function (b, x) { return x.pct > b.pct ? x : b; }, { pct: -1, at: Date.now() }), d = new Date(best.at);
+    var ymd = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    var base = window.TT_BUILD === 'web' || !window.TT_SITE ? new URL('cert.html', location.href).href : window.TT_SITE + '/cert.html';
+    return base + '?n=' + encodeURIComponent(name) + '&s=' + best.pct + '&d=' + ymd; }
+  function cert() {
+    var nm = (S.certName || (S.sch && S.sch.name) || '').slice(0, 40);
+    pwShow('<div class="eyebrow">Certificate</div><h2 id="pw-title">Financial Literacy Test Ready</h2><p class="muted" style="margin-top:6px">Type your name the way it should appear. It’s saved only on this device and in the certificate link.</p>' +
+      '<label style="display:block;text-align:left;font-weight:700;margin-top:10px" for="ct-name">Your name</label><input id="ct-name" maxlength="40" autocomplete="name" value="' + esc(nm) + '" style="width:100%;font-size:17px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);margin-top:6px">' +
+      '<div id="ct-err" class="muted" style="min-height:20px;margin-top:6px;color:var(--down)" aria-live="polite"></div>' +
+      '<div class="actions" style="margin-top:8px"><button class="btn sun" id="ct-open">Open to print or save</button><button class="btn" id="ct-share">Share link</button><button class="btn ghost" id="pw-x">Close</button></div>');
+    $('#pw-x').onclick = pwClose;
+    var get = function () { var v = $('#ct-name').value.trim(); if (!v) { $('#ct-err').textContent = 'Type your name first.'; $('#ct-name').focus(); return null; } S.certName = v; save(); return certLink(v); };
+    $('#ct-open').onclick = function () { var u = get(); if (!u) return; window.open(u, '_blank'); };
+    $('#ct-share').onclick = function () { var u = get(); if (!u) return; var text = 'I passed a full financial literacy practice test on Bullsburg! My certificate: ' + u;
+      var P = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share;
+      if (P) return P.share({ title: 'My Bullsburg certificate', text: text, dialogTitle: 'Share your certificate' }).catch(function () {});
+      if (navigator.share) return navigator.share({ title: 'My Bullsburg certificate', text: text }).catch(function () {});
+      if (navigator.clipboard) navigator.clipboard.writeText(u).then(function () { toast('Link copied.'); }, function () { toast('Couldn’t copy on this device.'); }); };
+  }
   window.TT_wiseReady = readiness;
+  window.TT_wisePredict = predict;
   window.TT_wiseSummary = function () { var tp = {}; TOP.forEach(function (t) { tp[t.id] = mastery(t.id); });
-    var bt = bestTest(); return { ready: readiness(), pre: S.pre ? S.pre.pct : null, post: S.post ? S.post.pct : null, test: bt < 0 ? null : bt, tests: (S.wt || []).length, topics: tp }; };
+    var bt = bestTest(), pr = predict(); return { pass: pr.need ? null : pr.pct, ready: readiness(), pre: S.pre ? S.pre.pct : null, post: S.post ? S.post.pct : null, test: bt < 0 ? null : bt, tests: (S.wt || []).length, topics: tp }; };
 
   /* ---------- drawing questions ---------- */
   function poolOf(t) { return t.stages.reduce(function (a, id) { return a.concat(bankOf(id)); }, []); }
@@ -49,7 +87,7 @@
       '<h2>W!SE certification prep</h2><p class="lesson-text" style="font-size:16px">Virginia students in Economics and Personal Finance can earn the W!SE Financial Literacy Certification. The test covers income, money management, banking, credit, saving and investing, insurance and big life purchases, and you need ' + PASS + '% to pass. Practice here until your readiness is comfortably above the line.</p>' + sponsor() +
       '<div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0">Your readiness</h3><b style="font-size:30px;font-family:var(--f-display)">' + r + '%</b></div>' +
       '<div class="ready" role="img" aria-label="Readiness ' + r + ' percent; passing is ' + PASS + ' percent"><i style="width:' + r + '%"></i><em title="Passing score"></em></div><small class="muted">The line marks the ' + PASS + '% passing score. ' + readyMsg(r) + '</small>' +
-      (bt >= 0 ? '<p style="margin:8px 0 0">Best practice test: <b>' + bt + '%</b>' + (bt >= PASS ? ' ✓ passing' : '') + '</p>' : '') + '</div>' +
+      (bt >= 0 ? '<p style="margin:8px 0 0">Best practice test: <b>' + bt + '%</b>' + (bt >= PASS ? ' ✓ passing' : '') + '</p>' : '') + '</div>' + predictCard() + certCard() +
       '<div class="wgrid"><div class="card"><h3>Smart practice</h3><p>' + SMART_N + ' questions aimed at your weakest topics, with an explanation for every miss.</p><button class="btn sun" id="w-smart">Start</button></div>' +
       '<div class="card"><h3>Full practice test</h3><p>' + (FULL_N * TOP.length) + ' questions across every topic, like the real test. No hints until the end.</p><button class="btn" id="w-full">' + (S.full ? 'Take the test' : '🔑 Full game') + '</button></div>' +
       '<div class="card">' + check + '</div></div>' +
@@ -62,6 +100,7 @@
     if (pre) pre.onclick = function () { run('pre', drawMixed(CHECK_N)); };
     if (post) post.onclick = function () { run('post', drawMixed(CHECK_N)); };
     st.querySelectorAll('[data-topic]').forEach(function (b) { b.onclick = function () { var t = byId(b.dataset.topic); if (!open(t.id)) return openPaywall(); run('topic', drawTopic(t, TOPIC_N), t); }; });
+    if ($('#w-cert')) $('#w-cert').onclick = cert;
   }
 
   /* ---------- the question runner ---------- */
@@ -105,7 +144,7 @@
     var growth = R.kind === 'post' && S.pre ? '<p>Start check: <b>' + S.pre.pct + '%</b> → End check: <b>' + pct + '%</b>. That’s <b>' + (pct - S.pre.pct >= 0 ? '+' : '') + (pct - S.pre.pct) + ' points</b>.</p>' : '';
     st.innerHTML = '<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← W!SE prep</button><span class="eyebrow">' + TITLES[R.kind] + ' results</span></div>' +
       '<div class="card"><h2 style="margin:0">' + right + ' of ' + n + ' right · ' + pct + '%</h2>' +
-      (R.kind === 'full' ? '<p>' + (pct >= PASS ? '✓ That would pass the ' + PASS + '% line. Nice work.' : 'The passing line is ' + PASS + '%. Practice the red topics below and try again.') + '</p>' : '') +
+      (R.kind === 'full' ? '<p>' + (pct >= PASS ? '✓ That would pass the ' + PASS + '% line. Nice work. <button class="btn sun" id="w-cert2" style="margin-left:6px">🏅 Get my certificate</button>' : 'The passing line is ' + PASS + '%. Practice the red topics below and try again.') + '</p>' : '') +
       (R.kind === 'pre' ? '<p>This is your starting point. Your teacher can see it, and you’ll take an end-of-course check later to see how much you’ve grown.</p>' : '') + growth +
       '<p class="muted">Your W!SE readiness is now <b>' + readiness() + '%</b>.</p></div>' +
       '<div class="card" style="margin-top:12px"><h3>By topic</h3>' + rows + '</div>' +
@@ -113,6 +152,7 @@
         return '<div class="miss"><div>' + a.q.q + '</div><div class="y">Your answer: ' + a.pick + '</div><div class="a">Right answer: ' + a.q.o[0] + '</div><div class="muted">' + a.q.why + '</div>' + lesson(a.q.sid) + '</div>'; }).join('') + '</div>' : '') +
       '<div class="row" style="margin-top:14px"><button class="btn sun" id="w-again">Practice my weak spots</button><button class="btn ghost" id="w-home">Back to W!SE prep</button></div></div>';
     $('#back').onclick = home; $('#w-home').onclick = home; $('#w-again').onclick = function () { run('smart', drawSmart(SMART_N)); };
+    if ($('#w-cert2')) $('#w-cert2').onclick = cert;
     if (R.test && pct >= PASS) confetti();
     if (window.TT_onSave) window.TT_onSave();
   }

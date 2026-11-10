@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bullsburg Certificate</title>
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'">
+<link rel="stylesheet" href="fonts.css">
+<style>
+@page{size:letter landscape;margin:0}
+*{box-sizing:border-box}
+body{margin:0;background:#0A1F1A;color:#16241F;font-family:'Atkinson Hyperlegible',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.bar button,.bar a{font:700 16px 'Atkinson Hyperlegible',system-ui,sans-serif;border-radius:12px;padding:11px 18px;border:1px solid #E3C179;background:#E3C179;color:#0A1F1A;cursor:pointer;text-decoration:none}
+.bar a{background:transparent;color:#F4EFE2;border-color:#3B5A50}
+.fit{width:min(100%,1056px);aspect-ratio:11/8.5;container-type:inline-size}
+.cert{width:100%;height:100%;background:#FBF8F1;position:relative;padding:3.2cqw 4cqw;display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.cert::before{content:"";position:absolute;inset:1.4cqw;border:.35cqw solid #11302A;pointer-events:none}
+.cert::after{content:"";position:absolute;inset:2.1cqw;border:.12cqw solid #C9A45A;pointer-events:none}
+.logo{display:flex;align-items:center;gap:1cqw;margin-top:1.4cqw}
+.logo svg{width:4.2cqw;height:4.2cqw}
+.logo span{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:2.6cqw;color:#11302A}
+.kicker{margin-top:2.2cqw;font-size:1.25cqw;letter-spacing:.32em;text-transform:uppercase;color:#8A6424;font-weight:700}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:4.3cqw;line-height:1.08;color:#11302A;margin:.9cqw 0 0}
+.to{margin-top:auto;padding-top:1.6cqw;font-size:1.6cqw;color:#4F5B55}
+.name{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:5cqw;color:#0A1F1A;margin-top:.5cqw;padding:0 3cqw .6cqw;border-bottom:.15cqw solid #C9A45A;min-width:45%;overflow-wrap:anywhere}
+.what{margin-top:1.8cqw;font-size:1.75cqw;line-height:1.5;max-width:76%;color:#16241F}
+.what b{color:#11302A}
+.row{margin-top:auto;width:84%;display:flex;justify-content:space-between;align-items:flex-end;gap:2cqw}
+.sig{flex:1;font-size:1.3cqw;color:#4F5B55;border-top:.12cqw solid #11302A;padding-top:.6cqw}
+.sig b{display:block;color:#16241F;font-size:1.5cqw}
+.seal{width:11cqw;height:11cqw;border-radius:50%;background:#11302A;color:#E3C179;display:flex;flex-direction:column;align-items:center;justify-content:center;border:.5cqw double #E3C179;flex:none}
+.seal b{font-family:Fraunces,Georgia,serif;font-size:3.1cqw;line-height:1}
+.seal small{font-size:.95cqw;letter-spacing:.14em;text-transform:uppercase;margin-top:.3cqw}
+.fine{margin-top:1.6cqw;font-size:.95cqw;color:#5E6A64;max-width:86%;line-height:1.45}
+.bad{color:#F4EFE2;max-width:560px;text-align:center;font-size:18px;line-height:1.5}
+@media print{body{background:#fff;padding:0;display:block}.bar{display:none}.fit{width:11in;height:8.5in;aspect-ratio:auto;container-type:size}.cert{box-shadow:none}
+  .fit{container-type:inline-size}}
+</style></head><body>
+<div class="bar"><button id="print" type="button">Print or save as PDF</button><a href="./">Open Bullsburg</a></div>
+<div class="fit" id="fit"></div>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search), esc = function (t) { return String(t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var name = (q.get('n') || '').trim().slice(0, 40), score = parseInt(q.get('s'), 10), d = q.get('d') || '', when = new Date(d + 'T12:00:00');
+  var fit = document.getElementById('fit');
+  if (!name || !(score >= 70 && score <= 100) || isNaN(when)) {
+    fit.outerHTML = '<p class="bad">This certificate link is incomplete. Open Bullsburg, go to W!SE Prep, and tap <b>Get my certificate</b> after passing a full practice test.</p>';
+    document.getElementById('print').hidden = true; return;
+  }
+  document.title = 'Bullsburg Certificate · ' + name;
+  var date = when.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  fit.innerHTML = '<div class="cert">' +
+    '<div class="logo"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#0A1F1A"/><line x1="13" y1="10" x2="13" y2="31" stroke="#FF7A70" stroke-width="2" stroke-linecap="round"/><rect x="10" y="15" width="6" height="11" rx="1.5" fill="#FF7A70"/><line x1="22" y1="7" x2="22" y2="28" stroke="#43DB9B" stroke-width="2" stroke-linecap="round"/><rect x="19" y="11" width="6" height="12" rx="1.5" fill="#43DB9B"/><line x1="31" y1="5" x2="31" y2="23" stroke="#43DB9B" stroke-width="2" stroke-linecap="round"/><rect x="28" y="8" width="6" height="10" rx="1.5" fill="#43DB9B"/><rect x="9" y="34" width="26" height="2.5" rx="1.25" fill="#E3C179"/></svg><span>Bullsburg</span></div>' +
+    '<div class="kicker">Certificate of achievement</div><h1>Financial Literacy Test Ready</h1>' +
+    '<div class="to">This certifies that</div><div class="name">' + esc(name) + '</div>' +
+    '<div class="what">scored <b>' + score + '%</b> on a full-length financial literacy practice test, above the <b>70% passing line</b>, covering income, budgeting, banking, credit, saving and investing, insurance and big purchases.</div>' +
+    '<div class="row"><div class="sig"><b>' + esc(date) + '</b>Date earned</div><div class="seal" aria-label="Score ' + score + ' percent"><b>' + score + '%</b><small>Passed</small></div><div class="sig"><b>Bullsburg LLC</b>bullsburg.com</div></div>' +
+    '<div class="fine">Earned in the Bullsburg app from the student’s own practice results. This is a practice achievement, not an official W!SE certification. W!SE is a trademark of Working in Support of Education, which is not affiliated with Bullsburg.</div></div>';
+  document.getElementById('print').onclick = function () { window.print(); };
+})();
+</script>
+</body></html>

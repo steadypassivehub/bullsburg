@@ -24,6 +24,14 @@
       .then(function (s) { refreshing = null; return s; });
     return refreshing;
   }
+  // Google sign-in (teachers): Supabase sends the person back here with the session in the URL fragment.
+  var oauthError = '';
+  (function () { var h = location.hash || ''; if (!/access_token=|error_description=/.test(h)) return;
+    var q = new URLSearchParams(h.slice(1));
+    if (q.get('access_token')) { var em = ''; try { em = JSON.parse(atob(q.get('access_token').split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).email || ''; } catch (e) {}
+      keep({ access_token: q.get('access_token'), refresh_token: q.get('refresh_token'), expires_in: +q.get('expires_in') || 3600, user: { email: em } }); }
+    else oauthError = q.get('error_description') || 'Sign-in was cancelled.';
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} })();
   window.TickerCloud = {
     configured: function () { return ok; },
     signedIn: function () { return !!sess; },
@@ -34,6 +42,9 @@
     // teacher accounts: email + password (email confirmation is off; the setup code proves who they are)
     signUp: function (email, pw) { return req('/auth/v1/signup', { email: String(email).trim().toLowerCase(), password: pw }).then(function (j) { if (!j || !j.access_token) { var e = new Error('confirm'); e.status = 400; throw e; } return keep(j); }); },
     signIn: function (email, pw) { return req('/auth/v1/token?grant_type=password', { email: String(email).trim().toLowerCase(), password: pw }).then(keep); },
+    google: function () { return ok && !!CFG.google; },
+    oauthError: function () { return oauthError; },
+    googleSignIn: function () { location.href = CFG.url + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(location.origin + location.pathname); },
     signOut: function () { var s = sess; sess = null; store(null); if (s) fetch(CFG.url + '/auth/v1/logout', { method: 'POST', headers: { apikey: CFG.key, Authorization: 'Bearer ' + s.access_token } }).catch(function () {}); },
     // calls a database function; auth=true sends the signed-in user's token
     rpc: function (name, args, auth) {
