@@ -27,13 +27,13 @@
     var p = Math.round(100 * (z >= 0 ? .5 * (1 + e) : .5 * (1 - e))); p = Math.max(3, Math.min(97, p));
     return { pct: p, score: Math.round(pred), sure: tests.length >= 2 && cov >= .75, label: p >= 85 ? 'Very likely to pass' : p >= 65 ? 'Likely to pass' : p >= 40 ? 'Could go either way' : 'Not ready yet' };
   }
-  function predictCard() { var P = predict();
+  function predictCard() { if (!S.full) return '<div class="card" style="margin-top:10px"><b>🔑 Pass predictor and certificate</b><p class="muted" style="margin:6px 0 0">See your chance of passing the W!SE test and earn a printable certificate with the full game.</p></div>'; var P = predict();
     if (P.need) return '<div class="card" style="margin-top:12px"><h3 style="margin:0">Pass predictor</h3><p class="muted" style="margin:6px 0 0">Answer ' + P.need + ' more W!SE practice question' + (P.need === 1 ? '' : 's') + ' to see your chance of passing.</p></div>';
     var col = P.pct >= 65 ? 'var(--up)' : P.pct >= 40 ? 'var(--sun)' : 'var(--down)';
     return '<div class="card" style="margin-top:12px" id="w-pred"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Pass predictor</h3><b style="font-size:20px;color:' + col + '">' + P.label + '</b></div>' +
       '<p style="margin:8px 0 0">If you took the real test today, we estimate about ' + (/^(8|11|18)/.test(String(P.pct)) ? 'an' : 'a') + ' <b>' + P.pct + '% chance</b> of passing, with a likely score near <b>' + P.score + '%</b>.</p>' +
       '<small class="muted">' + (P.sure ? 'Based on your recent full practice tests and every topic.' : 'This gets more accurate as you practice every topic and take full practice tests.') + ' It’s an estimate from practice, not a guarantee.</small></div>'; }
-  function certCard() { var bt = bestTest(); if (bt < PASS) return '';
+  function certCard() { var bt = bestTest(); if (!S.full || bt < PASS) return '';
     return '<div class="card cert-card" style="margin-top:12px;border-color:var(--accent)"><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div style="font-size:34px" aria-hidden="true">🏅</div><div style="flex:1;min-width:200px"><h3 style="margin:0">You earned a certificate!</h3><p style="margin:4px 0 0">You scored ' + bt + '% on a full practice test. Print it, share it with your teacher or family, or add it to a college or job application.</p></div><button class="btn sun" id="w-cert">Get my certificate</button></div></div>'; }
   function certLink(name) { var best = (S.wt || []).reduce(function (b, x) { return x.pct > b.pct ? x : b; }, { pct: -1, at: Date.now() }), d = new Date(best.at);
     var ymd = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');

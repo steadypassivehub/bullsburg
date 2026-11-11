@@ -129,11 +129,13 @@
     var b = S.life && S.life.best;
     frame('<h2>Real Life After 18</h2><p class="lesson-text" style="font-size:16px">Graduation day! Pick what you’ll do next, set up your first budget, then live through a whole year of paychecks, bills and surprises. Every choice has a real money lesson. Can you finish the year with savings, no card debt and a good credit score?</p>' +
       (b ? '<div class="card" style="margin-top:10px"><b>Your best year:</b> grade ' + esc(b.grade) + ' · net worth ' + usd(b.nw) + '</div>' : '') +
+      (S.full ? '' : '<div class="card" style="margin-top:10px">🔑 <b>Part of the full game.</b> Look around the paths below, then subscribe (or join your class) to play the year.</div>') +
       '<h3 style="margin:18px 0 8px">Choose your path</h3><div class="life-grid">' + PATHS.map(function (p, i) { var n = netMonthly(p.wage * p.hrs * 52 / 12);
         return '<button class="life-opt" data-p="' + i + '"><span class="life-ic" aria-hidden="true">' + p.icon + '</span><b>' + esc(p.name) + '</b><small class="muted">' + esc(p.job) + '</small><span>' + esc(p.blurb) + '</span><span class="mono" style="margin-top:6px">Take-home: about ' + usd(n.net) + ' a month</span></button>'; }).join('') + '</div>');
     document.querySelectorAll('[data-p]').forEach(function (b) { b.onclick = function () { start(PATHS[+b.dataset.p]); }; });
   }
   function start(p) {
+    if (!S.full) return openPaywall(); // full game or school license
     L = { path: p.id, pathName: p.name, job: p.job, wage: p.wage, hrs: p.hrs, ins: p.ins, raiseAt: p.raise, loan: p.loan || 0, m: 0, chk: 600, save: 0, invest: 0, k401: 0, retire: 0,
       card: false, bal: 0, limit: 1000, score: 0, ontime: 0, happy: 60, fixed: 0, savePct: 0, bnpl: [], seen: {}, log: [], over: 0, interest: 0, owed: 0 };
     ST = 0; setup();
