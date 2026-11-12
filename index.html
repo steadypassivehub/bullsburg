@@ -1,8 +1,8 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bullsburg</title><meta name="description" content="Learn stocks and options with a game: levels, boss battles and pretend money.">
+<title>Bullsburg: Money &amp; Investing Game</title><meta name="description" content="Bullsburg is a game that teaches money skills and investing: budgeting, banking, credit, taxes, stocks and options, all with pretend money. Free to start, with W!SE prep for schools.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://nvjlgiohvctocgbpegvi.supabase.co; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
-<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#0A1F1A"><link rel="stylesheet" href="fonts.css"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#0A1F1A"><link rel="stylesheet" href="fonts.css"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png"><link rel="icon" type="image/png" sizes="96x96" href="favicon-96.png"><link rel="canonical" href="https://bullsburg.com/"><meta property="og:title" content="Bullsburg: Money &amp; Investing Game"><meta property="og:description" content="Learn money skills and investing by playing, with pretend money."><meta property="og:image" content="https://bullsburg.com/icon-512.png"><meta property="og:url" content="https://bullsburg.com/"><meta property="og:type" content="website"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Bullsburg", "legalName": "Bullsburg LLC", "url": "https://bullsburg.com/", "logo": "https://bullsburg.com/icon-512.png"}</script>
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>window.TT_BUILD='web';window.TT_STORE_LINKS={};window.TT_ADS={};window.TT_SB={"url": "https://nvjlgiohvctocgbpegvi.supabase.co", "key": "sb_publishable_uY-81hCWhNXbnreZKwT7Tg_USO1Wljj", "google": true};window.TT_SITE="https://bullsburg.com";</script></head><body>
 
@@ -87,6 +87,18 @@ canvas { display: block; width: 100%; touch-action: pan-y; }
 .map-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .map-head h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 800; }
 .map-head p { max-width: 54ch; color: var(--muted); margin-top: 6px; }
+.how { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); padding: 14px 16px; margin: 0 0 18px; }
+.how > summary { cursor: pointer; font-weight: 700; color: var(--accent); list-style: none; display: flex; align-items: center; gap: 8px; min-height: 28px; }
+.how > summary::-webkit-details-marker { display: none; }
+.how > summary::before { content: 'ⓘ'; font-size: 18px; }
+.how > summary::after { content: '▾'; margin-left: auto; transition: transform .2s; }
+.how[open] > summary::after { transform: rotate(180deg); }
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; }
+.how-i { text-align: left; display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface2); color: var(--ink); font: inherit; cursor: pointer; }
+.how-i:hover, .how-i:focus-visible { border-color: var(--accent); }
+.how-i b { font-size: 16px; }
+.how-i span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+.how-foot { color: var(--muted); font-size: 14px; margin: 12px 0 10px; }
 .map-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; align-items: start; }
 @media (max-width: 900px) { .map-grid { grid-template-columns: 1fr; } }
 .world { border-radius: 20px; padding: 18px 18px 26px; margin-bottom: 20px; position: relative; overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
@@ -346,7 +358,7 @@ td.empty { font-family: var(--f-body); color: var(--muted); text-align: left !im
 .coinbox { display: grid; gap: 10px; margin-top: 14px; }
 .coin-row { display: flex; align-items: center; gap: 12px; border: 2px solid var(--line); border-radius: 16px; padding: 10px 12px; background: var(--surface); }
 .coin-row .ci { font-size: 26px; line-height: 1; } .coin-row .ct { flex: 1; min-width: 0; } .coin-row .ct b { font-family: var(--f-display); font-size: 19px; display: block; } .coin-row .ct small { color: var(--muted); font-size: 13.5px; }
-.coin-row.best { border-color: var(--sun); background: color-mix(in srgb, var(--sun) 12%, var(--surface)); } .coin-row .tagb { font-size: 11px; font-weight: 800; background: var(--sun); color: #2b1d00; border-radius: 99px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+.coin-row.best { border-color: var(--sun); background: color-mix(in srgb, var(--sun) 12%, var(--surface)); } .coin-row .tagb { font-size: 11px; font-weight: 800; background: var(--sun); color: #2b1d00; border-radius: 99px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; white-space: nowrap; display: inline-block; }
 .coin-row .btn { white-space: nowrap; } .coin-sec { font-family: var(--f-display); font-weight: 800; font-size: 15px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .04em; }
 #m-addcash { margin-left: auto; }
 
@@ -496,8 +508,8 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
   <section class="view" id="v-map">
     <div id="map-home">
       <div class="map-head">
-        <div><div class="eyebrow">Your adventure</div><h1>Learn the market, one stage at a time</h1>
-        <p>Clear each stage to earn XP and stars. Beat the boss at the end of Stock Street to sail to Options Island. Everything here uses pretend money.</p></div>
+        <div><div class="eyebrow">Your adventure</div><h1>Learn money and investing, one stage at a time</h1>
+        <p>Bullsburg has two sides to explore: <b>Investing</b> (stocks, charts and options) and <b>Money Skills</b> (paychecks, budgeting, banking, credit and more). Play them in any order. Clear each stage to earn XP and stars, and beat the boss at the end of every world. Everything here uses pretend money.</p></div>
         <div class="row"><button class="btn ghost" id="studybtn">📚 Study Hall</button><button class="btn ghost" id="unlockbtn">Unlock full game</button><button class="btn sun" id="continue">Play next stage</button></div>
       </div>
       <div class="map-grid">
@@ -1388,12 +1400,27 @@ function unlockScreen(tab) { const v = $('#v-' + tab); const ls = v.querySelecto
 
 /* ================= MAP ================= */
 function starStr(n) { return '<span class="stars">' + [0, 1, 2].map(i => i < n ? '★' : '<span class="off">★</span>').join('') + '</span>'; }
+function howBox() { const h = document.createElement('details'); h.className = 'how'; h.id = 'how'; h.open = !S.howSeen;
+  h.innerHTML = `<summary>How Bullsburg works</summary><div class="how-grid">
+    <button type="button" class="how-i" data-go="invest"><b>📈 Investing</b><span>5 worlds, from your first share of stock to charts, options and advanced strategies. Starts on Stock Street.</span></button>
+    <button type="button" class="how-i" data-go="money"><b>💵 Money Skills</b><span>6 worlds on everyday money: paychecks and taxes, budgeting, banking, credit, insurance and paying for college. Starts at Paycheck Plaza.</span></button>
+    <button type="button" class="how-i" data-go="wise"><b>🎓 W!SE Prep</b><span>Practice questions and full practice tests for financial literacy certification tests like W!SE, with a readiness score that shows what to study next.</span></button>
+    <button type="button" class="how-i" data-go="life"><b>🏠 Real Life After 18</b><span>Pick a path after high school, set up your first budget and live a whole year of paychecks, bills and surprises.</span></button></div>
+    <p class="how-foot">Play the two sides in any order and switch between them with the buttons above. Chart Lab and the Practice Market let you trade 8 made-up companies with pretend money.</p>
+    <button type="button" class="btn ghost" data-how-ok>Got it</button>`;
+  const seen = () => { if (!S.howSeen) { S.howSeen = 1; save(); } };
+  h.addEventListener('toggle', () => { if (!h.open) seen(); });
+  h.querySelector('[data-how-ok]').onclick = () => { seen(); h.open = false; };
+  h.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { const g = b.dataset.go; seen();
+    if (g === 'wise') return window.TT_openWise && window.TT_openWise(); if (g === 'life') return window.TT_openLife && window.TT_openLife();
+    S.trk = g; save(); renderMap(); const w = document.querySelector('.world'); if (w) w.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  return h; }
 function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const TK = S.trk === 'money' ? 'money' : 'invest'; const nextId = TRACK[TK].find(id => !S.stars[id] && isUnlocked(id) && !paid(id));
   const tabs = document.createElement('div'); tabs.className = 'tracks'; tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Choose a track');
   const cnt = k => TRACK[k].filter(id => S.stars[id]).length + ' / ' + TRACK[k].length;
   tabs.innerHTML = `<button data-trk="invest" aria-pressed="${TK === 'invest'}"><b>📈 Investing</b><small>${cnt('invest')}</small></button><button data-trk="money" aria-pressed="${TK === 'money'}"><b>💵 Money Skills</b><small>${cnt('money')}</small></button><button data-trk="wise"><b>🎓 W!SE Prep</b><small>${window.TT_wiseReady ? window.TT_wiseReady() + '% ready' : 'Test prep'}</small></button><button data-trk="life"><b>🏠 Real Life</b><small>${S.life && S.life.best ? 'Best: ' + S.life.best.grade : 'After 18'}</small></button>`;
   tabs.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.trk === 'wise') return window.TT_openWise && window.TT_openWise(); if (b.dataset.trk === 'life') return window.TT_openLife && window.TT_openLife(); S.trk = b.dataset.trk; save(); renderMap(); });
-  box.appendChild(tabs); const sp = S.sch && S.sch.sponsor; if (sp && sp.name) { const c = document.createElement('div'); c.className = 'sponsor-chip'; c.style.margin = '-6px 0 14px'; c.textContent = 'Your school license is sponsored by ' + sp.name + (sp.note ? ' · ' + sp.note : ''); box.appendChild(c); }
+  box.appendChild(tabs); box.appendChild(howBox()); const sp = S.sch && S.sch.sponsor; if (sp && sp.name) { const c = document.createElement('div'); c.className = 'sponsor-chip'; c.style.margin = '-6px 0 14px'; c.textContent = 'Your school license is sponsored by ' + sp.name + (sp.note ? ' · ' + sp.note : ''); box.appendChild(c); }
   const xs = ['4%', '30%', '52%', '30%'];
   WORLDS.filter(w => w.track === TK).forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
     const el = document.createElement('div'); el.className = 'world w' + w.n;
@@ -2180,7 +2207,7 @@ async function shareCard() { const d = reportData(), W = 1080, H = 1350, cv = do
   try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'My Bullsburg progress', text: `I'm level ${d.lvl} (${d.rank}) in Bullsburg!` }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'bullsburg-progress.png'; document.body.appendChild(a); a.click(); a.remove(); toast('Progress card saved.'); }
 function onboard() { if (S.onboarded) return; if (S.xp > 0 || Object.keys(S.stars).length) { S.onboarded = true; save(); return; }
-  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">Learn the stock market by playing</h2><p style="margin-top:8px">Clear stages, beat bosses and trade with pretend money. How should we explain things?</p>
+  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">Learn money and investing by playing</h2><p style="margin-top:8px">Two sides to explore: <b>Investing</b> (stocks, charts and options) and <b>Money Skills</b> (paychecks, budgeting, banking, credit and more). Clear stages, beat bosses and trade with pretend money. How should we explain things?</p>
     <div class="actions" style="margin-top:14px"><button class="btn sun" id="ob-kid">Kids</button><button class="btn" id="ob-adult">I'm a beginner adult</button></div>
     <p class="fine" style="margin-top:12px">You can switch any time at the top of the screen. Tip: play once a day to build a streak and earn bonus coins.</p>${window.TT_SB && window.TT_SB.url ? '<p style="margin-top:10px"><button class="btn ghost" id="ob-student" style="font-size:13px">🎓 My school gave me Bullsburg</button></p>' : ''}`);
   const pick = m => { S.mode = m; S.onboarded = true; save(); hud(); pwClose(); toast('Tap stage 1 to begin!'); };

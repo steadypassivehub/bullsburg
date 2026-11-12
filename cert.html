@@ -51,11 +51,11 @@ h1{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:4.3cqw;line-heig
   var date = when.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   fit.innerHTML = '<div class="cert">' +
     '<div class="logo"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#0A1F1A"/><line x1="13" y1="10" x2="13" y2="31" stroke="#FF7A70" stroke-width="2" stroke-linecap="round"/><rect x="10" y="15" width="6" height="11" rx="1.5" fill="#FF7A70"/><line x1="22" y1="7" x2="22" y2="28" stroke="#43DB9B" stroke-width="2" stroke-linecap="round"/><rect x="19" y="11" width="6" height="12" rx="1.5" fill="#43DB9B"/><line x1="31" y1="5" x2="31" y2="23" stroke="#43DB9B" stroke-width="2" stroke-linecap="round"/><rect x="28" y="8" width="6" height="10" rx="1.5" fill="#43DB9B"/><rect x="9" y="34" width="26" height="2.5" rx="1.25" fill="#E3C179"/></svg><span>Bullsburg</span></div>' +
-    '<div class="kicker">Certificate of achievement</div><h1>Financial Literacy Test Ready</h1>' +
-    '<div class="to">This certifies that</div><div class="name">' + esc(name) + '</div>' +
+    '<div class="kicker">Practice achievement</div><h1>Financial Literacy Certification Ready</h1>' +
+    '<div class="to">This recognizes that</div><div class="name">' + esc(name) + '</div>' +
     '<div class="what">scored <b>' + score + '%</b> on a full-length financial literacy practice test, above the <b>70% passing line</b>, covering income, budgeting, banking, credit, saving and investing, insurance and big purchases.</div>' +
-    '<div class="row"><div class="sig"><b>' + esc(date) + '</b>Date earned</div><div class="seal" aria-label="Score ' + score + ' percent"><b>' + score + '%</b><small>Passed</small></div><div class="sig"><b>Bullsburg LLC</b>bullsburg.com</div></div>' +
-    '<div class="fine">Earned in the Bullsburg app from the student’s own practice results. This is a practice achievement, not an official W!SE certification. W!SE is a trademark of Working in Support of Education, which is not affiliated with Bullsburg.</div></div>';
+    '<div class="row"><div class="sig"><b>' + esc(date) + '</b>Date earned</div><div class="seal" aria-label="Score ' + score + ' percent"><b>' + score + '%</b><small>Practice</small></div><div class="sig"><b>Bullsburg LLC</b>bullsburg.com</div></div>' +
+    '<div class="fine">Earned in the Bullsburg app from the student’s own practice results. This is a practice achievement, not an official certification of any kind. Official financial literacy tests, like the W!SE test, are given by schools. W!SE is a trademark of Working in Support of Education, which is not affiliated with Bullsburg.</div></div>';
   document.getElementById('print').onclick = function () { window.print(); };
 })();
 </script>
