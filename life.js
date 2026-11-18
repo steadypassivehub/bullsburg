@@ -29,6 +29,7 @@
 
   /* ---------- pacing ---------- */
   const MONTH_MS = 120000;          // one game month = 2 minutes of play
+  const TRIAL_MS = MONTH_MS / 4;    // free players get the first game week (30 seconds of play)
   const AWAY_MONTH_MS = 3600000;    // while the app is closed, businesses earn one month of profit per real hour
   const AWAY_CAP_MS = 8 * 3600000;  // up to 8 hours away, for businesses with a manager
   const SAVE_APY = .04, CARD_APR = .25;
@@ -205,7 +206,7 @@
     return pts >= 9 ? 'A' : pts >= 7 ? 'B' : pts >= 5 ? 'C' : pts >= 3 ? 'D' : 'F'; }
   function persist(force) { if (!G) return; const now = Date.now(); G.last = now; if (!force && now - lastSave < 15000) return; lastSave = now;
     const nw = Math.round(netWorth()), best = S.life && S.life.best;
-    S.life = { v: 2, g: G, runs: (S.life && S.life.runs) || 1, best: !best || nw > (best.nw || -Infinity) ? { grade: grade(), nw, path: G.path, at: now } : best };
+    S.life = { v: 2, g: G, runs: (S.life && S.life.runs) || 1, trial: !!(S.life && S.life.trial), best: !best || nw > (best.nw || -Infinity) ? { grade: grade(), nw, path: G.path, at: now } : best };
     try { save(); } catch (e) {} }
 
   /* ---------- the clock ---------- */
@@ -217,6 +218,7 @@
     const now = Date.now(), dt = Math.min(1000, now - lastTick); lastTick = now;
     if (modal || G.paused) { G.last = now; return; }
     G.t += dt; accrue(dt / MONTH_MS);
+    if (trialOver()) { trialEnd(); return; }
     if (G.t >= MONTH_MS) { G.t -= MONTH_MS; monthEnd(); }
     if (G.quiz && G.quiz.length && !modal) { quizDue(); return; }
     if (tab === 'job') { document.querySelectorAll('[data-gigw]').forEach(el => { const g = GIGS.find(x => x.id === el.dataset.gigw), left = Math.ceil(((G.gigAt[g.id] || 0) + g.wait * 1000 - Date.now()) / 1000); el.textContent = tx(left > 0 ? 'ready in ' + left + 's' : 'ready'); }); }
@@ -505,10 +507,10 @@
   function intro() {
     stopClock();
     frame('<h2>Life After 18</h2><p class="lesson-text" style="font-size:16px">Graduation day! Build the life you want: work your way up, go to school, start businesses and grow them into an empire, invest, buy a home and climb the net worth ladder. Your businesses keep earning even while the app is closed. Real-life choices pop up along the way, and every one teaches a money lesson.</p>' +
-      (S.full ? '' : '<div class="card" style="margin-top:10px">🔑 <b>Part of the full game.</b> Look at the paths below, then subscribe (or join your class) to play.</div>') +
+      (S.full ? '' : S.life && S.life.trial ? '<div class="card" style="margin-top:10px">🔑 <b>You’ve used your free week.</b> Subscribe (or join your class) to keep building your life.</div>' : '<div class="card" style="margin-top:10px">🎁 <b>Try your first week free.</b> Pick a path and play your first game week. To keep going after that, subscribe (or join your class).</div>') +
       '<h3 style="margin:18px 0 8px">Choose your path</h3><div class="life-grid">' + PATHS.map((p, i) => { const j = JOBS[p.job], pc = paycheck(j.ranks[0][1]);
         return '<button class="life-opt" data-p="' + i + '"><span class="life-ic" aria-hidden="true">' + p.icon + '</span><b>' + esc(p.name) + '</b><small class="muted">' + esc(j.ranks[0][0]) + '</small><span>' + esc(p.blurb) + '</span><span class="mono" style="margin-top:6px">Take-home: about ' + usd(pc.net) + ' a month</span></button>'; }).join('') + '</div>');
-    document.querySelectorAll('[data-p]').forEach(b => { b.onclick = () => { if (!S.full) return openPaywall(); G = newGame(PATHS[+b.dataset.p]); S.life = Object.assign({}, S.life || {}, { v: 2, g: G, runs: ((S.life && S.life.runs) || 0) + 1 }); tab = 'biz'; persist(true); render(); startClock();
+    document.querySelectorAll('[data-p]').forEach(b => { b.onclick = () => { if (!S.full && S.life && S.life.trial) return openPaywall(); G = newGame(PATHS[+b.dataset.p]); S.life = Object.assign({}, S.life || {}, { v: 2, g: G, runs: ((S.life && S.life.runs) || 0) + 1 }, S.full ? {} : { trial: true }); tab = 'biz'; persist(true); render(); startClock();
       note(['Welcome to life after high school! Here’s how to start:', '1. Your paycheck arrives at the end of each month (every 2 minutes of play), and bills come out.', '2. Start a 🌱 Lawn care business in the Business tab, then tap Collect as money comes in.', '3. Keep your businesses stocked and fix things when they break. Upgrade, hire staff, then hire a manager so it earns while you’re away.', '4. School has an exam every 4 months and jobs have a review every 6 months. Answer the money questions right to stay in!'], 'Your new life'); }; });
   }
   function hud() { const nw = netWorth(), r = rung(nw), next = LADDER[r + 1], mi = G.m % 12;
@@ -743,11 +745,17 @@
       m.querySelector('.ty-card').innerHTML = tx('<span class="eyebrow">Money lesson</span><p style="font-size:17px;margin:6px 0 12px">' + esc(lesson) + '</p><button class="btn sun" id="ty-ok">Back to my life</button>');
       $('#ty-ok').onclick = () => { closeModal(); persist(true); render(); }; $('#ty-ok').focus({ preventScroll: true }); }; }); }
 
+  /* ---------- free week ---------- */
+  function trialOver() { return !S.full && !!G && (G.m > 0 || G.t >= TRIAL_MS); }
+  function trialEnd() { stopClock(); closeModal(); const nw = netWorth();
+    frame('<h2>Your free week is over!</h2><p class="lesson-text" style="font-size:16px">In your first week you earned your way to a net worth of <b>' + usd(nw) + '</b>' + (G.biz.length ? ' and started your first business' : '') + '. The full game keeps your life going: paychecks, promotions, school, bigger businesses, a home, investing and taxes.</p>' +
+      '<div class="card" style="margin-top:10px">🔑 Subscribe (or join your class) to keep building from right where you stopped.</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn" id="ty-unlock">Unlock the full game</button><button class="btn ghost" id="ty-maps">Back to the map</button></div>');
+    $('#ty-unlock').onclick = () => openPaywall(); $('#ty-maps').onclick = () => { stopClock(); showMap(); }; }
   /* ---------- open ---------- */
   function open() {
     const g = S.life && S.life.g; if (g && g.v === 2) G = ensure(g); else G = null;
     if (!G) return intro();
-    if (!S.full) { G = null; return intro(); }
+    if (!S.full) { if (trialOver()) return trialEnd(); render(); return; }
     const a = away(); render();
     if (a && (a.auto >= 1 || a.filled >= 1 || a.capped)) { const h = Math.floor(a.ms / 3600000), mi = Math.round(a.ms % 3600000 / 60000), lines = ['You were away for ' + (h ? h + ' hour' + (h === 1 ? '' : 's') + ' ' : '') + mi + ' minute' + (mi === 1 ? '' : 's') + '.'];
       if (a.auto >= 1) lines.push('👔 Your managers deposited ' + usd(a.auto) + ' into your cash.');
@@ -757,7 +765,7 @@
       if (a.over) lines.push('Managers can earn for up to 8 hours while you’re away.');
       note(lines, 'Welcome back'); persist(true); }
   }
-  document.addEventListener('visibilitychange', () => { if (document.hidden && G) persist(true); else if (!document.hidden && G && onScreen() && !timer) { const a = away(); render(); if (a && (a.auto >= 1 || a.filled >= 1)) note(['While you were away, your businesses earned ' + usd(a.auto + a.filled) + '.'], 'Welcome back'); } });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && G) persist(true); else if (!document.hidden && G && onScreen() && !timer) { if (!S.full) { if (trialOver()) trialEnd(); else render(); return; } const a = away(); render(); if (a && (a.auto >= 1 || a.filled >= 1)) note(['While you were away, your businesses earned ' + usd(a.auto + a.filled) + '.'], 'Welcome back'); } });
   addEventListener('pagehide', () => { if (G) persist(true); });
 
   const css = document.createElement('style');
