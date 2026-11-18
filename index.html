@@ -526,7 +526,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
 
   <!-- CHART LAB -->
   <section class="view" id="v-charts" hidden>
-    <div class="lab-head"><div><div class="eyebrow">Lab 1</div><h1>Chart Lab</h1><p>Every chart here is pretend data. Tap or hover a day to read it, then play Trend Spotter to earn XP.</p></div></div>
+    <div class="lab-head"><div><div class="eyebrow">Lab 1</div><h1>Chart Lab</h1><p>Every chart here is pretend data. Tap or hover a day to read it, play Trend Spotter, then learn to read any chart in Chart School below.</p></div></div>
     <div class="lab-grid">
       <div class="card">
         <div class="toolbar">
@@ -568,6 +568,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
           <div class="fb" id="t-fb" aria-live="polite"></div></div>
       </div>
     </div>
+    <div id="chart-school"></div>
   </section>
 
   <!-- MARKET -->
@@ -630,6 +631,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
         </div>
       </div>
     </div>
+    <div id="market-school" style="display:grid;gap:16px;margin-top:16px"></div>
   </section>
 
   <!-- OPTIONS -->
@@ -2226,6 +2228,9 @@ const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'op
 <script src="es.js"></script>
 <script src="lang.js"></script>
 <script src="wise.js"></script>
+<script src="life_es.js"></script>
 <script src="life.js"></script>
+<script src="charts.js"></script>
+<script src="market.js"></script>
 
 <script src="cloud.js"></script><script src="school.js"></script><script src="mday.js"></script><script src="live.js"></script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>

@@ -105,7 +105,7 @@
       streak: str, best_streak: (S.streak && S.streak.best) || 0, daily_quiz: S.dq && S.dq.day ? S.dq.score : null,
       next_stage: next ? BYID[next].title || next : 'All done', worlds: worlds, on: new Date().toISOString(),
       ready: w.ready == null ? null : w.ready, pass: w.pass == null ? null : w.pass, pre: w.pre == null ? null : w.pre, post: w.post == null ? null : w.post, test: w.test == null ? null : w.test,
-      tests: w.tests || 0, topics: w.topics || {}, life: S.life && S.life.best ? S.life.best.grade : null, invest_cleared: trk('invest'), money_cleared: trk('money') };
+      tests: w.tests || 0, topics: w.topics || {}, life: S.life && S.life.best ? S.life.best.grade : null, life_nw: S.life && S.life.best && typeof S.life.best.nw === 'number' ? S.life.best.nw : null, life_ach: S.life && S.life.g && S.life.g.ach ? Object.keys(S.life.g.ach).filter(function (k) { return !/_t$/.test(k); }).length : null, invest_cleared: trk('invest'), money_cleared: trk('money') };
   }
   var pushT = null, pushing = false;
   function push(now) {
