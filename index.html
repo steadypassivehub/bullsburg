@@ -2233,4 +2233,4 @@ const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'op
 <script src="charts.js"></script>
 <script src="market.js"></script>
 
-<script src="cloud.js"></script><script src="school.js"></script><script src="mday.js"></script><script src="live.js"></script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script></body></html>
+<script src="cloud.js"></script><script src="school.js"></script><script src="mday.js"></script><script src="live.js"></script><script>if('serviceWorker' in navigator){var _hadSW=!!navigator.serviceWorker.controller,_rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(_hadSW&&!_rl){_rl=true;location.reload()}});addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(r){r.update()}).catch(function(){})})}</script></body></html>
