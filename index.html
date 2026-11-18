@@ -281,6 +281,14 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 
 /* locked lab screen */
 .lockscreen { text-align: center; padding: 50px 16px; max-width: 520px; margin: 0 auto; }
+.ob-who { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.ob-w { font: inherit; font-size: 14px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line, rgba(255,255,255,.18)); background: transparent; color: inherit; cursor: pointer; }
+.ob-w.on { background: var(--sun, #E3C179); color: #10261F; border-color: transparent; font-weight: 700; }
+.ob-goals { display: grid; gap: 10px; margin-top: 14px; }
+.ob-goal { font: inherit; text-align: left; display: grid; grid-template-columns: 40px 1fr; column-gap: 10px; align-items: center; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line, rgba(255,255,255,.18)); background: rgba(255,255,255,.04); color: inherit; cursor: pointer; }
+.ob-goal:hover, .ob-goal:focus-visible { border-color: var(--sun, #E3C179); }
+.ob-goal span { grid-row: span 2; font-size: 28px; text-align: center; }
+.ob-goal b { font-size: 17px; } .ob-goal small { opacity: .8; font-size: 13px; }
 .lockscreen .pad { font-size: 54px; line-height: 1; }
 .lockscreen h2 { font-size: 30px; margin-top: 10px; }
 .lockscreen p { color: var(--muted); margin-top: 8px; }
@@ -697,22 +705,22 @@ const RANKS = [
 const UNLOCK_MSG = { 3: 'You can read charts like a pro now.', 7: 'Options Island is calling.', 8: 'The Greeks speak your language now.', 10: 'Time to build real strategies.', 12: 'Protecting your money is the real skill.', 15: 'You reached the top level: Market Master.' };
 
 const L = [
- { id: 's1', world: 1, title: 'What is a stock?', terms: ['Share', 'Stock', 'Ticker symbol', 'Exchange'], widget: 'own',
+ { id: 's1', world: 1, title: 'What is a stock?', terms: ['Share', 'Stock', 'Ticker symbol', 'Exchange'], widget: 'own', unlock: 'market',
    kid: `<p>Your friend Maya starts a lemonade stand. She needs $100 for lemons, cups and a sign, so she cuts her business into <strong>100 equal pieces</strong> and sells each piece for $1.</p><p>Each piece is called a <strong>share</strong>. If you buy 10 shares, you own 10% of the lemonade stand. When the stand does well, your pieces are worth more.</p><p>Big companies do the same thing with millions of pieces. Owning a stock means you own a tiny slice of a real company.</p>`,
    adult: `<p>A <strong>share of stock</strong> is a unit of ownership in a company. Companies sell shares to raise money. After that, investors trade shares with each other on <strong>exchanges</strong> like the New York Stock Exchange and Nasdaq.</p><p>Each company has a short <strong>ticker symbol</strong> (Apple is AAPL). Your ownership slice is your shares divided by all the shares that exist. Common stock usually gives you a vote at shareholder meetings and a claim on part of the company's profits.</p>`,
    quiz: [{ q: 'A company has 100 shares. You own 25. How much of the company do you own?', o: ['25%', '2.5%', '100%', '4%'], why: '25 out of 100 pieces is 25 percent.' },
           { q: 'What is a ticker symbol?', o: ['A short code that names a stock, like AAPL', 'The price of one share', 'A receipt from the bank'], why: 'Tickers are nicknames on the market board, so AAPL means Apple.' }] },
- { id: 's2', world: 1, title: 'Why do prices move?', terms: ['Supply and demand', 'Buyer', 'Seller', 'Earnings'], widget: 'tug',
+ { id: 's2', world: 1, title: 'Why do prices move?', terms: ['Supply and demand', 'Buyer', 'Seller', 'Earnings'], widget: 'tug', unlock: 'charts',
    kid: `<p>Think about trading cards. When everybody wants the same rare card and nobody wants to give theirs up, the card gets <strong>more expensive</strong>.</p><p>Stocks work the same way. When more people want to <strong>buy</strong> than <strong>sell</strong>, the price goes up. When more people want to sell, the price goes down.</p><p>News changes what people want. A hit new product can make lots of people want the stock.</p>`,
    adult: `<p>A stock's price is simply the last price where a buyer and a seller agreed to trade. When demand to buy outweighs the supply of shares for sale, buyers bid the price up, and the reverse pushes it down.</p><p>What moves demand: <strong>earnings</strong> reports, company news, interest rates, and the overall mood of the market. Day to day moves are noisy. Over many years, prices tend to follow how much money the business actually makes.</p>`,
    quiz: [{ q: 'Lots of people want to buy a stock and only a few want to sell. What usually happens?', o: ['The price goes up', 'The price goes down', 'Nothing changes'], why: 'More buyers than sellers pushes the price up.' },
           { q: 'A company reports much bigger profits than people expected. What often happens next?', o: ['The stock price jumps up', 'The stock disappears', 'The company has to give the money back'], why: 'Good surprises make more people want the stock, so the price often rises.' }] },
- { id: 's3', world: 1, title: 'Making and losing money', terms: ['Profit', 'Loss', 'Dividend', 'Unrealized gain'], unlock: 'market',
+ { id: 's3', world: 1, title: 'Making and losing money', terms: ['Profit', 'Loss', 'Dividend', 'Unrealized gain'],
    kid: `<p>Buy a share for $10, sell it later for $15, and you made <strong>$5 profit</strong>. But prices can fall too. If it drops to $6, you'd lose $4 if you sold.</p><p>Some companies also share their profits with owners. That payment is called a <strong>dividend</strong>, like Maya's lemonade stand paying every owner a quarter each month.</p><p>Finishing this stage unlocks the <strong>Practice Market</strong>, where you can try it with pretend money.</p>`,
    adult: `<p>You earn money from stocks two ways: the price rising above what you paid (a <strong>capital gain</strong>) and <strong>dividends</strong>, cash some companies pay to shareholders.</p><p>Until you sell, a gain or loss is <strong>unrealized</strong>, meaning it only exists on paper. Prices can fall below what you paid, and a company that fails can go to zero. Total return is price change plus dividends.</p><p>Clearing this stage unlocks the <strong>Practice Market</strong>.</p>`,
    quiz: [{ q: 'You buy 10 shares at $20 and sell them at $26. What is your profit?', o: ['$60', '$6', '$260', '$46'], why: 'You made $6 per share, times 10 shares = $60.' },
           { q: 'What is a dividend?', o: ['Cash a company pays its shareholders', 'A fee for buying stock', 'A type of chart'], why: 'Dividends are a slice of profits paid out to owners.' }] },
- { id: 's4', world: 1, title: 'Reading a stock chart', terms: ['Candlestick', 'Open / Close', 'High / Low', 'Volume', 'Moving average'], widget: 'minichart', unlock: 'charts',
+ { id: 's4', world: 1, title: 'Reading a stock chart', terms: ['Candlestick', 'Open / Close', 'High / Low', 'Volume', 'Moving average'], widget: 'minichart',
    kid: `<p>A chart is a picture of the price over time. When the line goes uphill, the price went up.</p><p>Many charts use <strong>candles</strong>. Each candle is one day. <strong>Green</strong> means the price ended the day higher than it started. <strong>Red</strong> means it ended lower. The skinny lines on top and bottom (the wicks) show the highest and lowest price that day.</p><p>Clear this stage to unlock the <strong>Chart Lab</strong> and the Trend Spotter game.</p>`,
    adult: `<p>A line chart plots each day's closing price. A <strong>candlestick</strong> chart shows four prices per day: <strong>open, high, low, close</strong>. The body runs from open to close; the wicks reach the high and low.</p><p><strong>Volume</strong> bars show how many shares traded. A <strong>moving average</strong> smooths the noise so you can see the trend. Charts describe the past and never guarantee the future.</p><p>Clearing this stage unlocks the <strong>Chart Lab</strong>.</p>`,
    quiz: [{ q: 'A green candle means…', o: ['The price closed higher than it opened', 'The company is environmentally friendly', 'The stock paid a dividend'], why: 'Green candles close above where they opened.' },
@@ -1176,7 +1184,7 @@ L.forEach(s => { if (s.boss) return; s.quiz.forEach((q, i) => q.key = s.id + ':'
 const WORLDS = [{ n: 1, name: 'Stock Street', sub: 'World 1 · Stocks' }, { n: 2, name: 'Options Island', sub: 'World 2 · Options basics' }, { n: 3, name: 'Greek Peaks', sub: 'World 3 · Pricing and the Greeks' },
   { n: 4, name: 'Strategy City', sub: 'World 4 · Options strategies' }, { n: 5, name: 'Master\u2019s Summit', sub: 'World 5 · Becoming a real trader' }];
 WORLDS.forEach(w => w.track = 'invest'); if (typeof MONEY_WORLDS !== 'undefined') WORLDS.push(...MONEY_WORLDS);
-const LAB_GATE = { market: 's3', charts: 's4', options: 'o2' };
+const LAB_GATE = { market: 's1', charts: 's2', options: 'o2' };
 
 const MISSIONS = [
  { id: 'm1', title: 'First share', d: 'Buy any stock in the Practice Market.', xp: 40 },
@@ -1499,6 +1507,7 @@ function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts :
   if (Q.boss && first) setTimeout(confetti, 300);
   if (s.final) { mission('m15'); graduation(stars); }
   try { if (window.TT_onStageClear) window.TT_onStageClear(Q.id, !!Q.boss, first); } catch (e) {}
+  if (first) { if (Q.id === 's1' || Q.id === TRACK.money[0]) track('stage1'); if (STAGES.filter(id => S.stars[id]).length === 3) { track('stage3'); setTimeout(() => softPaywall('stage3'), 1600); } if (Q.boss && Q.hearts) { track('boss1'); setTimeout(() => softPaywall('boss'), 2200); } }
   hud(); const gl = $('#golab'); if (gl) gl.onclick = () => go(s.unlock); const ns = $('#nexts'); if (ns) ns.onclick = () => openStage(nextId); $('#tomap2').onclick = () => showMap(); }
 
 /* ================= lesson widgets ================= */
@@ -1843,7 +1852,7 @@ function placeStock() { const m = M(), u = m.ui, q = Math.floor(+$('#st-qty').va
   const h = m.hold[sym], free = h ? h.sh - coveredUsed(sym) : 0;
   if (u.sside === 'sell' && free < q) return say(free ? `You can sell up to ${free} shares${coveredUsed(sym) ? ' (the rest are covering calls you sold)' : ''}.` : `You don't own any free ${sym} shares. This cash account can't short-sell.`);
   if (u.skind === 'market') { const p = px(sym);
-    if (u.sside === 'buy') { if (freeCash() < q * p) return say(`Not enough free cash. You can afford ${Math.floor(freeCash() / p)} shares.`); m.cash -= q * p; const more = !!m.hold[sym]; addShares(sym, q, q * p); logT(`Bought ${q} ${sym} at ${money(p)}. ${avgLine(sym)}`); say(`Bought ${q} shares of ${sym} at ${money(p)}.${more ? ' ' + avgLine(sym) : ''}`, true); mission('m1'); if (Object.keys(m.hold).length >= 3) mission('m2'); }
+    if (u.sside === 'buy') { if (freeCash() < q * p) return say(`Not enough free cash. You can afford ${Math.floor(freeCash() / p)} shares.`); m.cash -= q * p; const more = !!m.hold[sym]; addShares(sym, q, q * p); logT(`Bought ${q} ${sym} at ${money(p)}. ${avgLine(sym)}`); say(`Bought ${q} shares of ${sym} at ${money(p)}.${more ? ' ' + avgLine(sym) : ''}`, true); mission('m1'); track('trade1'); if (Object.keys(m.hold).length >= 3) mission('m2'); }
     else { const basis = removeShares(sym, q); m.cash += q * p; const g = q * p - basis; logT(`Sold ${q} ${sym} at ${money(p)} (${g >= 0 ? 'profit' : 'loss'} ${money(Math.abs(g))}).`); say(`Sold ${q} shares at ${money(p)}: ${g >= 0 ? 'profit' : 'loss'} of ${money(Math.abs(g))}.`, g >= 0); } }
   else { const p = +$('#st-px').value; if (!(p > 0)) return say('Enter a price for your order.');
     if (u.skind === 'stop' && u.sside === 'sell' && p >= px(sym)) return say(`A sell stop must be below the current price (${money(px(sym))}). It's meant to protect you if the price falls.`);
@@ -2023,7 +2032,7 @@ function openPaywall() { if (S.full) return toast('You already have the full gam
     <p class="fine">Kids: ask a grown-up first. A grown-up will need to answer a question before buying.</p>
     <p class="fine sub-terms">Payment is charged to your ${/iPhone|iPad|iPod|Mac/.test(navigator.userAgent) ? 'Apple Account' : 'Google Play account'} when you confirm. The subscription renews automatically at the same price each ${PLANS[PLAN].per} unless canceled at least 24 hours before the end of the current period. Manage or cancel any time in your account settings. Your progress is kept if you cancel. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Terms of Use</a> · <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p>`);
   document.querySelectorAll('[data-plan]').forEach(b => b.onclick = () => { PLAN = b.dataset.plan; openPaywall(); });
-  $('#pw-buy').onclick = () => gate(doBuy); $('#pw-later').onclick = pwClose; }
+  track('pw_view'); $('#pw-buy').onclick = () => { track('pw_buy_tap'); gate(doBuy); }; $('#pw-later').onclick = pwClose; }
 function gate(next) { const a = 6 + Math.floor(Math.random() * 7), b = 3 + Math.floor(Math.random() * 7); GATE = { ans: a * b, next };
   pwShow(`<div class="eyebrow">For grown-ups</div><h2 id="pw-title">Ask a grown-up</h2><p class="muted" style="margin-top:6px">To keep purchases safe, a grown-up needs to answer this.</p>
     <div class="gateq">What is ${NUMW[a]} times ${NUMW[b]}?</div><div class="field"><label for="pw-ans">Answer in numbers</label><input type="number" id="pw-ans" inputmode="numeric" autocomplete="off"></div>
@@ -2043,7 +2052,7 @@ function webBuyPreview() { pwShow(`<div class="eyebrow">Web preview</div><h2 id=
     <div class="actions" style="margin-top:14px"><button class="btn sun" id="pw-test">Pretend purchase (testing only)</button><button class="btn ghost" id="pw-x">Close</button></div>
     <p class="fine">The test button exists so you can try the full game while building it. It is removed from the store versions.</p>`);
   $('#pw-test').onclick = grantFull; $('#pw-x').onclick = pwClose; }
-function grantFull() { S.full = true; save(); pwClose(); confetti(); toast('Full game unlocked. Options Island and beyond are open!'); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); }
+function grantFull() { S.full = true; save(); track('sub'); pwClose(); confetti(); toast('Full game unlocked. Options Island and beyond are open!'); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); }
 $('#restore').onclick = async () => { let r; try { r = await Store.restore(); } catch (e) { r = false; }
   if (r === null) return toast('Restore works in the App Store and Google Play versions.'); if (r) grantFull(); else toast('No active subscription found on this account.'); };
 $('#managesub').onclick = () => { if (window.TickerStoreBridge && window.TickerStoreBridge.manage) window.TickerStoreBridge.manage(); else toast('Manage your subscription in the App Store or Google Play app.'); };
@@ -2169,7 +2178,9 @@ function openDaily() { const k = stk(), n = streakAlive();
 function dailyPool() { const seen = STAGES.filter(id => S.stars[id] && BYID[id].quiz && !BYID[id].boss); const ids = seen.length ? seen : STAGES.slice(0, 2);
   /* seeded by this player's own id + today, so each player gets a different quiz (and reopening it doesn't reroll) */
   const r = mulberry32([...(S.pid + dayKey())].reduce((a, c) => (Math.imul(a, 31) + c.charCodeAt(0)) >>> 0, 7));
-  return drawQs(ids.flatMap(id => bankOf(id)), 3, r); }
+  const pool = ids.flatMap(id => bankOf(id)), missed = pool.filter(q => q.key && S.ql[q.key] && S.ql[q.key][2] === 0);
+  const again = missed.length ? drawQs(missed, Math.min(2, missed.length), r) : [], keys = new Set(again.map(q => q.key));
+  return again.concat(drawQs(pool.filter(q => !keys.has(q.key)), 3 - again.length, r)); }
 function openDailyQuiz() { if (!clockOK()) return toast('Your device clock looks wrong. Fix the date and time to play the daily quiz.'); if (!dqReady()) return toast('Come back tomorrow for a new daily quiz.'); const qs = dailyPool(); let i = 0, score = 0;
   const step = () => { const q = qs[i]; const order = shuffle(q.o.map((t, k) => ({ t, k })));
     pwShow(`<div class="eyebrow">Daily quiz · question ${i + 1} of ${qs.length}</div><h2 id="pw-title" style="font-size:24px">${q.q}</h2><div id="dq-o" style="margin-top:8px">${order.map(o => `<button class="dq-opt" data-k="${o.k}">${o.t}</button>`).join('')}</div><div id="dq-why" class="fine" style="margin-top:10px"></div>`);
@@ -2179,7 +2190,7 @@ function openDailyQuiz() { if (!clockOK()) return toast('Your device clock looks
       $('#dq-n').onclick = () => { i++; if (i < qs.length) step(); else finish(); }; }); };
   const finish = () => { S.dq = { day: dayKey(), score }; save(); const coins = Math.max(50, score * 100);
     pwShow(`<div class="eyebrow">Daily quiz</div><h2 id="pw-title">${score} of ${qs.length} right</h2><p style="margin-top:8px">${score === 3 ? 'Perfect! ' : ''}You earned ${fmtC(coins)} coins and ${10 * score + 10} XP. A new quiz unlocks tomorrow.</p><div class="actions" style="margin-top:14px"><button class="btn" id="dq-x">Done</button></div>`);
-    $('#dq-x').onclick = pwClose; addCash(coins, 'Daily quiz'); addXP(10 * score + 10); markActive(); renderToday(); };
+    $('#dq-x').onclick = pwClose; track('dq'); addCash(coins, 'Daily quiz'); addXP(10 * score + 10); markActive(); renderToday(); };
   step(); }
 function reportData() { const total = STAGES.length, cleared = STAGES.filter(id => S.stars[id]).length, stars = Object.values(S.stars).reduce((a, b) => a + b, 0);
   const worlds = WORLDS.filter(w => STAGES.filter(id => BYID[id].world === w.n).every(id => S.stars[id])).map(w => w.name);
@@ -2208,13 +2219,32 @@ async function shareCard() { const d = reportData(), W = 1080, H = 1350, cv = do
   const blob = await new Promise(r => cv.toBlob(r, 'image/png')); const file = new File([blob], 'bullsburg-progress.png', { type: 'image/png' });
   try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'My Bullsburg progress', text: `I'm level ${d.lvl} (${d.rank}) in Bullsburg!` }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'bullsburg-progress.png'; document.body.appendChild(a); a.click(); a.remove(); toast('Progress card saved.'); }
+/* ================= anonymous funnel counts =================
+   Sends only an event name, the platform and today's date. No name, no id, nothing about the player. Each event is sent once per device. */
+const TRACK_OK = ['install', 'upgrade', 'goal_invest', 'goal_money', 'goal_life', 'kid', 'adult', 'stage1', 'stage3', 'boss1', 'trade1', 'chart_lesson', 'market_lesson',
+  'life_start', 'life_trial_end', 'pw_view', 'pw_buy_tap', 'sub', 'dq', 'd1', 'd7', 'd30'];
+function track(e) { try { if (TRACK_OK.indexOf(e) < 0) return; S.fx = S.fx || {}; if (S.fx[e]) return; S.fx[e] = 1; save();
+  const p = BUILD !== 'app' ? 'web' : (/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) ? 'ios' : 'android');
+  setTimeout(() => { try { if (window.TickerCloud) window.TickerCloud.rpc('track', { e, p }).catch(() => {}); } catch (x) {} }, 50); } catch (x) {} }
+window.TT_track = track;
+function trackVisit() { try { const today = dayKey(); if (!S.inst) { S.inst = today; save(); track(S.xp > 0 || Object.keys(S.stars).length ? 'upgrade' : 'install'); return; }
+  const days = Math.round((Date.parse(today) - Date.parse(S.inst)) / 86400000); if (days === 1) track('d1'); else if (days === 7) track('d7'); else if (days === 30) track('d30'); } catch (x) {} }
+function softPaywall(why) { // shown once each, at a high point, to players who don't have the full game
+  if (S.full || S.teacher || (S.sch && S.sch.on)) return; S.pwm = S.pwm || {}; if (S.pwm[why]) return; S.pwm[why] = Date.now(); save(); openPaywall(); }
 function onboard() { if (S.onboarded) return; if (S.xp > 0 || Object.keys(S.stars).length) { S.onboarded = true; save(); return; }
-  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">Learn money and investing by playing</h2><p style="margin-top:8px">Two sides to explore: <b>Investing</b> (stocks, charts and options) and <b>Money Skills</b> (paychecks, budgeting, banking, credit and more). Clear stages, beat bosses and trade with pretend money. How should we explain things?</p>
-    <div class="actions" style="margin-top:14px"><button class="btn sun" id="ob-kid">Kids</button><button class="btn" id="ob-adult">I'm a beginner adult</button></div>
-    <p class="fine" style="margin-top:12px">You can switch any time at the top of the screen. Tip: play once a day to build a streak and earn bonus coins.</p>${window.TT_SB && window.TT_SB.url ? '<p style="margin-top:10px"><button class="btn ghost" id="ob-student" style="font-size:13px">🎓 My school gave me Bullsburg</button></p>' : ''}`);
-  const pick = m => { S.mode = m; S.onboarded = true; save(); hud(); pwClose(); toast('Tap stage 1 to begin!'); };
+  let who = 'kid';
+  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">What do you want to try first?</h2>
+    <div class="ob-who" role="group" aria-label="Who is playing?"><span class="fine">Who’s playing?</span><button class="ob-w on" data-w="kid" aria-pressed="true">A kid</button><button class="ob-w" data-w="adult" aria-pressed="false">A beginner adult</button></div>
+    <div class="ob-goals"><button class="ob-goal" data-g="invest"><span aria-hidden="true">📈</span><b>Buy my first stock</b><small>Learn what a stock is in 2 minutes, then trade with pretend money</small></button>
+    <button class="ob-goal" data-g="money"><span aria-hidden="true">💵</span><b>Money basics</b><small>Paychecks, budgeting, banking and credit</small></button>
+    <button class="ob-goal" data-g="life"><span aria-hidden="true">🏠</span><b>Build a business</b><small>Life After 18: start a business and grow it</small></button></div>
+    <p class="fine" style="margin-top:10px">You can do all three, in any order. Everything uses pretend money. Play once a day to build a streak.</p>${window.TT_SB && window.TT_SB.url ? '<p style="margin-top:10px"><button class="btn ghost" id="ob-student" style="font-size:13px">🎓 My school gave me Bullsburg</button></p>' : ''}`);
+  document.querySelectorAll('.ob-w').forEach(b => b.onclick = () => { who = b.dataset.w; document.querySelectorAll('.ob-w').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); });
+  const pick = g => { S.mode = who; S.onboarded = true; save(); track(who); track('goal_' + g); hud(); pwClose();
+    if (g === 'life' && window.TT_openLife) window.TT_openLife(); else openStage(g === 'money' ? TRACK.money[0] : 's1'); };
+  document.querySelectorAll('.ob-goal').forEach(b => b.onclick = () => pick(b.dataset.g));
   const obs = $('#ob-student'); if (obs) obs.onclick = () => { S.mode = 'kid'; S.onboarded = true; save(); hud(); pwClose(); if (window.TT_openStudent) window.TT_openStudent(); };
-  $('#ob-kid').onclick = () => pick('kid'); $('#ob-adult').onclick = () => pick('adult'); }
+}
 $('#h-streak').onclick = openDaily;
 /* ================= global controls ================= */
 document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { S.mode = b.dataset.mode; save(); hud(); const lt = $('#ltext'); if (lt && Q && !Q.boss) lt.innerHTML = S.mode === 'kid' ? BYID[Q.id].kid : BYID[Q.id].adult; });
@@ -2222,7 +2252,7 @@ $('#teacher').checked = !!S.teacher; $('#teacher').onchange = e => { S.teacher =
 let raArm = false; $('#resetall').onclick = () => { if (!raArm) { raArm = true; $('#resetall').textContent = 'Tap again to erase all progress'; setTimeout(() => { raArm = false; $('#resetall').textContent = 'Reset progress'; }, 3000); return; }
   Object.assign(S, { xp: 0, stars: {}, missions: {}, best: 0, mkt: newMarket() }); /* purchase (S.full) is kept */ save(); raArm = false; $('#resetall').textContent = 'Reset progress'; hud(); tape(); go('map'); toast('Progress reset. Welcome back, rookie.'); };
 
-hud(); tape(); renderWords(); renderToday(); setTimeout(onboard, 400);
+hud(); tape(); renderWords(); renderToday(); setTimeout(onboard, 400); setTimeout(trackVisit, 1500);
 const start = (location.hash || '').slice(1); go(['map', 'charts', 'market', 'options', 'words'].includes(start) ? start : 'map');
 </script>
 <script src="es.js"></script>
