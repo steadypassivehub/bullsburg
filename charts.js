@@ -268,7 +268,7 @@
         q.querySelectorAll('[data-q="' + k + '"]').forEach(y => y.classList.remove('wrong'));
         b.classList.add(ok ? 'right' : 'wrong'); why.hidden = false; why.innerHTML = (ok ? '✅ ' : '❌ Not quite. ') + esc(x.why);
         if (ok) { got[k] = 1; q.querySelectorAll('[data-q="' + k + '"]').forEach(y => { y.disabled = true; }); }
-        if (Object.keys(got).length === l.q.length && !st().done[l.id]) { st().done[l.id] = Date.now(); save(); try { addXP(20, b); } catch (e) {}
+        if (Object.keys(got).length === l.q.length && !st().done[l.id]) { st().done[l.id] = Date.now(); save(); try { window.TT_track && window.TT_track(key === 'cs' ? 'chart_lesson' : 'market_lesson'); } catch (e) {} try { addXP(20, b); } catch (e) {}
           const n = L.filter(z => st().done[z.id]).length; toast(n === L.length ? cfg.finish : 'Lesson complete! ' + n + ' of ' + L.length + ' done.'); if (n === L.length) try { confetti(); } catch (e) {} } }; }); }
     home();
   }
