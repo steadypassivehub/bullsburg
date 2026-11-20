@@ -289,6 +289,17 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .ob-goal:hover, .ob-goal:focus-visible { border-color: var(--sun, #E3C179); }
 .ob-goal span { grid-row: span 2; font-size: 28px; text-align: center; }
 .ob-goal b { font-size: 17px; } .ob-goal small { opacity: .8; font-size: 13px; }
+.ob-main { border-color: var(--sun, #E3C179); background: color-mix(in srgb, var(--sun, #E3C179) 14%, transparent); padding: 16px; }
+.ob-main b { font-size: 19px; }
+.ob-or { margin: 16px 0 8px; }
+.ob-alt { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ob-mini { grid-template-columns: 1fr; text-align: center; justify-items: center; row-gap: 4px; padding: 10px 6px; }
+.ob-mini span { grid-row: auto; font-size: 24px; } .ob-mini b { font-size: 14px; line-height: 1.2; }
+.linkish { font: inherit; font-size: 13px; background: none; border: 0; color: var(--muted, #A9BCB2); text-decoration: underline; cursor: pointer; padding: 6px; }
+.allw { display: block; margin: 4px auto 18px; }
+.lpager { display: grid; gap: 12px; margin: 18px 0 8px; max-width: 66ch; }
+.lp-dots { display: flex; gap: 6px; } .lp-dots i { width: 22px; height: 6px; border-radius: 99px; background: var(--line); } .lp-dots i.on { background: var(--sun, #E3C179); }
+#continue { white-space: normal; text-align: left; }
 .lockscreen .pad { font-size: 54px; line-height: 1; }
 .lockscreen h2 { font-size: 30px; margin-top: 10px; }
 .lockscreen p { color: var(--muted); margin-top: 8px; }
@@ -517,8 +528,8 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
     <div id="map-home">
       <div class="map-head">
         <div><div class="eyebrow">Your adventure</div><h1>Learn money and investing, one stage at a time</h1>
-        <p>Bullsburg has two sides to explore: <b>Investing</b> (stocks, charts and options) and <b>Money Skills</b> (paychecks, budgeting, banking, credit and more). Play them in any order. Clear each stage to earn XP and stars, and beat the boss at the end of every world. Everything here uses pretend money.</p></div>
-        <div class="row"><button class="btn ghost" id="studybtn">📚 Study Hall</button><button class="btn ghost" id="unlockbtn">Unlock full game</button><button class="btn sun" id="continue">Play next stage</button></div>
+        <p>Short lessons and games. Everything here uses pretend money.</p></div>
+        <div class="row"><button class="btn sun" id="continue">Play next stage</button><button class="btn ghost" id="studybtn">📚 Study Hall</button><button class="btn ghost" id="unlockbtn">Unlock full game</button></div>
       </div>
       <div class="map-grid">
         <div id="worlds"></div>
@@ -1368,7 +1379,12 @@ function hud() { try { renderStreakChip(); } catch (e) {} const i = levelOf(S.xp
   $('#h-stars').textContent = Object.values(S.stars).reduce((a, b) => a + b, 0);
   document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === S.mode));
   document.querySelectorAll('.tab').forEach(t => { const g = LAB_GATE[t.dataset.tab]; const lk = g && !isOpen(t.dataset.tab); t.classList.toggle('locked', !!lk);
-    t.innerHTML = t.innerHTML.replace(/<span class="lk"[^>]*>.*?<\/span>/g, '') + (lk ? '<span class="lk" aria-label="locked">🔒</span>' : ''); }); }
+    t.innerHTML = t.innerHTML.replace(/<span class="lk"[^>]*>.*?<\/span>/g, '') + (lk ? '<span class="lk" aria-label="locked">🔒</span>' : '');
+    t.hidden = !!lk; }); /* simpler start: a lab's tab appears once its stage is cleared */
+  const fresh = !S.xp && !Object.keys(S.stars).length; /* brand-new player: no zeros in the header */
+  const sb = $('#h-streak'); if (sb) sb.hidden = fresh && !stk().last;
+  const sc = document.querySelector('.starcount'); if (sc) sc.hidden = !Object.keys(S.stars).length;
+  $('#h-lvl').hidden = fresh; const xb = document.querySelector('.xpbox'); if (xb) xb.hidden = fresh; }
 function popXP(n, el) { if (!n) return; const p = document.createElement('div'); p.className = 'xp-pop'; p.textContent = '+' + n + ' XP';
   let x = innerWidth / 2, y = innerHeight / 2; if (el && el.getBoundingClientRect) { const r = el.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top; }
   p.style.left = x + 'px'; p.style.top = y + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1200); }
@@ -1410,7 +1426,7 @@ function unlockScreen(tab) { const v = $('#v-' + tab); const ls = v.querySelecto
 
 /* ================= MAP ================= */
 function starStr(n) { return '<span class="stars">' + [0, 1, 2].map(i => i < n ? '★' : '<span class="off">★</span>').join('') + '</span>'; }
-function howBox() { const h = document.createElement('details'); h.className = 'how'; h.id = 'how'; h.open = !S.howSeen;
+function howBox() { const h = document.createElement('details'); h.className = 'how'; h.id = 'how'; h.open = false;
   h.innerHTML = `<summary>How Bullsburg works</summary><div class="how-grid">
     <button type="button" class="how-i" data-go="invest"><b>📈 Investing</b><span>5 worlds, from your first share of stock to charts, options and advanced strategies, plus 29 lessons in Chart School and Market School. Starts on Stock Street.</span></button>
     <button type="button" class="how-i" data-go="money"><b>💵 Money Skills</b><span>6 worlds on everyday money: paychecks and taxes, budgeting, banking, credit, insurance and paying for college. Starts at Paycheck Plaza.</span></button>
@@ -1432,7 +1448,8 @@ function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const TK = 
   tabs.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.trk === 'wise') return window.TT_openWise && window.TT_openWise(); if (b.dataset.trk === 'life') return window.TT_openLife && window.TT_openLife(); S.trk = b.dataset.trk; save(); renderMap(); });
   box.appendChild(tabs); box.appendChild(howBox()); const sp = S.sch && S.sch.sponsor; if (sp && sp.name) { const c = document.createElement('div'); c.className = 'sponsor-chip'; c.style.margin = '-6px 0 14px'; c.textContent = 'Your school license is sponsored by ' + sp.name + (sp.note ? ' · ' + sp.note : ''); box.appendChild(c); }
   const xs = ['4%', '30%', '52%', '30%'];
-  WORLDS.filter(w => w.track === TK).forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
+  const tw = WORLDS.filter(w => w.track === TK), curW = nextId ? BYID[nextId].world : (tw.find(w => L.filter(x => x.world === w.n).some(s => !S.stars[s.id])) || tw[0]).n;
+  (window.TT_allW ? tw : tw.filter(w => w.n === curW)).forEach(w => { const stages = L.filter(x => x.world === w.n); const got = stages.reduce((a, s) => a + (S.stars[s.id] || 0), 0);
     const el = document.createElement('div'); el.className = 'world w' + w.n;
     el.innerHTML = `<div class="world-top"><div><div class="eyebrow">${w.sub}</div><h2>${w.name}</h2></div><div class="mono muted" style="font-size:13px">★ ${got} / ${stages.length * 3}</div></div><div class="path"><svg class="trail" aria-hidden="true"></svg></div>`;
     const path = el.querySelector('.path'); let num = 0;
@@ -1444,9 +1461,16 @@ function renderMap() { const box = $('#worlds'); box.innerHTML = ''; const TK = 
     if (paidWorld(w.n) && !S.full) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔑<br>${w.name} is part of the full game.${w.n === 2 ? ' Options Island, Greek Peaks, Strategy City and Master\u2019s Summit: 38 more stages, 4 boss battles and real options trading.' : w.n === 7 ? ' Budget Boulevard, Bank Bay, Credit Canyon, Safety Shores and Future Falls: 24 more stages, 5 boss battles and full W!SE test prep.' : ''}<br><button class="btn sun" style="margin-top:12px">Unlock for ${priceStr()}</button></div>`; lk.querySelector('button').onclick = openPaywall; el.appendChild(lk); }
     else if (w.n >= 2 && w.n !== 6 && !isUnlocked(firstId)) { const lk = document.createElement('div'); lk.className = 'world-lock'; lk.innerHTML = `<div>🔒<br>Beat ${prevBoss.title.replace(/^.*?: /, '')} to reach ${w.name}.</div>`; el.appendChild(lk); }
     box.appendChild(el); });
+  if (tw.length > 1) { const aw = document.createElement('button'); aw.className = 'btn ghost allw'; aw.textContent = window.TT_allW ? 'Show only my current world' : `See all ${tw.length} worlds`;
+    aw.onclick = () => { window.TT_allW = !window.TT_allW; renderMap(); }; box.appendChild(aw); }
   requestAnimationFrame(drawTrails); renderMissions(); renderRanks();
-  const needBuy = !nextId && !S.full; $('#continue').textContent = nextId ? 'Play next stage' : needBuy ? 'Unlock the full game' : 'All stages cleared!'; $('#continue').disabled = !nextId && !needBuy;
-  $('#continue').onclick = () => nextId ? openStage(nextId) : needBuy && openPaywall(); $('#unlockbtn').hidden = S.full || needBuy; $('#unlockbtn').onclick = openPaywall; }
+  const cleared = Object.keys(S.stars).length, ns = nextId && BYID[nextId];
+  const nsNum = ns && !ns.boss ? L.filter(x => x.world === ns.world && !x.boss).findIndex(x => x.id === nextId) + 1 : 0;
+  const needBuy = !nextId && !S.full; $('#continue').textContent = nextId ? (cleared ? 'Continue: ' : 'Start: ') + (ns.boss ? ns.title : 'Stage ' + nsNum + ' · ' + ns.title) : needBuy ? 'Unlock the full game' : 'All stages cleared!'; $('#continue').disabled = !nextId && !needBuy;
+  $('#continue').onclick = () => nextId ? openStage(nextId) : needBuy && openPaywall();
+  $('#unlockbtn').hidden = S.full || needBuy || cleared < 3; $('#unlockbtn').onclick = openPaywall; /* no sales pitch before a player has tried a few stages */
+  $('#studybtn').hidden = !cleared;
+  document.querySelectorAll('.map-grid .side > .card:not(#today-card)').forEach(c => c.hidden = !cleared); /* missions and levels appear after the first stage */ }
 function drawTrails() { document.querySelectorAll('.path').forEach(p => { const svg = p.querySelector('svg'); const pr = p.getBoundingClientRect(); const pts = [...p.querySelectorAll('.disc')].map(d => { const r = d.getBoundingClientRect(); return [r.left - pr.left + r.width / 2, r.top - pr.top + r.height / 2]; });
   if (pts.length < 2) return; let dd = `M${pts[0][0]},${pts[0][1]}`; for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], my = (a[1] + b[1]) / 2; dd += ` C${a[0]},${my} ${b[0]},${my} ${b[0]},${b[1]}`; }
   svg.innerHTML = `<path d="${dd}" fill="none" stroke="var(--line)" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/>`; }); }
@@ -1468,7 +1492,20 @@ function openStage(id) { const s = BYID[id]; if (paid(id)) return openPaywall();
       <h2>${s.title}</h2><div class="lesson-text" id="ltext">${S.mode === 'kid' ? s.kid : s.adult}</div><div class="terms">${s.terms.map(t => `<span>${t}</span>`).join('')}</div>
       <div id="widget"></div><div class="quiz card" id="quiz"></div></div>`;
     if (s.widget) WIDGETS[s.widget.split(':')[0]]($('#widget'), s.widget.split(':')[1]); }
-  $('#back').onclick = () => showMap(); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' }); }
+  $('#back').onclick = () => showMap(); renderQ(); if (!s.boss) pageLesson(); window.scrollTo({ top: 0, behavior: 'auto' }); }
+/* Lessons read as short cards: a few sentences at a time, then the activity and quiz. */
+function pageLesson() { const lt = $('#ltext'); if (!lt) return; const old = $('#lpager'); if (old) old.remove();
+  const rest = ['.terms', '#widget', '#quiz'].map(q => lt.parentElement.querySelector(q)).filter(Boolean);
+  const els = [...lt.children].filter(e => !e.classList.contains('tts')), steps = []; let cur = [], len = 0;
+  els.forEach(e => { const n = e.textContent.length; if (cur.length && (len + n > 260 || /^(UL|OL|TABLE)$/.test(e.tagName))) { steps.push(cur); cur = []; len = 0; } cur.push(e); len += n; });
+  if (cur.length) steps.push(cur);
+  if (steps.length < 2) { rest.forEach(r => r.hidden = false); return; }
+  let i = 0; const pg = document.createElement('div'); pg.className = 'lpager'; pg.id = 'lpager'; lt.after(pg);
+  const show = () => { els.forEach(e => e.hidden = true); steps[i].forEach(e => e.hidden = false); rest.forEach(r => r.hidden = true);
+    pg.innerHTML = `<div class="lp-dots" aria-label="Part ${i + 1} of ${steps.length}">${steps.map((_, k) => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</div><div class="row">${i ? '<button class="btn ghost" data-lp="-1">Back</button>' : ''}<button class="btn sun" data-lp="1">${i + 1 < steps.length ? 'Next' : 'Got it: try it out'}</button></div>`;
+    pg.querySelectorAll('[data-lp]').forEach(b => b.onclick = () => { const d = +b.dataset.lp; if (d > 0 && i + 1 >= steps.length) { els.forEach(e => e.hidden = false); rest.forEach(r => r.hidden = false); pg.remove(); requestAnimationFrame(() => (rest[1] && rest[1].children.length ? rest[1] : rest[2] || lt).scrollIntoView({ behavior: 'smooth', block: 'start' })); return; }
+      i += d; show(); }); };
+  show(); }
 function renderQ() { const box = $('#quiz'); const q = Q.qs[Q.i]; const n = Q.qs.length;
   if (!q) return Q.practice ? finishPractice() : finishStage();
   const order = shuffle(q.o.map((t, k) => ({ t, k })));
@@ -2169,7 +2206,8 @@ function dqReady() { return !S.dq || S.dq.day !== dayKey(); }
 function renderToday() { const c = $('#today-card'); if (!c) return; const done = stk().last === dayKey(), n = streakAlive();
   c.innerHTML = `<h3>Today</h3><div class="daily" style="margin-top:10px"><div class="goal"><div class="ring" style="--p:${done ? 100 : 0}">${done ? '✓' : '1'}</div><div><b>${done ? 'Daily goal done' : 'Daily goal: play once'}</b><small class="muted">${done ? `${n}-day streak. See you tomorrow!` : 'Clear a stage, play a market day or take the daily quiz.'}</small></div></div>${weekRow()}
     <button class="btn${dqReady() ? ' sun' : ' ghost'}" id="t-dq">${dqReady() ? 'Daily quiz: up to 300 coins' : `Daily quiz done (${S.dq.score}/3)`}</button><button class="btn ghost" id="t-study">📚 Study Hall: review past questions</button><button class="btn ghost" id="t-rep">Progress report for grown-ups</button></div>`;
-  $('#t-study').onclick = () => openStudy(); $('#t-dq').onclick = openDailyQuiz; $('#t-rep').onclick = openReport; renderStreakChip(); }
+  $('#t-study').onclick = () => openStudy(); $('#t-dq').onclick = openDailyQuiz; $('#t-rep').onclick = openReport;
+  const any = Object.keys(S.stars).length; $('#t-study').hidden = !any; $('#t-rep').hidden = !any; renderStreakChip(); }
 function openDaily() { const k = stk(), n = streakAlive();
   pwShow(`<div class="eyebrow">Your streak</div><h2 id="pw-title">${n} ${n === 1 ? 'day' : 'days'} in a row</h2><p class="muted" style="margin-top:6px">Play once a day to grow your streak. Best ever: ${k.best} days. Streak shields: ${k.fz} of 2 (you earn one every 7 days).</p>
     <div style="margin-top:14px">${weekRow()}</div><p class="fine" style="margin-top:12px">Streak rewards: 3 days +500 coins, 7 days +1,500, 14 days +3,000, 30 days +5,000.</p>
@@ -2232,22 +2270,19 @@ function trackVisit() { try { const today = dayKey(); if (!S.inst) { S.inst = to
 function softPaywall(why) { // shown once each, at a high point, to players who don't have the full game
   if (S.full || S.teacher || (S.sch && S.sch.on)) return; S.pwm = S.pwm || {}; if (S.pwm[why]) return; S.pwm[why] = Date.now(); save(); openPaywall(); }
 function onboard() { if (S.onboarded) return; if (S.xp > 0 || Object.keys(S.stars).length) { S.onboarded = true; save(); return; }
-  let who = 'kid';
-  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">What do you want to try first?</h2>
-    <div class="ob-who" role="group" aria-label="Who is playing?"><span class="fine">Who’s playing?</span><button class="ob-w on" data-w="kid" aria-pressed="true">A kid</button><button class="ob-w" data-w="adult" aria-pressed="false">A beginner adult</button></div>
-    <div class="ob-goals"><button class="ob-goal" data-g="invest"><span aria-hidden="true">📈</span><b>Buy my first stock</b><small>Learn what a stock is in 2 minutes, then trade with pretend money</small></button>
-    <button class="ob-goal" data-g="money"><span aria-hidden="true">💵</span><b>Money basics</b><small>Paychecks, budgeting, banking and credit</small></button>
-    <button class="ob-goal" data-g="life"><span aria-hidden="true">🏠</span><b>Build a business</b><small>Life After 18: start a business and grow it</small></button></div>
-    <p class="fine" style="margin-top:10px">You can do all three, in any order. Everything uses pretend money. Play once a day to build a streak.</p>${window.TT_SB && window.TT_SB.url ? '<p style="margin-top:10px"><button class="btn ghost" id="ob-student" style="font-size:13px">🎓 My school gave me Bullsburg</button></p>' : ''}`);
-  document.querySelectorAll('.ob-w').forEach(b => b.onclick = () => { who = b.dataset.w; document.querySelectorAll('.ob-w').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); });
-  const pick = g => { S.mode = who; S.onboarded = true; save(); track(who); track('goal_' + g); hud(); pwClose();
-    if (g === 'life' && window.TT_openLife) window.TT_openLife(); else openStage(g === 'money' ? TRACK.money[0] : 's1'); };
+  pwShow(`<div class="eyebrow">Welcome to Bullsburg</div><h2 id="pw-title">Start with a 2-minute lesson</h2>
+    <div class="ob-goals"><button class="ob-goal ob-main" data-g="invest"><span aria-hidden="true">📈</span><b>Buy my first stock</b><small>Learn what a stock is in 2 minutes, then trade with pretend money</small></button></div>
+    <p class="fine ob-or">Or start somewhere else:</p>
+    <div class="ob-alt"><button class="ob-goal ob-mini" data-g="money"><span aria-hidden="true">💵</span><b>Money basics</b></button><button class="ob-goal ob-mini" data-g="life"><span aria-hidden="true">🏠</span><b>Life After 18</b></button><button class="ob-goal ob-mini" data-g="wise"><span aria-hidden="true">🎓</span><b>W!SE test prep</b></button></div>
+    ${window.TT_SB && window.TT_SB.url ? '<p style="margin-top:12px;text-align:center"><button class="linkish" id="ob-student">🎓 My school gave me Bullsburg</button></p>' : ''}`);
+  const pick = g => { S.onboarded = true; save(); if (g !== 'wise') track('goal_' + g); track(S.mode); hud(); pwClose();
+    if (g === 'life' && window.TT_openLife) window.TT_openLife(); else if (g === 'wise' && window.TT_openWise) window.TT_openWise(); else openStage(g === 'money' ? TRACK.money[0] : 's1'); };
   document.querySelectorAll('.ob-goal').forEach(b => b.onclick = () => pick(b.dataset.g));
   const obs = $('#ob-student'); if (obs) obs.onclick = () => { S.mode = 'kid'; S.onboarded = true; save(); hud(); pwClose(); if (window.TT_openStudent) window.TT_openStudent(); };
 }
 $('#h-streak').onclick = openDaily;
 /* ================= global controls ================= */
-document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { S.mode = b.dataset.mode; save(); hud(); const lt = $('#ltext'); if (lt && Q && !Q.boss) lt.innerHTML = S.mode === 'kid' ? BYID[Q.id].kid : BYID[Q.id].adult; });
+document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { S.mode = b.dataset.mode; save(); hud(); const lt = $('#ltext'); if (lt && Q && !Q.boss) { lt.innerHTML = S.mode === 'kid' ? BYID[Q.id].kid : BYID[Q.id].adult; pageLesson(); } });
 $('#teacher').checked = !!S.teacher; $('#teacher').onchange = e => { S.teacher = e.target.checked; save(); hud(); if (TAB === 'map' && !$('#map-home').hidden) renderMap(); else go(TAB, TAB === 'map'); };
 let raArm = false; $('#resetall').onclick = () => { if (!raArm) { raArm = true; $('#resetall').textContent = 'Tap again to erase all progress'; setTimeout(() => { raArm = false; $('#resetall').textContent = 'Reset progress'; }, 3000); return; }
   Object.assign(S, { xp: 0, stars: {}, missions: {}, best: 0, mkt: newMarket() }); /* purchase (S.full) is kept */ save(); raArm = false; $('#resetall').textContent = 'Reset progress'; hud(); tape(); go('map'); toast('Progress reset. Welcome back, rookie.'); };
