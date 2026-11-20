@@ -958,3 +958,4 @@ var ES = {
 "It avoids all taxes": "Evita todos los impuestos",
 "Pay yourself first, automatically.": "Págate primero a ti, de forma automática."
 };
+if (typeof WISE_MORE_ES !== 'undefined') Object.assign(ES, WISE_MORE_ES);

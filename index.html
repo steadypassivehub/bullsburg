@@ -707,6 +707,7 @@ html,body{overflow-wrap:break-word}img,video,svg,canvas,iframe{max-width:100%}pr
 </div>
 
 <script src="money.js"></script>
+<script src="wise_more.js"></script>
 <script>
 /* ================= data ================= */
 const RANKS = [
@@ -1187,6 +1188,7 @@ const GEN = {
    return mk(`On ${$$(A)}, what does a ${f}% expense ratio cost per year?`, $$(A * f / 100), [$$(A * f / 10), $$(A * f / 1000), $$(A * f)], `${f}% of ${$$(A)} = ${$$(A * f / 100)}.`); }]
 };
 if (typeof MONEY_QB !== 'undefined') { Object.assign(QB, MONEY_QB); Object.assign(GEN, MONEY_GEN); }
+if (typeof WISE_MORE !== 'undefined') for (const k in WISE_MORE) QB[k] = (QB[k] || []).concat(WISE_MORE[k]);
 /* Every question gets a stable key so the Study Hall can remember it. */
 L.forEach(s => { if (s.boss) return; s.quiz.forEach((q, i) => q.key = s.id + ':' + i);
   (QB[s.id] || []).forEach((a, j) => s.quiz.push({ q: a[0], o: [a[1], ...a[2]], why: a[3], key: s.id + ':x' + j }));
