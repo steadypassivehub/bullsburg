@@ -81,6 +81,13 @@
     '<tr><td colspan="3" class="muted">No players yet.</td></tr>';
   const boardTable = (rows, kind, n, me) => `<table><thead><tr><th class="n">#</th><th>Player</th><th class="n">${kind === 'market' ? 'Worth' : 'Points'}</th></tr></thead><tbody>${boardRows(rows, kind, n, me)}</tbody></table>`;
 
+  /* Teams: the teacher's screen splits the class into balanced teams and ranks them by their AVERAGE score, so team size doesn't matter. */
+  const TEAM_NAMES = ['Bulls', 'Bears', 'Eagles', 'Wolves', 'Falcons', 'Sharks'], TEAM_COL = ['#1F7A5A', '#B8893B', '#2F6FB0', '#7A4FB0', '#C2463D', '#2C8C8C'];
+  const teamBoard = (rows, teams, n, kind) => { const t = TEAM_NAMES.slice(0, n).map((name, i) => ({ i, name, sum: 0, k: 0 }));
+    (rows || []).forEach(r => { const ti = teams[r.name]; if (ti != null && t[ti]) { t[ti].sum += kind === 'market' ? +r.value || 0 : +r.score || 0; t[ti].k++; } });
+    return t.map(x => ({ i: x.i, name: x.name, k: x.k, avg: x.k ? Math.round(x.sum / x.k) : 0 })).sort((a, b) => b.avg - a.avg); };
+  const teamTable = (tb, kind) => `<table><thead><tr><th class="n">#</th><th>Team</th><th class="n">Players</th><th class="n">${kind === 'market' ? 'Avg. worth' : 'Avg. points'}</th></tr></thead><tbody>${tb.map((t, j) => `<tr><td class="n">${j + 1}</td><td><b style="color:${TEAM_COL[t.i]}">● Team ${esc(t.name)}</b></td><td class="n">${t.k}</td><td class="n">${kind === 'market' ? usd0(t.avg) : Number(t.avg).toLocaleString('en-US')}</td></tr>`).join('')}</tbody></table>`;
+
   /* =====================================================================
      HOST (the teacher's projector screen)
      ===================================================================== */
@@ -106,11 +113,12 @@
            <label class="lv-f">Starting cash<select id="lvo-c"><option value="10000" selected>$10,000</option><option value="1000">$1,000</option></select></label>`
         : `<label class="lv-f">Topic<select id="lvo-t"><option value="">All W!SE topics (mixed)</option>${topics.map(t => `<option value="${esc(t.id)}">${esc(t.name)}</option>`).join('')}</select></label>
            <label class="lv-f">Questions<select id="lvo-n"><option>5</option><option selected>10</option><option>15</option></select></label>
-           <label class="lv-f">Time per question<select id="lvo-s"><option value="15">15 seconds</option><option value="20" selected>20 seconds</option><option value="30">30 seconds</option></select></label>`}</div>
+           <label class="lv-f">Time per question<select id="lvo-s"><option value="15">15 seconds</option><option value="20" selected>20 seconds</option><option value="30">30 seconds</option></select></label>`}
+        <label class="lv-f">Play as<select id="lvo-tm"><option value="0">Individuals</option><option value="2">2 teams</option><option value="3">3 teams</option><option value="4">4 teams</option><option value="5">5 teams</option><option value="6">6 teams</option></select></label></div>
         <div class="lv-msg" id="lvo-err" aria-live="polite"></div><button class="btn sun" id="lvo-go" style="margin-top:6px;font-size:18px;padding:12px 22px">Open the lobby</button></div></div>`;
     el.querySelector('#lvo-go').onclick = async function () {
       const b = this; b.disabled = true; b.textContent = 'Opening…';
-      H.n = +el.querySelector('#lvo-n').value; H.secs = +el.querySelector('#lvo-s').value;
+      H.n = +el.querySelector('#lvo-n').value; H.secs = +el.querySelector('#lvo-s').value; H.tn = +el.querySelector('#lvo-tm').value || 0; H.teams = {};
       let pub;
       if (kind === 'market') {
         if (!MD()) { b.disabled = false; b.textContent = 'Open the lobby'; el.querySelector('#lvo-err').textContent = 'Market Day needs the latest Bullsburg page. Refresh and try again.'; return; }
@@ -135,8 +143,11 @@
         await sleep(2000);
       }
     }
+    function syncTeams() { if (!H.tn || !H.data) return; const size = Array(H.tn).fill(0); Object.values(H.teams).forEach(t => size[t]++);
+      (H.data.board || []).map(r => r.name).filter(nm => H.teams[nm] == null).sort().forEach(nm => { const t = size.indexOf(Math.min(...size)); H.teams[nm] = t; size[t]++; }); }
     async function step(phase, round, pub, secret) {
       if (H.busy) return; H.busy = true;
+      if (H.tn && phase !== 'lobby') { syncTeams(); pub = Object.assign({}, pub, { teams: H.teams, tn: H.tn, tboard: teamBoard(H.data.board, H.teams, H.tn, kind) }); }
       try { await C.rpc('live_set', { p_game: H.id, p_phase: phase, p_round: round, p_pub: pub, p_secret: secret || null }, true);
         const d = await C.rpc('live_host', { p_game: H.id }, true); if (d) H.data = d; H.drawn = null; render(); }
       catch (e) { toast('Connection hiccup. Try that again.'); }
@@ -165,26 +176,30 @@
         const an = document.getElementById('h-ans'); if (an) an.textContent = d.answered + ' of ' + d.players + ' answered';
         const nm = document.getElementById('h-names'); if (nm) nm.innerHTML = d.board.map(r => `<span>${esc(r.name)}</span>`).join('') || '<span class="muted">Waiting for students…</span>';
         const lb = document.getElementById('h-board'); if (lb) lb.innerHTML = boardRows(d.board, kind, 10);
+        const tbx = document.getElementById('h-teams'); if (tbx && H.tn) { syncTeams(); tbx.innerHTML = teamTable(teamBoard(d.board, H.teams, H.tn, kind), kind); }
         if (kind === 'quiz' && d.phase === 'question' && d.players > 0 && d.answered >= d.players) { clearInterval(H.tick); reveal(); }
         return;
       }
       H.drawn = key; clearInterval(H.tick); const p = d.pub || {}; let body = '';
+      if (H.tn && d.phase !== 'lobby') syncTeams();
+      const teamsCard = H.tn && d.phase !== 'lobby' ? `<div class="card" style="margin-top:12px"><h2>Teams</h2><div id="h-teams">${teamTable(teamBoard(d.board, H.teams, H.tn, kind), kind)}</div></div>` : '';
       if (d.phase === 'lobby') {
         body = `<h1>Join ${title}!</h1><p style="font-size:clamp(17px,2vw,24px);margin:12px 0">Open Bullsburg on your device and sign in to <b>${esc(clsName)}</b>. A <b>Join</b> button pops up at the bottom of the screen.</p>
           <div class="lv-stat"><div><span>Players</span><b id="h-players">${d.players}</b></div></div>
           <div class="lv-names" id="h-names">${d.board.map(r => `<span>${esc(r.name)}</span>`).join('') || '<span class="muted">Waiting for students…</span>'}</div>
+          ${H.tn ? `<p style="font-size:18px;margin:14px 0 0"><b>Team game:</b> when you start, Bullsburg splits the class into ${H.tn} even teams. Teams are ranked by their average, so every player counts.</p>` : ''}
           <button class="btn sun" id="h-next" style="margin-top:20px;font-size:20px;padding:14px 26px">Start the game</button>
           ${kind === 'market' ? `<h2 style="margin-top:26px">The companies</h2><p style="margin:0 0 10px">Students can research charts, company facts and options while they wait, and place limit orders before trading opens.</p>${MD().hostTiles(p, 'lobby', 0)}` : ''}`;
       } else if (kind === 'market' && d.phase === 'trade') {
         body = `<div class="lv-row" style="justify-content:space-between"><span class="eyebrow">Week ${d.round} of ${p.rounds} · Market is open</span><span class="lv-big" id="h-clock" aria-label="Time left">-</span></div>
           <div class="lv-news"><span class="eyebrow">Breaking news</span><div class="h">${esc(p.head)}</div></div>
-          <div class="lv-grid" style="grid-template-columns:minmax(0,2fr) minmax(260px,1fr)"><div>${MD().hostTiles(p, 'trade', d.round)}</div><div class="card"><h2>Leaders</h2>${boardTable(d.board, kind, 10).replace('<tbody>', '<tbody id="h-board">')}</div></div>
+          <div class="lv-grid" style="grid-template-columns:minmax(0,2fr) minmax(260px,1fr)"><div>${MD().hostTiles(p, 'trade', d.round)}</div><div class="card"><h2>Leaders</h2>${boardTable(d.board, kind, 10).replace('<tbody>', '<tbody id="h-board">')}</div></div>${teamsCard}
           <div class="lv-row" style="margin-top:16px"><button class="btn sun" id="h-next" style="font-size:18px;padding:12px 22px">Close the market and play the week</button><button class="btn ghost" id="h-more">+30 seconds</button></div>`;
       } else if (kind === 'market' && d.phase === 'results') {
         const last = d.round >= p.rounds;
         body = `<span class="eyebrow">Week ${d.round} of ${p.rounds} · Market closed</span>
           <div class="lv-news"><div class="h">${esc(p.head)}</div><div class="lv-why"><b>Why prices moved:</b> ${esc(p.why)}</div></div>
-          <div class="lv-grid" style="grid-template-columns:minmax(0,2fr) minmax(260px,1fr)"><div>${MD().hostTiles(p, 'results', d.round)}${MD().hostWeekNews(p, d.round)}</div><div class="card"><h2>Leaders</h2>${boardTable(d.board, kind, 10).replace('<tbody>', '<tbody id="h-board">')}</div></div>
+          <div class="lv-grid" style="grid-template-columns:minmax(0,2fr) minmax(260px,1fr)"><div>${MD().hostTiles(p, 'results', d.round)}${MD().hostWeekNews(p, d.round)}</div><div class="card"><h2>Leaders</h2>${boardTable(d.board, kind, 10).replace('<tbody>', '<tbody id="h-board">')}</div></div>${teamsCard}
           <button class="btn sun" id="h-next" style="margin-top:16px;font-size:18px;padding:12px 22px">${last ? 'See the final results' : 'Next week'}</button>`;
       } else if (kind === 'quiz' && d.phase === 'question') {
         body = `<div class="lv-row" style="justify-content:space-between"><span class="eyebrow">Question ${d.round} of ${p.rounds} · ${esc(p.topic || '')}</span><span class="lv-big" id="h-clock" aria-label="Time left">-</span></div>
@@ -196,12 +211,13 @@
         body = `<span class="eyebrow">Question ${d.round} of ${p.rounds}</span><h1 style="margin:8px 0 4px">${esc(p.q)}</h1>
           <div class="lv-opts">${(p.o || []).map((t, j) => { const c = (p.counts || {})[j] || 0; return `<div class="lv-opt ${j === p.right ? 'right' : ''}" style="flex-direction:column;align-items:stretch"><span class="lv-row"><span class="k">${LETTERS[j]}</span>${esc(t)}${j === p.right ? ' ✓' : ''}</span><span class="muted" style="font-size:14px">${c} student${c === 1 ? '' : 's'}</span><span class="lv-bar"><i style="width:${total ? Math.round(100 * c / total) : 0}%"></i></span></div>`; }).join('')}</div>
           ${p.why ? `<div class="lv-news"><div class="lv-why" style="margin:0"><b>Why:</b> ${esc(p.why)}</div></div>` : ''}
-          <div class="card"><h2>Leaders</h2>${boardTable(d.board, kind, 5).replace('<tbody>', '<tbody id="h-board">')}</div>
+          <div class="card"><h2>Leaders</h2>${boardTable(d.board, kind, 5).replace('<tbody>', '<tbody id="h-board">')}</div>${teamsCard}
           <button class="btn sun" id="h-next" style="margin-top:16px;font-size:18px;padding:12px 22px">${last ? 'See the final results' : 'Next question'}</button>`;
       } else if (d.phase === 'over') {
         const b = d.board, cell = (r, n) => r ? `<div class="${n === 1 ? 'p1' : ''}"><div class="rk">#${n}</div><div style="font-size:22px;font-weight:800;margin-top:4px">${esc(r.name)}</div><div class="mono">${kind === 'market' ? usd0(r.value) : Number(r.score).toLocaleString('en-US') + ' pts'}</div></div>` : '<div></div>';
-        body = `<h1>Final results</h1><div class="lv-pod">${cell(b[1], 2)}${cell(b[0], 1)}${cell(b[2], 3)}</div>
-          <div class="card"><h2>Everyone</h2>${boardTable(b, kind, 50)}</div>
+        const tw = H.tn ? teamBoard(b, H.teams, H.tn, kind)[0] : null;
+        body = `<h1>Final results</h1>${tw && tw.k ? `<p style="font-size:24px;margin:6px 0 12px">🏆 <b style="color:${TEAM_COL[tw.i]}">Team ${esc(tw.name)}</b> wins the team game!</p>` : ''}<div class="lv-pod">${cell(b[1], 2)}${cell(b[0], 1)}${cell(b[2], 3)}</div>
+          ${teamsCard}<div class="card"><h2>Everyone</h2>${boardTable(b, kind, 50)}</div>
           ${kind === 'market' ? '<p style="font-size:18px;margin-top:14px"><b>Talk about it:</b> Who spread their money across several companies? Who bet on one? Which news surprised you, and what would you do differently with real money?</p>' : ''}
           <a class="btn sun" href="teacher.html" style="margin-top:12px;display:inline-block;font-size:18px;padding:12px 22px">Back to the dashboard</a>`;
       }
@@ -254,7 +270,9 @@
     const g = P.game; if (!g) return; const el = shell(), me = g.me || {}, p = g.pub || {}, kind = g.kind, key = g.phase + ':' + g.round;
     if (P.drawn === key) return updateNums();
     P.drawn = key; clearInterval(P.tick); let body = '';
-    const top = `<div class="lv-top"><span class="lv-pill"><span class="lv-dot"></span>Live · ${kind === 'market' ? 'Market Day' : 'Quiz Battle'}</span><button class="btn ghost" id="lv-leave">${g.phase === 'over' ? 'Done' : 'Leave'}</button></div>`;
+    const myName = typeof S !== 'undefined' && S.sch && S.sch.name, myT = p.teams && myName != null ? p.teams[myName] : null;
+    const tpill = myT != null && TEAM_NAMES[myT] ? `<span class="lv-pill" style="border-color:${TEAM_COL[myT]};color:${TEAM_COL[myT]}">● Team ${TEAM_NAMES[myT]}</span>` : '';
+    const top = `<div class="lv-top"><span class="lv-row"><span class="lv-pill"><span class="lv-dot"></span>Live · ${kind === 'market' ? 'Market Day' : 'Quiz Battle'}</span>${tpill}</span><button class="btn ghost" id="lv-leave">${g.phase === 'over' ? 'Done' : 'Leave'}</button></div>`;
     const stats = kind === 'market'
       ? `<div class="lv-stat"><div><span>Cash</span><b id="s-cash">${usd(me.cash)}</b></div><div><span>Total worth</span><b id="s-val">${usd(me.value)}</b></div><div><span>Rank</span><b id="s-rank">#${me.rank || '-'}</b></div></div>`
       : `<div class="lv-stat"><div><span>Points</span><b id="s-score">${Number(me.score || 0).toLocaleString('en-US')}</b></div><div><span>Rank</span><b id="s-rank">#${me.rank || '-'}</b></div></div>`;
@@ -279,7 +297,7 @@
       P.lastScore = me.score || 0;
     } else if (g.phase === 'over') {
       body = `<h1>Game over!</h1><p style="font-size:20px;margin:10px 0">You finished <b>#${me.rank || '-'}</b>${kind === 'market' ? ' with ' + usd(me.value) : ' with ' + Number(me.score || 0).toLocaleString('en-US') + ' points'}.</p>
-        <div class="card"><h2>Top players</h2>${boardTable(g.top, kind, 5, typeof S !== 'undefined' && S.sch && S.sch.name)}</div>`;
+        ${p.tboard ? `<div class="card"><h2>Teams</h2>${teamTable(p.tboard, kind)}</div>` : ''}<div class="card"><h2>Top players</h2>${boardTable(g.top, kind, 5, typeof S !== 'undefined' && S.sch && S.sch.name)}</div>`;
     }
     el.innerHTML = `<div class="lv-w">${top}${body}</div>`;
     el.querySelector('#lv-leave').onclick = leave;

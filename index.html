@@ -167,6 +167,9 @@ canvas { display: block; width: 100%; touch-action: pan-y; }
 .hearts .gone { color: var(--line); }
 .qcard { margin-top: 12px; }
 .qcard .q { font-family: var(--f-display); font-size: 23px; font-weight: 700; line-height: 1.25; }
+.warm { margin: 6px 0 14px; border: 2px dashed var(--line); }
+.warm .opt.picked { outline: 2px solid var(--accent); outline-offset: 1px; }
+.warm .qhead { display: flex; justify-content: space-between; align-items: center; }
 .opts { display: grid; gap: 10px; margin-top: 14px; }
 .opt { text-align: left; border: 2px solid var(--line); background: var(--surface); border-radius: 13px; padding: 12px 14px; font-size: 16.5px; font-weight: 700; box-shadow: 0 3px 0 var(--line); display: flex; gap: 12px; align-items: center; }
 .opt .k { flex: none; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: var(--surface2); border: 1px solid var(--line); font-family: var(--f-mono); font-size: 13px; }
@@ -1310,7 +1313,7 @@ function bankOf(id) { const s = BYID[id]; return (s.quiz || []).concat(s.gens ||
 function drawQs(items, n, r = Math.random) { const seen = k => (S.ql[k] || [0])[0];
   return shuffle(items, r).sort((a, b) => Math.min(seen(a.key), 3) - Math.min(seen(b.key), 3)).slice(0, n).map(it => realize(it, r)); }
 const KEYQ = {}; L.forEach(s => (s.quiz || []).concat(s.gens || []).forEach(q => { if (q.key) KEYQ[q.key] = q; }));
-function logQ(q, ok) { if (!q || !q.key) return; const e = S.ql[q.key] || [0, 0, 1]; e[0]++; if (!ok) e[1]++; e[2] = ok ? 1 : 0; S.ql[q.key] = e;
+function logQ(q, ok) { if (!q || !q.key) return; const e = S.ql[q.key] || [0, 0, 1]; e[0]++; if (!ok) e[1]++; e[2] = ok ? 1 : 0; S.ql[q.key] = e; srLog(q.key, ok);
   if (KEYQ[q.key] && KEYQ[q.key].gen) S.qg[q.key] = [q.q, q.o[0], q.why]; save(); }
 function sma(a, k) { return a.map((_, i) => i < k - 1 ? null : a.slice(i - k + 1, i + 1).reduce((s, x) => s + x, 0) / k); }
 
@@ -1494,7 +1497,21 @@ function openStage(id) { const s = BYID[id]; if (paid(id)) return openPaywall();
       <h2>${s.title}</h2><div class="lesson-text" id="ltext">${S.mode === 'kid' ? s.kid : s.adult}</div><div class="terms">${s.terms.map(t => `<span>${t}</span>`).join('')}</div>
       <div id="widget"></div><div class="quiz card" id="quiz"></div></div>`;
     if (s.widget) WIDGETS[s.widget.split(':')[0]]($('#widget'), s.widget.split(':')[1]); }
-  $('#back').onclick = () => showMap(); renderQ(); if (!s.boss) pageLesson(); window.scrollTo({ top: 0, behavior: 'auto' }); }
+  $('#back').onclick = () => showMap(); renderQ(); if (!s.boss) { pageLesson(); if (!S.stars[id] && !(S.wu && S.wu[id])) warmUp(id); } window.scrollTo({ top: 0, behavior: 'auto' }); }
+/* Warm-up: 2 guesses before a new lesson (the pretesting effect). They don't count against the player, and the same questions come back in the checkpoint. */
+function warmUp(id) { const lt = $('#ltext'); if (!lt || !Q.qs.length) return; const hide = [lt, $('#lpager'), ...['.terms', '#widget', '#quiz'].map(q => lt.parentElement.querySelector(q))].filter(Boolean);
+  const was = hide.map(e => e.hidden); hide.forEach(e => e.hidden = true); const qs = Q.qs.slice(0, 2); let i = 0, got = 0;
+  const w = document.createElement('div'); w.className = 'card warm'; w.id = 'warm'; lt.before(w);
+  const done = skip => { if (!skip) { S.wu = S.wu || {}; S.wu[id] = [got, qs.length]; save(); track('warmup'); } w.remove(); hide.forEach((e, k) => e.hidden = was[k]); };
+  const step = () => { const q = qs[i], order = shuffle(q.o.map((t, k) => ({ t, k })));
+    w.innerHTML = `<div class="qhead"><span class="eyebrow">${tt('Warm-up')} ${i + 1} / ${qs.length}</span><button class="linkish" id="wu-skip">${tt('Skip')}</button></div><p class="muted" style="margin:6px 0 4px">${tt('Take a guess before the lesson. Guessing first, even if you’re wrong, helps you remember more. It doesn’t count against you.')}</p><div class="qcard"><div class="q">${q.q}</div><div class="opts">${order.map((x, j) => `<button class="opt" data-k="${x.k}"><span class="k">${'ABCD'[j]}</span>${x.t}</button>`).join('')}</div></div>`;
+    $('#wu-skip').onclick = () => done(true);
+    w.querySelectorAll('.opt').forEach(b => b.onclick = () => { if (+b.dataset.k === 0) got++; w.querySelectorAll('.opt').forEach(o => o.disabled = true); b.classList.add('picked');
+      setTimeout(() => { i++; if (i < qs.length) return step();
+        w.innerHTML = `<div class="eyebrow">${tt('Warm-up done')}</div><p style="margin:6px 0 12px">${tt('Keep your guesses in mind. The lesson has the answers, and the same questions come back in the checkpoint.')}</p><button class="btn sun" id="wu-go">${tt('Start the lesson')}</button>`;
+        $('#wu-go').onclick = () => done(false); $('#wu-go').focus(); }, 450); }); };
+  step(); }
+const tt = x => (window.TT_t ? window.TT_t(x) : x);
 /* Lessons read as short cards: a few sentences at a time, then the activity and quiz. */
 function pageLesson() { const lt = $('#ltext'); if (!lt) return; const old = $('#lpager'); if (old) old.remove();
   const rest = ['.terms', '#widget', '#quiz'].map(q => lt.parentElement.querySelector(q)).filter(Boolean);
@@ -1511,7 +1528,7 @@ function pageLesson() { const lt = $('#ltext'); if (!lt) return; const old = $('
 function renderQ() { const box = $('#quiz'); const q = Q.qs[Q.i]; const n = Q.qs.length;
   if (!q) return Q.practice ? finishPractice() : finishStage();
   const order = shuffle(q.o.map((t, k) => ({ t, k })));
-  box.innerHTML = `<div class="qhead"><span class="eyebrow">${Q.practice ? 'Practice' : Q.boss ? 'Boss question' : 'Checkpoint'} ${Q.i + 1} of ${n}</span>${Q.practice ? '<span class="mono muted" style="font-size:12px">Study mode</span>' : Q.boss ? `<span class="hearts" aria-label="${Q.hearts} hearts left">${[0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('')}</span>` : '<span class="mono muted" style="font-size:12px">+20 XP if right first try</span>'}</div>
+  box.innerHTML = `<div class="qhead"><span class="eyebrow">${Q.practice ? (Q.review ? tt('Review') : 'Practice') : Q.boss ? 'Boss question' : 'Checkpoint'} ${Q.i + 1} of ${n}</span>${Q.practice ? '<span class="mono muted" style="font-size:12px">Study mode</span>' : Q.boss ? `<span class="hearts" aria-label="${Q.hearts} hearts left">${[0, 1, 2].map(i => i < Q.hearts ? '♥' : '<span class="gone">♥</span>').join('')}</span>` : '<span class="mono muted" style="font-size:12px">+20 XP if right first try</span>'}</div>
     <div class="qprog"><i style="width:${Q.i / n * 100}%"></i></div><div class="qcard"><div class="q">${q.q}</div><div class="opts">${order.map((x, j) => `<button class="opt" data-k="${x.k}"><span class="k">${'ABCD'[j]}</span>${x.t}</button>`).join('')}</div><div id="why"></div></div>`;
   let tried = false;
   box.querySelectorAll('.opt').forEach(b => b.onclick = () => { const right = +b.dataset.k === 0; if (!tried) logQ(q, right);
@@ -1536,6 +1553,7 @@ function graduation(stars) { $('#quiz').innerHTML = `<div class="grad"><div clas
   <div class="row" style="justify-content:center;margin-top:18px"><button class="btn sun" id="g-mkt">Keep practicing in the market</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
   $('#g-mkt').onclick = () => go('market'); $('#tomap2').onclick = () => showMap(); }
 function finishStage() { const s = BYID[Q.id]; const stars = Q.boss ? Q.hearts : (Q.miss === 0 ? 3 : Q.miss === 1 ? 2 : 1); const prev = S.stars[Q.id] || 0; const first = !prev;
+  if (!Q.boss && S.wu && S.wu[Q.id] && S.wu[Q.id].length === 2) S.wu[Q.id].push(Q.qs.length - Q.miss, Q.qs.length);
   S.stars[Q.id] = Math.max(prev, stars); save(); markActive(); let bonus = 0;
   if (first) bonus = Q.boss ? 150 : 50; else if (stars > prev) bonus = 10 * (stars - prev);
   const tl = TRACK[trackOf(Q.id)], nextId = tl[tl.indexOf(Q.id) + 1]; S.cl = S.cl || {}; S.cl[Q.id] = Date.now(); const unlockTxt = first && s.unlock ? `<p><b>Unlocked: ${{ market: 'Practice Market', charts: 'Chart Lab', options: 'Options Lab' }[s.unlock]}!</b></p>` : '';
@@ -2180,18 +2198,36 @@ function openStudy(focusId) { go('map', true); $('#map-home').hidden = true; con
   st.querySelectorAll('[data-relesson]').forEach(b => b.onclick = () => openStage(b.dataset.relesson));
   $('#sh-practice').onclick = () => startPractice(Object.values(all).flat().filter(x => x.last === 0).map(x => x.k));
   if (focusId && $('#sh-' + focusId)) $('#sh-' + focusId).scrollIntoView({ block: 'start' }); else window.scrollTo({ top: 0, behavior: 'auto' }); }
-function startPractice(keys) { const qs = shuffle(keys).slice(0, 10).map(k => realize(KEYQ[k])); if (!qs.length) return;
+function startPractice(keys, review) { const qs = shuffle(keys).slice(0, 10).map(k => realize(KEYQ[k])); if (!qs.length) return;
   go('map', true); $('#map-home').hidden = true; const st = $('#stage'); st.hidden = false;
-  Q = { id: null, qs, i: 0, miss: 0, boss: false, practice: true };
+  Q = { id: null, qs, i: 0, miss: 0, boss: false, practice: true, review: !!review };
   st.innerHTML = `<div class="stage"><div class="stage-top"><button class="btn ghost" id="back">← Study Hall</button><span class="eyebrow">Study Hall · Practice</span></div><h2>Practice round</h2><p class="lesson-text" style="font-size:16.5px">Questions you missed before, in a new order. Number questions get new numbers. Get one right and it leaves your review list.</p><div class="quiz card" id="quiz"></div></div>`;
-  $('#back').onclick = () => openStudy(); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' }); }
+  if (review) { st.querySelector('.stage-top .eyebrow').textContent = tt('Spaced review'); st.querySelector('h2').textContent = tt('Spaced review'); st.querySelector('.lesson-text').textContent = tt('Questions from earlier lessons come back on a schedule: after 1 day, 3 days, a week, two weeks, then a month. Remembering after a gap is what makes learning stick.'); $('#back').textContent = tt('← Map'); }
+  $('#back').onclick = () => review ? showMap() : openStudy(); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' }); }
 function finishPractice() { const n = Q.qs.length, ok = n - Q.miss;
+  if (Q.review) { const left = srDue().length; addXP(5 * ok + 5); markActive(); track('review');
+    $('#quiz').innerHTML = `<div class="win"><h3>${ok} / ${n} ✓</h3><p>${tt('Questions you got right come back later. The ones you missed come back tomorrow.')}${left ? ' ' + tt('Still due today:') + ' ' + left : ''}</p><div class="row">${left ? `<button class="btn sun" id="p-more">${tt('Review more')}</button>` : ''}<button class="btn ${left ? 'ghost' : 'sun'}" id="tomap2">${tt('Back to map')}</button></div></div>`;
+    const pm = $('#p-more'); if (pm) pm.onclick = startReview; $('#tomap2').onclick = () => showMap(); return; }
   $('#quiz').innerHTML = `<div class="win"><h3>${ok} of ${n} right on the first try</h3><p>${Q.miss ? 'Keep going. The ones you missed stay in your review list.' : 'All cleared from your review list!'}</p><div class="row"><button class="btn sun" id="p-again">Back to Study Hall</button><button class="btn ghost" id="tomap2">Back to map</button></div></div>`;
   $('#p-again').onclick = () => openStudy(); $('#tomap2').onclick = () => showMap(); }
 
 /* ================= daily streak, daily quiz, grown-up report, onboarding ================= */
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const dayDiff = (a, b) => Math.round((new Date(b + 'T12:00') - new Date(a + 'T12:00')) / 864e5);
+/* ---- Spaced review: every answered question comes back after 1, 3, 7, 14, then 30 days; a miss resets it to tomorrow ---- */
+const SR_GAP = [1, 1, 3, 7, 14, 30];
+const addDays = (k, n) => { const d = new Date(k + 'T12:00'); d.setDate(d.getDate() + n); return dayKey(d); };
+function srOf(k) { S.sr = S.sr || {}; let e = S.sr[k]; if (!e) { const l = S.ql[k]; if (!l) return null; e = S.sr[k] = l[2] ? [1, addDays(dayKey(), 3)] : [0, dayKey()]; } return e; }
+function srLog(k, ok) { S.sr = S.sr || {}; const e = S.sr[k] || [0, '']; e[0] = ok ? Math.min(e[0] + 1, SR_GAP.length - 1) : 0; e[1] = addDays(dayKey(), SR_GAP[e[0]]); S.sr[k] = e; }
+function srDue() { const t = dayKey(); return Object.keys(S.ql).filter(k => KEYQ[k]).filter(k => { const e = srOf(k); return e && e[1] <= t; }); }
+function startReview() { const due = srDue(); if (!due.length) return toast(tt('Nothing to review today. Come back tomorrow!'));
+  startPractice(shuffle(due).sort((a, b) => S.sr[a][1] < S.sr[b][1] ? -1 : S.sr[a][1] > S.sr[b][1] ? 1 : 0).slice(0, 10), true); }
+/* ---- Minutes of active learning per day (shown to teachers as time this week) ---- */
+let _act = Date.now(); ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(e => addEventListener(e, () => { _act = Date.now(); }, { passive: true }));
+setInterval(() => { if (document.visibilityState !== 'visible' || Date.now() - _act > 120000 || /[?&]host=/.test(location.search)) return; S.mins = S.mins || {}; const k = dayKey(); S.mins[k] = (S.mins[k] || 0) + 1;
+  const ks = Object.keys(S.mins).sort(); while (ks.length > 120) delete S.mins[ks.shift()]; save(); }, 60000);
+function minsIn(days) { let t = 0; for (let i = 0; i < days; i++) { const d = new Date(); d.setDate(d.getDate() - i); t += (S.mins || {})[dayKey(d)] || 0; } return t; }
+function warmStats() { let a = 0, b = 0, c = 0, d = 0, n = 0; for (const id in (S.wu || {})) { const w = S.wu[id]; if (w.length === 4) { a += w[0]; b += w[1]; c += w[2]; d += w[3]; n++; } } return n ? { before: Math.round(100 * a / b), after: Math.round(100 * c / d), lessons: n } : null; }
 const STREAK_REWARDS = { 3: 500, 7: 1500, 14: 3000, 30: 5000, 60: 8000, 100: 15000 };
 function stk() { S.streak = Object.assign({ n: 0, best: 0, last: '', fz: 0, days: [] }, S.streak || {}); return S.streak; }
 function streakAlive() { const k = stk(); if (!k.last) return 0; const g = dayDiff(k.last, dayKey()); return g <= 1 + k.fz ? k.n : 0; }
@@ -2207,8 +2243,8 @@ function weekRow() { const k = stk(), out = []; for (let i = 6; i >= 0; i--) { c
 function dqReady() { return !S.dq || S.dq.day !== dayKey(); }
 function renderToday() { const c = $('#today-card'); if (!c) return; const done = stk().last === dayKey(), n = streakAlive();
   c.innerHTML = `<h3>Today</h3><div class="daily" style="margin-top:10px"><div class="goal"><div class="ring" style="--p:${done ? 100 : 0}">${done ? '✓' : '1'}</div><div><b>${done ? 'Daily goal done' : 'Daily goal: play once'}</b><small class="muted">${done ? `${n}-day streak. See you tomorrow!` : 'Clear a stage, play a market day or take the daily quiz.'}</small></div></div>${weekRow()}
-    <button class="btn${dqReady() ? ' sun' : ' ghost'}" id="t-dq">${dqReady() ? 'Daily quiz: up to 300 coins' : `Daily quiz done (${S.dq.score}/3)`}</button><button class="btn ghost" id="t-study">📚 Study Hall: review past questions</button><button class="btn ghost" id="t-rep">Progress report for grown-ups</button></div>`;
-  $('#t-study').onclick = () => openStudy(); $('#t-dq').onclick = openDailyQuiz; $('#t-rep').onclick = openReport;
+    <button class="btn sun" id="t-rev">🔁 ${tt('Review due today:')} ${srDue().length}</button><button class="btn${dqReady() ? ' sun' : ' ghost'}" id="t-dq">${dqReady() ? 'Daily quiz: up to 300 coins' : `Daily quiz done (${S.dq.score}/3)`}</button><button class="btn ghost" id="t-study">📚 Study Hall: review past questions</button><button class="btn ghost" id="t-rep">Progress report for grown-ups</button></div>`;
+  $('#t-study').onclick = () => openStudy(); $('#t-dq').onclick = openDailyQuiz; $('#t-rep').onclick = openReport; $('#t-rev').onclick = startReview; $('#t-rev').hidden = !srDue().length;
   const any = Object.keys(S.stars).length; $('#t-study').hidden = !any; $('#t-rep').hidden = !any; renderStreakChip(); }
 function openDaily() { const k = stk(), n = streakAlive();
   pwShow(`<div class="eyebrow">Your streak</div><h2 id="pw-title">${n} ${n === 1 ? 'day' : 'days'} in a row</h2><p class="muted" style="margin-top:6px">Play once a day to grow your streak. Best ever: ${k.best} days. Streak shields: ${k.fz} of 2 (you earn one every 7 days).</p>
@@ -2240,7 +2276,7 @@ function openReport() { const d = reportData(), k = stk();
   pwShow(`<div class="eyebrow">For grown-ups</div><h2 id="pw-title">Progress report</h2><p class="muted" style="margin-top:6px">A quick look at what your player has learned. Everything stays on this device.</p>
     <div class="rep"><div><span>Level ${d.lvl}</span><b style="font-size:17px">${d.rank}</b></div><div><span>Stages cleared</span><b>${d.cleared} of ${d.total}</b></div><div><span>Stars</span><b>★ ${d.stars}</b></div><div><span>Streak (best)</span><b>${streakAlive()} (${k.best}) days</b></div>
     <div><span>Missions done</span><b>${d.missions} of ${MISSIONS.length}</b></div><div><span>Practice trading profit</span><b class="${d.profit >= 0 ? 'u' : 'd'}">${d.profit >= 0 ? '+' : ''}${money(d.profit)}</b></div></div>
-    <p style="margin-top:12px"><b>Worlds completed:</b> ${d.worlds.length ? d.worlds.join(', ') : 'none yet'}.</p>
+    <p style="margin-top:12px"><b>Worlds completed:</b> ${d.worlds.length ? d.worlds.join(', ') : 'none yet'}.</p>${(() => { const w = warmStats(), m = minsIn(7); return `<p style="margin-top:6px"><b>${tt('Learning time this week:')}</b> ${m} min${w ? ` · <b>${tt('Warm-up guesses vs. after the lesson:')}</b> ${w.before}% → ${w.after}%` : ''}</p>`; })()}${window.TT_familyHTML ? window.TT_familyHTML() : ''}
     <div class="actions" style="margin-top:14px"><button class="btn sun" id="r-share">Share a progress card</button><button class="btn" id="r-note">Send a note home</button><button class="btn ghost" id="r-x">Close</button></div>`);
   $('#r-share').onclick = shareCard; $('#r-x').onclick = pwClose; $('#r-note').onclick = () => window.TT_parentNote && window.TT_parentNote(); }
 async function shareCard() { const d = reportData(), W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');

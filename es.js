@@ -958,4 +958,37 @@ var ES = {
 "It avoids all taxes": "Evita todos los impuestos",
 "Pay yourself first, automatically.": "Págate primero a ti, de forma automática."
 };
+Object.assign(ES, {
+"Warm-up": "Calentamiento",
+"Skip": "Saltar",
+"Take a guess before the lesson. Guessing first, even if you’re wrong, helps you remember more. It doesn’t count against you.": "Adivina antes de la lección. Adivinar primero, aunque te equivoques, te ayuda a recordar más. No cuenta en tu contra.",
+"Warm-up done": "Calentamiento terminado",
+"Keep your guesses in mind. The lesson has the answers, and the same questions come back in the checkpoint.": "Recuerda lo que adivinaste. La lección tiene las respuestas, y las mismas preguntas vuelven en el punto de control.",
+"Start the lesson": "Empezar la lección",
+"Spaced review": "Repaso espaciado",
+"Questions from earlier lessons come back on a schedule: after 1 day, 3 days, a week, two weeks, then a month. Remembering after a gap is what makes learning stick.": "Las preguntas de lecciones anteriores vuelven según un calendario: después de 1 día, 3 días, una semana, dos semanas y luego un mes. Recordar después de un tiempo es lo que hace que el aprendizaje dure.",
+"← Map": "← Mapa",
+"Review": "Repaso",
+"Questions you got right come back later. The ones you missed come back tomorrow.": "Las preguntas que acertaste vuelven más adelante. Las que fallaste vuelven mañana.",
+"Still due today:": "Pendientes hoy:",
+"Review more": "Repasar más",
+"Back to map": "Volver al mapa",
+"Nothing to review today. Come back tomorrow!": "No hay nada que repasar hoy. ¡Vuelve mañana!",
+"Review due today:": "Repaso pendiente hoy:",
+"Learning time this week:": "Tiempo de aprendizaje esta semana:",
+"Warm-up guesses vs. after the lesson:": "Calentamiento vs. después de la lección:",
+"Family challenge": "Reto en familia",
+"A 15-minute activity to do together at home. No need to share private numbers with anyone.": "Una actividad de 15 minutos para hacer juntos en casa. No hace falta compartir números privados con nadie.",
+"Pick a company your family buys from, like a store or a snack brand. Look up its stock symbol together and check the price each day for a week. What news moved it?": "Elijan una empresa a la que su familia le compra, como una tienda o una marca de botanas. Busquen juntos su símbolo en la bolsa y revisen el precio cada día durante una semana. ¿Qué noticias lo movieron?",
+"Talk about a time you paid a little now to lock in something later, like a deposit or a reservation. How is that like buying an option?": "Hablen de una vez que pagaron un poco ahora para asegurar algo después, como un depósito o una reservación. ¿En qué se parece a comprar una opción?",
+"List three things that lose value as time passes, like milk, a coupon or a concert ticket. Talk about why time matters for options too.": "Hagan una lista de tres cosas que pierden valor con el tiempo, como la leche, un cupón o un boleto de concierto. Hablen de por qué el tiempo también importa en las opciones.",
+"Ask a grown-up if they have ever rented something out to earn extra money. Talk about how a covered call is like renting out a stock.": "Pregunta a un adulto si alguna vez ha rentado algo para ganar dinero extra. Hablen de cómo una call cubierta se parece a rentar una acción.",
+"Look up one low-cost index fund together and find its expense ratio. What would it cost per year on $1,000?": "Busquen juntos un fondo indexado de bajo costo y encuentren su comisión anual (expense ratio). ¿Cuánto costaría al año sobre $1,000?",
+"Look at a real or sample pay stub together. Find the gross pay, each tax taken out, and the net pay. Which deduction was biggest?": "Miren juntos un talón de pago real o de ejemplo. Encuentren el pago bruto, cada impuesto descontado y el pago neto. ¿Cuál fue la deducción más grande?",
+"Plan a week of family meals on a set budget. Compare unit prices (price per ounce) and see how close you get to the budget.": "Planeen una semana de comidas en familia con un presupuesto fijo. Comparen precios por unidad (precio por onza) y vean qué tan cerca quedan del presupuesto.",
+"Look at a bank or credit union account together, on paper or in the app. Find any fees and the interest rate. How could you avoid the fees?": "Miren juntos una cuenta de banco o cooperativa de crédito, en papel o en la app. Encuentren los cargos y la tasa de interés. ¿Cómo podrían evitar los cargos?",
+"Look at a credit card offer or statement together. Find the APR and the minimum payment. About how long would it take to pay off the balance with only the minimum?": "Miren juntos una oferta o estado de cuenta de tarjeta de crédito. Encuentren la APR y el pago mínimo. ¿Más o menos cuánto tardarían en pagar el saldo pagando solo el mínimo?",
+"Find one insurance card or policy at home (car, health or renters). Find the deductible and the premium together.": "Busquen en casa una tarjeta o póliza de seguro (de auto, de salud o de inquilino). Encuentren juntos el deducible y la prima.",
+"Use a college or trade school’s net price calculator together, or look up what a first apartment costs near you. Make a rough monthly budget for it.": "Usen juntos la calculadora de precio neto de una universidad o escuela técnica, o busquen cuánto cuesta un primer apartamento cerca de ustedes. Hagan un presupuesto mensual aproximado."
+});
 if (typeof WISE_MORE_ES !== 'undefined') Object.assign(ES, WISE_MORE_ES);
