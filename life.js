@@ -35,9 +35,9 @@
 
   /* ---------- paths after high school ---------- */
   const PATHS = [
-    { id: 'job', icon: '🛒', name: 'Start working', blurb: 'Get a full-time job at a store right away, with health insurance and a steady paycheck. You can go to school later.', job: 'retail', cash: 1000 },
-    { id: 'trade', icon: '⚡', name: 'Learn a trade', blurb: 'A paid electrician apprenticeship. Trade school takes 10 months, then your pay jumps.', job: 'elec', edu: 'trade', cash: 800 },
-    { id: 'college', icon: '🎓', name: 'Go to college', blurb: 'Three years of college with a part-time job. You borrow for tuition, but a degree unlocks the highest-paying careers.', job: 'barista', edu: 'college', cash: 600 }];
+    { id: 'job', icon: '🛒', name: 'Start working', blurb: 'Work full time now. Steady pay.', job: 'retail', cash: 1000 },
+    { id: 'trade', icon: '⚡', name: 'Learn a trade', blurb: 'Paid electrician training. Big raise in 10 months.', job: 'elec', edu: 'trade', cash: 800 },
+    { id: 'college', icon: '🎓', name: 'Go to college', blurb: 'Borrow for college. Unlock top-paying jobs.', job: 'barista', edu: 'college', cash: 600 }];
 
   /* ---------- careers: monthly gross pay at each rank ---------- */
   const JOBS = {
@@ -505,8 +505,8 @@
     $('#back').onclick = () => { closeModal(); stopClock(); showMap(); }; return st; }
   function intro() {
     stopClock();
-    frame('<h2>Life After 18</h2><p class="lesson-text" style="font-size:16px">Graduation day! Build the life you want: work your way up, go to school, start businesses and grow them into an empire, invest, buy a home and climb the net worth ladder. Your businesses keep earning even while the app is closed. Real-life choices pop up along the way, and every one teaches a money lesson.</p>' +
-      (S.full ? '' : S.life && S.life.trial ? '<div class="card" style="margin-top:10px">🔑 <b>You’ve used your free month.</b> Subscribe (or join your class) to keep building your life.</div>' : '<div class="card" style="margin-top:10px">🎁 <b>Try your first month free.</b> Pick a path and play your first game month, all the way to your first paycheck. To keep going after that, subscribe (or join your class).</div>') +
+    frame('<h2>Life After 18</h2><p class="lesson-text" style="font-size:16px">Graduation day! Pick a path, earn money and build your life.</p>' +
+      (S.full ? '' : S.life && S.life.trial ? '<div class="card" style="margin-top:10px">🔑 <b>You’ve used your free month.</b> Subscribe (or join your class) to keep building your life.</div>' : '<div class="card" style="margin-top:10px">🎁 <b>Try your first month free.</b> Play until your first paycheck.</div>') +
       '<h3 style="margin:18px 0 8px">Choose your path</h3><div class="life-grid">' + PATHS.map((p, i) => { const j = JOBS[p.job], pc = paycheck(j.ranks[0][1]);
         return '<button class="life-opt" data-p="' + i + '"><span class="life-ic" aria-hidden="true">' + p.icon + '</span><b>' + esc(p.name) + '</b><small class="muted">' + esc(j.ranks[0][0]) + '</small><span>' + esc(p.blurb) + '</span><span class="mono" style="margin-top:6px">Take-home: about ' + usd(pc.net) + ' a month</span></button>'; }).join('') + '</div>');
     document.querySelectorAll('[data-p]').forEach(b => { b.onclick = () => { if (!S.full && S.life && S.life.trial) return openPaywall(); G = newGame(PATHS[+b.dataset.p]); S.life = Object.assign({}, S.life || {}, { v: 2, g: G, runs: ((S.life && S.life.runs) || 0) + 1 }, S.full ? {} : { trial: true }); tab = 'biz'; persist(true); render(); startClock(); try { window.TT_track && window.TT_track('life_start'); } catch (e) {}

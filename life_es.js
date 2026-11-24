@@ -1,6 +1,12 @@
 // Spanish for Life After 18. English phrase -> Spanish. life.js swaps these in the text it draws when Español is on.
 // Longer phrases are matched first; names that appear in lowercase inside sentences are listed in lowercase too.
 var LIFE_ES = {
+"Graduation day! Pick a path, earn money and build your life.": "¡Día de graduación! Elige un camino, gana dinero y construye tu vida.",
+"Play until your first paycheck.": "Juega hasta tu primer sueldo.",
+"Work full time now. Steady pay.": "Trabaja tiempo completo ya. Sueldo fijo.",
+"Paid electrician training. Big raise in 10 months.": "Aprendiz de electricista pagado. Gran aumento en 10 meses.",
+"Borrow for college. Unlock top-paying jobs.": "Pide prestado para la universidad. Desbloquea los mejores trabajos.",
+
 // months, paths, careers, school
 "January": "enero", "February": "febrero", "March": "marzo", "April": "abril", "May": "mayo", "June": "junio", "July": "julio", "August": "agosto", "September": "septiembre", "October": "octubre", "November": "noviembre", "December": "diciembre",
 "Start working": "Empezar a trabajar", "Get a full-time job at a store right away, with health insurance and a steady paycheck. You can go to school later.": "Consigue un trabajo de tiempo completo en una tienda ya, con seguro médico y un sueldo fijo. Puedes estudiar después.",
