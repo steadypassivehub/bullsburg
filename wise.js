@@ -178,7 +178,7 @@
     lines.push(recent.length ? '• I finished ' + recent.length + ' lesson' + (recent.length === 1 ? '' : 's') + ': ' + recent.slice(-4).map(function (s) { return s.title; }).join(', ') + '.' : '• I kept practicing and reviewing.');
     lines.push('• I’ve cleared ' + (d.cleared || 0) + ' of ' + (d.total || STAGES.length) + ' stages and I’m level ' + (d.lvl || 1) + '.');
     var r = readiness(); if (r) lines.push('• My W!SE financial literacy test readiness is ' + r + '% (70% passes).');
-    lines.push('', 'Ask ' + nm + ': ' + (TALK[last.world] || TALK[1]), '', 'This week’s family challenge: ' + window.TT_familyChallenge(), '', 'Bullsburg is a money and investing game for teens. Parent guide: ' + ((window.TT_SITE || 'https://bullsburg.com') + '/parents.html'));
+    lines.push('', 'Ask ' + nm + ': ' + (TALK[last.world] || TALK[1]), '', 'This week’s family challenge: ' + window.TT_familyChallenge(), '', 'Can you pass my money quiz? 5 questions, 2 minutes: ' + ((window.TT_SITE || 'https://bullsburg.com') + '/quiz.html'), '', 'Bullsburg is a money and investing game for teens. Parent guide: ' + ((window.TT_SITE || 'https://bullsburg.com') + '/parents.html'));
     var text = lines.join('\n');
     pwShow('<div class="eyebrow">For your family</div><h2 id="pw-title">Send a note home</h2><p style="margin-top:6px" class="muted">Share what you learned this week and a question to talk about at dinner.</p>' +
       '<div class="card" style="white-space:pre-wrap;font-size:14px;margin-top:10px;text-align:left">' + esc(text) + '</div>' +

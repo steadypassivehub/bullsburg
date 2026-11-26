@@ -19,7 +19,7 @@
     if (!st || !st.found) return;
     var had = S.sch || null;
     S.sch = { key: st.key, on: !!st.active, school: st.school, ends: st.ends_on, cls: st.class || '', name: st.name || '', reason: st.reason || '', gave: had ? had.gave : !S.full, checked: today(),
-      sponsor: st.sponsor || null, league: !!st.league };
+      sponsor: st.sponsor || null, league: !!st.league, ai: !!st.ai_feedback };
     if (S.sch.on && !S.full) { S.full = true; S.sch.gave = true; }
     if (!S.sch.on && S.full && S.sch.gave) S.full = false;
     save(); refreshAll(); paintButton();
@@ -90,7 +90,7 @@
   }
 
   /* ---------------- progress sync ---------------- */
-  var FIELDS = ['xp', 'stars', 'missions', 'mkt', 'best', 'streak', 'dq', 'ql', 'qg', 'mode', 'onboarded', 'wq', 'pre', 'post', 'wt', 'cl', 'trk', 'life', 'lang'];
+  var FIELDS = ['xp', 'stars', 'missions', 'mkt', 'best', 'streak', 'dq', 'ql', 'qg', 'mode', 'onboarded', 'wq', 'pre', 'post', 'wt', 'cl', 'trk', 'life', 'lang', 'tb'];
   function snapshot() { var o = {}; FIELDS.forEach(function (k) { o[k] = S[k]; }); return JSON.stringify(o); }
   function summary() {
     var d = {}; try { d = reportData(); } catch (e) {}
@@ -107,7 +107,8 @@
       ready: w.ready == null ? null : w.ready, pass: w.pass == null ? null : w.pass, pre: w.pre == null ? null : w.pre, post: w.post == null ? null : w.post, test: w.test == null ? null : w.test,
       mins7: typeof minsIn === 'function' ? minsIn(7) : null, mins30: typeof minsIn === 'function' ? minsIn(30) : null, review_due: typeof srDue === 'function' ? srDue().length : null,
       warm_before: (function () { try { var x = warmStats(); return x ? x.before : null; } catch (e) { return null; } })(), warm_after: (function () { try { var x = warmStats(); return x ? x.after : null; } catch (e) { return null; } })(), warm_lessons: (function () { try { var x = warmStats(); return x ? x.lessons : 0; } catch (e) { return 0; } })(),
-      tests: w.tests || 0, topics: w.topics || {}, life: S.life && S.life.best ? S.life.best.grade : null, life_nw: S.life && S.life.best && typeof S.life.best.nw === 'number' ? S.life.best.nw : null, life_ach: S.life && S.life.g && S.life.g.ach ? Object.keys(S.life.g.ach).filter(function (k) { return !/_t$/.test(k); }).length : null, invest_cleared: trk('invest'), money_cleared: trk('money') };
+      tests: w.tests || 0, topics: w.topics || {}, life: S.life && S.life.best ? S.life.best.grade : null, life_nw: S.life && S.life.best && typeof S.life.best.nw === 'number' ? S.life.best.nw : null, life_ach: S.life && S.life.g && S.life.g.ach ? Object.keys(S.life.g.ach).filter(function (k) { return !/_t$/.test(k); }).length : null, invest_cleared: trk('invest'), money_cleared: trk('money'),
+      teach_lessons: (function () { return Object.keys(S.tb || {}).length; })(), teach_pct: (function () { var h = 0, n = 0; for (var k in (S.tb || {})) { var t = S.tb[k]; h += t[0] || 0; n += t[1] || 0; } return n ? Math.round(100 * h / n) : null; })() };
   }
   var pushT = null, pushing = false;
   function push(now) {
@@ -131,6 +132,7 @@
     if (o.onboarded) S.onboarded = true;
     if (o.pre && !S.pre) S.pre = o.pre; if (o.post && (!S.post || o.post.at > S.post.at)) S.post = o.post;
     if (o.wt && (!S.wt || o.wt.length > S.wt.length)) S.wt = o.wt;
+    for (var tk in (o.tb || {})) { S.tb = S.tb || {}; var ta = S.tb[tk], tb2 = o.tb[tk]; if (!ta || (tb2 && tb2[0] > ta[0])) S.tb[tk] = tb2; }
     for (var tq in (o.wq || {})) { S.wq = S.wq || {}; if (!S.wq[tq] || o.wq[tq].length > S.wq[tq].length) S.wq[tq] = o.wq[tq]; }
     for (var c in (o.cl || {})) { S.cl = S.cl || {}; if (!S.cl[c]) S.cl[c] = o.cl[c]; }
     if (o.life && o.life.best && typeof o.life.best.nw === 'number' && (!S.life || !S.life.best || o.life.best.nw > S.life.best.nw)) S.life = o.life;

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parent Money Quiz</title>
+<meta name="description" content="A 2-minute money quiz for parents: the same ideas your teen is learning in Bullsburg.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://nvjlgiohvctocgbpegvi.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{--bg:#fff;--ink:#0B1F33;--muted:#4A5A68;--line:#E3EAE7;--g:#05803F;--tint:#E6F6EC;--bad:#C2412F;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Poppins,system-ui,sans-serif;overflow-wrap:break-word}
+.bar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:2}
+.bar .w{max-width:720px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}.logo b{font-family:Montserrat,Poppins,sans-serif;font-weight:700;font-size:17px;letter-spacing:.14em;color:var(--g)}
+main{max-width:720px;margin:0 auto;padding:28px 16px 56px}
+.pill{display:inline-block;background:var(--tint);color:var(--g);font-weight:700;font-size:14px;padding:6px 14px;border-radius:999px}
+h1{font-size:clamp(28px,6vw,40px);line-height:1.1;margin:12px 0 10px;font-weight:800;letter-spacing:-.02em}h1 em{font-style:normal;color:var(--g)}
+h2{font-size:22px;line-height:1.25;margin:6px 0 14px;font-weight:800}
+.sub{color:var(--muted);margin:0 0 18px}.muted{color:var(--muted);font-size:15px}
+.card{border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;background:#fff}
+.btn{display:inline-block;background:var(--g);color:#fff;border:0;border-radius:999px;padding:12px 22px;font:700 16px Poppins,system-ui,sans-serif;cursor:pointer;text-decoration:none}
+.btn:disabled{opacity:.45;cursor:default}.btn.ghost{background:#fff;color:var(--g);border:2px solid var(--g)}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;font:500 16px Poppins,system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--g)}.opt.ok{border-color:var(--g);background:var(--tint)}.opt.no{border-color:var(--bad);background:#FBECE9}
+.prog{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:0 0 16px}.prog i{display:block;height:100%;background:var(--g);transition:width .3s}
+label.ck{display:flex;gap:10px;align-items:flex-start;margin:14px 0}label.ck input{width:20px;height:20px;margin-top:3px;accent-color:var(--g)}
+.why{margin:10px 0 0;padding:10px 14px;border-left:4px solid var(--g);background:var(--tint);border-radius:0 10px 10px 0;font-size:15.5px}
+.score{font-size:46px;font-weight:800;color:var(--g);line-height:1}
+ul{padding-left:20px}li{margin:6px 0}
+</style><link rel="icon" type="image/png" sizes="48x48" href="/bullsburg-icon-48.png"><link rel="icon" type="image/png" sizes="96x96" href="/bullsburg-icon-96.png"><link rel="icon" type="image/png" sizes="192x192" href="/bullsburg-icon-192.png"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png"></head><body>
+<div class="bar"><div class="w"><a href="./" class="logo"><img src="bullsburg-mark.svg" alt="" width="34" height="34"><b>BULLSBURG</b></a><a class="btn" style="padding:9px 18px;font-size:15px" href="parents.html">Parent guide</a></div></div>
+<main id="app"></main>
+<script>window.TT_SB = {"url": "https://nvjlgiohvctocgbpegvi.supabase.co", "key": "sb_publishable_uY-81hCWhNXbnreZKwT7Tg_USO1Wljj", "google": true};</script>
+<script src="cloud.js"></script>
+<script>
+(function () {
+  var QS = [
+    { q: 'You put $100 in a savings account that earns 2% a year. After 5 years, how much is in it?', o: ['More than $102', 'Exactly $102', 'Less than $102'], a: 0,
+      w: 'Interest adds $2 in the first year alone, then keeps earning on the growing balance (compound interest), so it ends up at about $110.' },
+    { q: 'Your savings earn 1% a year and prices rise 2% a year. After one year, your money buys:', o: ['More than today', 'The same as today', 'Less than today'], a: 2,
+      w: 'When inflation is higher than your interest rate, your money loses buying power, even though the number in the account went up.' },
+    { q: 'True or false: buying one company’s stock is usually safer than buying a fund that holds hundreds of companies.', o: ['True', 'False'], a: 1,
+      w: 'False. A fund spreads your money across many companies (diversification), so one company’s bad year hurts much less.' },
+    { q: 'Which has the biggest effect on a credit score?', o: ['How much you earn', 'Paying bills on time', 'How many bank accounts you have'], a: 1,
+      w: 'Payment history is the biggest part of a FICO score. Income isn’t part of a credit score at all.' },
+    { q: 'You owe $1,000 on a card with a 20% APR and pay only $25 a month. About how long until it’s paid off?', o: ['Under 2 years', '2 to 4 years', 'More than 5 years'], a: 2,
+      w: 'About 5½ years, and you’d pay roughly $650 in interest. Most of each early payment goes to interest, not the balance.' }
+  ];
+  var app = document.getElementById('app'), i = 0, right = [], C = window.TickerCloud;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function intro() {
+    app.innerHTML = '<span class="pill">For parents · 2 minutes</span><h1>Could you pass your <em>teen’s money quiz?</em></h1>' +
+      '<p class="sub">Five quick questions on the same ideas your teen is learning in Bullsburg: interest, inflation, investing, credit and debt.</p>' +
+      '<div class="card"><b>Before you start</b><ul class="muted" style="margin:8px 0 0">' +
+      '<li>This quiz is for parents and other adults.</li>' +
+      '<li>It’s anonymous. We don’t ask for your name or email, and we don’t save anything about you or your device.</li>' +
+      '<li>If you agree, we add your answers to running totals (how many people got each question right) so we can see which ideas families find hardest. You can take the quiz without sharing.</li></ul>' +
+      '<label class="ck"><input type="checkbox" id="adult"> <span>I’m 18 or older.</span></label>' +
+      '<label class="ck"><input type="checkbox" id="share" checked> <span>Add my answers to the anonymous totals.</span></label>' +
+      '<button class="btn" id="go" disabled>Start the quiz</button></div>' +
+      '<p class="muted">Bullsburg LLC · <a href="privacy.html">Privacy policy</a></p>';
+    var ad = document.getElementById('adult'), go = document.getElementById('go');
+    ad.onchange = function () { go.disabled = !ad.checked; };
+    go.onclick = function () { share = document.getElementById('share').checked; i = 0; right = []; ask(); };
+  }
+  var share = true;
+
+  function ask() {
+    var Q = QS[i];
+    app.innerHTML = '<div class="prog" aria-hidden="true"><i style="width:' + (i / QS.length * 100) + '%"></i></div>' +
+      '<p class="muted" style="margin:0">Question ' + (i + 1) + ' of ' + QS.length + '</p><h2>' + esc(Q.q) + '</h2>' +
+      '<div id="opts">' + Q.o.map(function (o, k) { return '<button class="opt" data-k="' + k + '">' + esc(o) + '</button>'; }).join('') + '</div><div id="after" aria-live="polite"></div>';
+    Array.prototype.forEach.call(app.querySelectorAll('.opt'), function (b) {
+      b.onclick = function () {
+        var k = +b.dataset.k, ok = k === Q.a; right.push(ok);
+        Array.prototype.forEach.call(app.querySelectorAll('.opt'), function (x) { x.disabled = true; if (+x.dataset.k === Q.a) x.classList.add('ok'); });
+        if (!ok) b.classList.add('no');
+        document.getElementById('after').innerHTML = '<div class="why"><b>' + (ok ? 'Right.' : 'Not quite.') + '</b> ' + esc(Q.w) + '</div>' +
+          '<p style="margin-top:16px"><button class="btn" id="next">' + (i + 1 < QS.length ? 'Next question' : 'See my score') + '</button></p>';
+        document.getElementById('next').onclick = function () { i++; if (i < QS.length) ask(); else done(); };
+        document.getElementById('next').focus();
+      };
+    });
+  }
+
+  function done() {
+    var n = right.filter(Boolean).length;
+    if (share && C && C.configured()) C.rpc('parent_quiz_save', { p_right: right }).catch(function () {});
+    try { if (C && C.configured()) C.rpc('track', { e: 'pquiz', p: 'web' }).catch(function () {}); } catch (e) {}
+    var msg = n === 5 ? 'Perfect score. Now see if your teen can beat you.' : n >= 3 ? 'Nice work. A couple of these trip up a lot of adults.' : 'These are tricky, and most of us were never taught them in school.';
+    app.innerHTML = '<span class="pill">Your score</span><p class="score" style="margin:14px 0 4px">' + n + ' / 5</p><h2>' + msg + '</h2>' +
+      '<div class="card"><b>Talk about it tonight</b><p style="margin:6px 0 0">Ask your teen question ' + (right.indexOf(false) >= 0 ? (right.indexOf(false) + 1) : 5) + ' and see how they explain it. Teaching an idea out loud is one of the best ways to remember it.</p></div>' +
+      '<div class="card"><b>What your teen is learning</b><p style="margin:6px 0 10px" class="muted">Bullsburg covers paychecks, budgeting, banking, credit, insurance, college and investing, with pretend money only.</p>' +
+      '<a class="btn" href="parents.html">Read the parent guide</a> <button class="btn ghost" id="again" style="margin-top:8px">Take it again</button></div>';
+    document.getElementById('again').onclick = intro;
+  }
+  intro();
+})();
+</script>
+</body></html>
